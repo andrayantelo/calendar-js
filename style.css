@@ -1,5 +1,13 @@
 /*Calendar css */
 body {
-    background-color: #f1f1f1;
+    background-color: #e0e0e0;
+}
+
+#calendar {
+    
+    box-shadow:0px 3px 3px rgba(0, 0, 0, 0.25); 
+    margin: 50px auto;
+    display: table;
+    font: 13px/1.5 "Helvetica Neue", Helvatica, Arial, san-serif; 
 }
 
