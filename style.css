@@ -1,6 +1,18 @@
 /*Calendar css */
 body {
+    font-size:100%;
 }
+
+#calendar{
+    margin: 50px auto;
+    font: 1em/1.5 "Helvetica Neue", Helvatica, Arial, san-serif;
+    display:table;
+   }
+   
+#month-year {
+    color: red;
+}
+
 
 
 
