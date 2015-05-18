@@ -1,6 +1,34 @@
 /*Calendar css */
 body {
+    font-size:100%;
 }
+
+#calendar{
+    margin: 50px auto;
+    font: 1em/1.5 "Helvetica Neue", Helvatica, Arial, san-serif;
+    display:table;
+   }
+   
+.header {
+    cursor: default;
+    background: #bbbbbb;
+    height: 34px;
+    position: relative; 
+    color:#ffffff; 
+    border-top-right-radius: 5px; 
+    font-weight:bold;
+    text-transform: uppercase;
+}
+
+#calendar .header #month-year {
+    color: black;
+    display: inline-block;
+    line-height: 34px;
+    letter-spacing: 1px; 
+    width: 100%; 
+    text-align: center; 
+}
+
 
 
 
