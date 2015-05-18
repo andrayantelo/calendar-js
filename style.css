@@ -9,8 +9,24 @@ body {
     display:table;
    }
    
-#month-year {
-    color: red;
+.header {
+    cursor: default;
+    background: #bbbbbb;
+    height: 34px;
+    position: relative; 
+    color:#ffffff; 
+    border-top-right-radius: 5px; 
+    font-weight:bold;
+    text-transform: uppercase;
+}
+
+#calendar .header #month-year {
+    color: black;
+    display: inline-block;
+    line-height: 34px;
+    letter-spacing: 1px; 
+    width: 100%; 
+    text-align: center; 
 }
 
 
