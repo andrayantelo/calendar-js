@@ -11,7 +11,7 @@ body {
    
 .header {
     cursor: default;
-    background: #bbbbbb;
+    background: #e1e1e1;
     height: 34px;
     position: relative; 
     color:#ffffff; 
@@ -29,6 +29,23 @@ body {
     text-align: center; 
 }
 
+#calendar table {
+    border-collapse: collapse;
+}
 
-
+#calendar td {
+    width:30px;
+    height: 30px;
+    text-align: center;
+    cursor:default;
+}
+    
+#calendar #days {
+    background: #e1e1e1;
+    text-transform: upper-case;
+    font-size: 90%;
+    line-height: 26px;
+    height: 26px;
+    color:#000000;
+}
 
