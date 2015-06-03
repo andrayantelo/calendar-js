@@ -52,12 +52,12 @@ body {
     width: 100%;
 }
 
-#calendar #calendarframe .month {
-   /* width: 100%;
+/*#calendar #calendarframe .month {
+    width: 100%;
     position: relative; 
     border:1px solid #e6e6e6;
-    border: 1px solid #e1e1e1;*/
-}
+    border: 1px solid #e1e1e1;
+}*/
 
 #calendar #calendarframe .month td {
     border:1px solid #e6e6e6;
