@@ -5,7 +5,7 @@ $(document).ready(function() {
     $(".daynumber").click(function (event) {
         event.preventDefault();
         $( this ).toggleClass("fa fa-check");
-        $( ".daynumber" ).toggleClass("hidden");
+        /*$( ".fa check" ).toggleClass("hidden");*/
        })
 });
 
