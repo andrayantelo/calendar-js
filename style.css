@@ -1,11 +1,11 @@
 /*Calendar css */
-body {
+html {
     font-size:100%;
 }
 
 #calendar{
     margin: 50px auto;
-    font: 1em/1.5 "Helvetica Neue", Helvatica, Arial, san-serif;
+    font: 0.95em/1.5 "Helvetica Neue", Helvatica, Arial, san-serif;
     display:table;
    }
    
@@ -63,16 +63,24 @@ body {
     border:1px solid #e6e6e6;
     }
 
-#calendar #calendarframe td.today {
-    background:#e1e1e1; 
-    color:#8c8c8c; 
-    box-shadow:1px 1px 0px #fff inset; 
-    -moz-box-shadow:1px 1px 0px #fff inset; 
-    -webkit-box-shadow:1px 1px 0px #fff inset; 
+
+.daynumber {
+    width:30px;
+    height:30px;
     
 }
 
-#calendar #calendarframe td.check {
+/*#calendar #calendarframe td.today*/
+.today {
+    background:#e1e1e1; 
+    color:#8c8c8c; 
+    height: 
+    box-shadow:1px 1px 0px #fff inset; 
+    -moz-box-shadow:1px 1px 0px #fff inset; 
+    -webkit-box-shadow:1px 1px 0px #fff inset; 
+    height: 29px;
     
 }
+
+
 
