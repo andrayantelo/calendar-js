@@ -2,10 +2,10 @@
 
 $(document).ready(function() {
 
-    $(".daycell").click(function (event) {
+    $(".daynumber").click(function (event) {
         event.preventDefault();
         $( this ).toggleClass("fa fa-check");
-        $( ".daycell .daynumber" ).toggleClass("hidden");
+        $( ".daynumber" ).toggleClass("hidden");
        })
 });
 
