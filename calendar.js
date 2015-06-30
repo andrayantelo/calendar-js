@@ -1,9 +1,14 @@
-$(document).ready(function() {
-   /* $( "td div").click(function () {
-        $( this ).toggleClass( " */
+    alert("balls");
+
+
+/*$(document).ready(function() {
+
+    $( ".daynumber").click(function (event) {
+        event.preventDefault();
+        $( "i" ).hide();
 });
 
-
+*/
 
 /* var CALENDAR = function() {
     
