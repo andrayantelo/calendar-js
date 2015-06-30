@@ -70,6 +70,10 @@ html {
     
 }
 
+.dayhighlight {
+    background: red
+}
+
 /*#calendar #calendarframe td.today*/
 .today {
     background:#e1e1e1; 

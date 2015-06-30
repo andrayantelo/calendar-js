@@ -1,14 +1,15 @@
-    alert("this works");
+   /* alert("this works"); */
 
+$(document).ready(function() {
 
-/*$(document).ready(function() {
-
-    $( ".daynumber").click(function (event) {
+    $(".daycell").click(function (event) {
         event.preventDefault();
-        $( "i" ).hide();
+        $( this ).toggleClass("fa fa-check");
+        $( ".daycell .daynumber" ).toggleClass("hidden");
+       })
 });
 
-*/
+
 
 /* var CALENDAR = function() {
     
