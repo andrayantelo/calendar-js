@@ -5,7 +5,7 @@ $(document).ready(function() {
 
 
 
-var CALENDAR = function() {
+/* var CALENDAR = function() {
     
     var wrap, label, 
         months = ["January", "February", "March", "April", "May", "June", 
@@ -50,3 +50,4 @@ var CALENDAR = function() {
         createCal: createCal;
     };
 };
+*/

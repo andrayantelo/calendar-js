@@ -45,7 +45,7 @@ body {
 #calendar #days {
     background: #e1e1e1;
     text-transform: upper-case;
-    font-size: 90%;
+    font-size: 100%;
     line-height: 26px;
     height: 26px;
     color:#000000;
@@ -75,3 +75,4 @@ body {
 #calendar #calendarframe td.check {
     
 }
+
