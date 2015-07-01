@@ -20,7 +20,7 @@ html {
     text-transform: uppercase;
 }
 
-#month-year {
+.month-year {
     color: black;
     display: inline-block;
     line-height: 34px;

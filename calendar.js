@@ -1,16 +1,9 @@
  /*   alert("this works");  */
-
-$(document).ready(function() {
-
-    $(".cell").click(function (event) {
-        console.log(event);  // prints so you can look at the event object in the console
-        $( this ).children().toggleClass("hidden");
-       })
-});
-
-var $cal = $(".calendar")
+ var $cal = $(".calendar")
 
 var createMonth = function() {
+    
+    console.log("this is happening"); // check if it's working
     
     var months = ["January", "February", "March", "April", "May", "June", 
                   "July", "August", "September", "October", "November", 
@@ -18,10 +11,25 @@ var createMonth = function() {
     
     for (i = 0; i< months.length; i ++) {
         
-        $cal
+        $(".calendar").children('.month-year').each(function() {
+          text('hello');
+          )};
     };
     
 };
+
+
+$(document).ready(function() {
+
+    $(".cell").click(function (event) {
+        console.log(event);  // prints so you can look at the event object in the console
+        $( this ).children().toggleClass("hidden");
+       })
+    
+    createMonth();
+       
+});
+
 
 /* var CALENDAR = function() {
     
