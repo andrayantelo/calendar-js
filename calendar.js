@@ -8,11 +8,19 @@ $(document).ready(function() {
        })
 });
 
-var createCalendar = function() {
+var $cal = $(".calendar")
+
+var createMonth = function() {
     
     var months = ["January", "February", "March", "April", "May", "June", 
                   "July", "August", "September", "October", "November", 
                   "December"];
+    
+    for (i = 0; i< months.length; i ++) {
+        
+        $cal
+    };
+    
 };
 
 /* var CALENDAR = function() {
