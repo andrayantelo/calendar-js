@@ -8,7 +8,8 @@ $(document).ready(function() {
        })
 });
 
-
+var createCalendar = function() {
+};
 
 /* var CALENDAR = function() {
     

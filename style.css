@@ -3,7 +3,7 @@ html {
     font-size:100%;
 }
 
-#calendar{
+.calendar{
     margin: 50px auto;
     font: 0.95em/1.5 "Helvetica Neue", Helvatica, Arial, san-serif;
     display:table;
@@ -20,7 +20,7 @@ html {
     text-transform: uppercase;
 }
 
-#calendar .header #month-year {
+#month-year {
     color: black;
     display: inline-block;
     line-height: 34px;
@@ -30,11 +30,11 @@ html {
     
 }
 
-#calendar table {
+.calendar table {
     border-collapse: collapse;
 }
 
-#calendar td {
+.calendar td {
     width:30px;
     height: 30px;
     text-align: center;
@@ -42,7 +42,7 @@ html {
     
 }
     
-#calendar #days {
+.calendar #days {
     background: #e1e1e1;
     text-transform: upper-case;
     font-size: 100%;
@@ -59,7 +59,7 @@ html {
     border: 1px solid #e1e1e1;
 }*/
 
-#monthframe {
+.monthframe {
     margin:15px;
 }
 /*#calendar #calendarframe*/
