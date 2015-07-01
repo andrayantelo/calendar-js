@@ -59,8 +59,13 @@ html {
     border: 1px solid #e1e1e1;
 }*/
 
-#calendar #calendarframe .month td {
+#monthframe {
+    margin:15px;
+}
+/*#calendar #calendarframe*/
+.month td {
     border:1px solid #e6e6e6;
+    
     }
 
 
@@ -86,5 +91,8 @@ html {
     
 }
 
-
+.fa fa-check {
+    width: 30px;
+    height: 30px;
+}
 
