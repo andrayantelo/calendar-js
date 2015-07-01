@@ -1,11 +1,12 @@
-   /* alert("this works"); */
+ /*   alert("this works");  */
 
 $(document).ready(function() {
 
-    $(".daynumber").click(function (event) {
+    $(".cell").click(function (event) {
+        console.log(event);  // prints so you can look at the event object in the console
+        x = event;
         event.preventDefault();
-        $( this ).toggleClass("fa fa-check");
-        /*$( ".fa check" ).toggleClass("hidden");*/
+        $( this ).children().toggleClass("hidden");
        })
 });
 
