@@ -4,8 +4,6 @@ $(document).ready(function() {
 
     $(".cell").click(function (event) {
         console.log(event);  // prints so you can look at the event object in the console
-        x = event;
-        event.preventDefault();
         $( this ).children().toggleClass("hidden");
        })
 });
