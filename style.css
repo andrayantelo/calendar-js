@@ -72,6 +72,7 @@ html {
 .daynumber {
     width:30px;
     height:30px;
+    margin: 5px;
     
 }
 
@@ -96,3 +97,9 @@ html {
     height: 30px;
 }
 
+.mainheader {
+    /*text-transform: uppercase;*/
+    font-weight: bold;
+    text-align: center;
+    font-size: 2.5em;
+};
