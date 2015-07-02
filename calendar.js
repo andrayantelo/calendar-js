@@ -9,23 +9,18 @@ var createMonth = function() {
                   "July", "August", "September", "October", "November", 
                   "December"];
                   
-    var monthYear = [".month-year-0", ".month-year-1", ".month-year-2",
-                      ".month-year-3", ".month-year-4", ".month-year-5",
-                      ".month-year-6", ".month-year-7", ".month-year-8",
-                      ".month-year-9", ".month-year-10", ".month-year-11",];
     
     for (i = 0; i< months.length; i ++) {
         
-        for (j = 0; j < monthYear.length; j ++) {
             
-        $(".calendar .monthframe").children(monthYear[j]).each(function () {
-            $(this).text('hello world'); });
+        $(".calendar .monthframe").children('.month-year').each(function () {
+            $(this).text(months[i]); });
         
         };
     };
     
     
-};
+
 
 
 $(document).ready(function() {
