@@ -18,7 +18,8 @@ var createMonth = function() {
         
         for (j = 0; j < monthYear.length; j ++) {
             
-        $(".calendar .monthframe").children(monthYear[j]).text('hello world');
+        $(".calendar .monthframe").children(monthYear[j]).each(function () {
+            $(this).text('hello world'); });
         
         };
     };
