@@ -8,13 +8,21 @@ var createMonth = function() {
     var months = ["January", "February", "March", "April", "May", "June", 
                   "July", "August", "September", "October", "November", 
                   "December"];
+                  
+    var monthYear = [".month-year-0", ".month-year-1", ".month-year-2",
+                      ".month-year-3", ".month-year-4", ".month-year-5",
+                      ".month-year-6", ".month-year-7", ".month-year-8",
+                      ".month-year-9", ".month-year-10", ".month-year-11",];
     
     for (i = 0; i< months.length; i ++) {
         
-        $(".calendar").children('.month-year').each(function() {
-          text('hello');
-          )};
+        for (j = 0; j < monthYear.length; j ++) {
+            
+        $(".calendar .monthframe").children(monthYear[j]).text('hello world');
+        
+        };
     };
+    
     
 };
 
