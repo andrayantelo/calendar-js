@@ -28,7 +28,7 @@ $(document).ready(function() {
 
     $(".cell").click(function (event) {
         console.log(event);  // prints so you can look at the event object in the console
-        $( this ).children().toggleClass("hidden");
+        $( this ).children().toggleClass("hidden"); // toggles between hidden and daynumber/fa fa-check
        })
     
        
