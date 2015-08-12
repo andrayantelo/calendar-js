@@ -35,3 +35,33 @@ $(document).ready(function() {
 });
 
 
+var storeInLocalStorage = function(storageItemKey, storageItem) {        
+    
+        // convert a javascript value (storageItem) to a JSON string
+        localStorage.setItem(storageItemKey, JSON.stringify(storageItem));
+    
+        // access the current domain's local Storage object and add a data item
+        //(storageString) to it 
+};
+
+var loadFromLocalStorage = function(storageItemKey, storageItem) {  
+        loadItem = localStorage.getItem(storageItemKey)
+        
+        
+        if (loadItem === undefined) {
+            console.log("Could not load, Key does not exist");
+            return storageItem;   //DO I NEED TO RETURN ANYTHING HERE?
+                                                                                                                    
+         // to account for when storage is empy
+        }
+        else if (loadItem === null) {                                                            
+            console.log("Could not load, key does not exist");
+            return storageItem;
+        }                                                                                                                           
+       // store the results back in the object that was stored //IS THIS NECESSARY?
+       storageItem = JSON.parse(loadItem);  
+       console.log(loadItem);
+        
+       return storageItem
+         
+};
