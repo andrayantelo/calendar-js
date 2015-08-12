@@ -20,6 +20,13 @@ html {
     text-transform: uppercase;
 }
 
+.mainheader {
+    /*text-transform: uppercase;*/
+    font-weight: bold;
+    text-align: center;
+    font-size: 2.5em;
+}
+
 .month-year {
     color: black;
     display: inline-block;
@@ -69,12 +76,7 @@ html {
     }
 
 
-.daynumber {
-    width:30px;
-    height:30px;
-    margin: 5px;
-    
-}
+
 
 .dayhighlight {
     background: red
@@ -95,11 +97,18 @@ html {
 .fa fa-check {
     width: 30px;
     height: 30px;
+    
 }
 
-.mainheader {
-    /*text-transform: uppercase;*/
-    font-weight: bold;
-    text-align: center;
-    font-size: 2.5em;
-};
+.daynumber {
+    text-align:center
+    
+} 
+
+
+
+.cell {
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+}
