@@ -65,3 +65,7 @@ var loadFromLocalStorage = function(storageItemKey, storageItem) {
        return storageItem
          
 };
+
+var scanForCellStates = function() {
+    
+};
