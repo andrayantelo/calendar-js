@@ -28,11 +28,27 @@ $(document).ready(function() {
 
     $(".cell").click(function (event) {
         console.log(event);  // prints so you can look at the event object in the console
-        $( this ).children().toggleClass("hidden"); // toggles between hidden and daynumber/fa fa-check
+        $( this ).children().toggleClass("hidden");// toggles between hidden and daynumber/fa fa-check
        })
     
-       
+    //$(".nill").click(function (event) {
+    //    console.log(event);
+    //    $( this ).toggleClass("cell nill");
+    //    console.log(".nill should be .cell");
+    //    console.log(this + 'here it is');
+    //    addChildrenToCell(this);
+    //})
 });
+
+//var addChildrenToCell = function(dayDiv) {
+//    if (dayDiv === "$('.cell')") {
+//        dayDiv.append("<div class='daynumber'>1</div><i class='fa fa-check hidden'></i>");
+//        console.log(dayDiv);
+//    }
+//    else {
+//        return;
+//    }
+//};
 
 
 var storeInLocalStorage = function(storageItemKey, storageItem) {        
@@ -44,28 +60,37 @@ var storeInLocalStorage = function(storageItemKey, storageItem) {
         //(storageString) to it 
 };
 
-var loadFromLocalStorage = function(storageItemKey, storageItem) {  
-        loadItem = localStorage.getItem(storageItemKey)
+var loadFromLocalStorage = function(storageItemKey, substituteLoadedItem) {  
+        //loads item from localstorage with key storageItemKey and returns the item
+        //if the item is not in localStorage, returns substituteLoadedItem
+        var storageItem = localStorage.getItem(storageItemKey)
         
         
-        if (loadItem === undefined) {
-            console.log("Could not load, Key does not exist");
-            return storageItem;   //DO I NEED TO RETURN ANYTHING HERE?
-                                                                                                                    
-         // to account for when storage is empy
+        if (storageItem === null) {
+            console.log(storageItemKey + "not found in localstorage");
+            return substituteLoadedItem;   
         }
-        else if (loadItem === null) {                                                            
-            console.log("Could not load, key does not exist");
-            return storageItem;
-        }                                                                                                                           
-       // store the results back in the object that was stored //IS THIS NECESSARY?
-       storageItem = JSON.parse(loadItem);  
-       console.log(loadItem);
+                                                                                                   
+ 
+       else {
+       var storageItem = JSON.parse(storageItem);  
+       console.log(storageItem);
         
        return storageItem
+       }
          
 };
 
-var scanForCellStates = function() {
+var storeMonth = function() {
+    
+};
+
+var collectCellStates = function(theTable) {
+    //goes through the rows of a table and stores the tds of the table in $tds
+    theTable.find('tr').each(function () {
+        var $tds = $(this).find('td');
+        console.log($tds);
+    })
+    
     
 };
