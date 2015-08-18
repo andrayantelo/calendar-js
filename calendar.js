@@ -121,14 +121,54 @@ var collectDayContentFromRow = function(theWeekRow) {
     console.log(tdContentsArray.length + " this is the after length of the contents array");
     return tdContentsArray;
 };
-var storeMonth = function() {
+
+
+var isolateDivTypes = function(tdArray) {
+    //takes an array of td.contents() and stores the div type elements in arrayofDivTypes
+    //for now each element of arrayofDivTypes is an OBJECT. Not sure if this is what I want yet
+    var arrayOfDivTypes = [];
+    for (i=0; i < tdArray.length; i++) {
+        arrayOfDivTypes.push(tdContentsArray[1][1]);}
+    return arrayOfDivTypes;
+};
+
+
+//a sample array of saved checkmarks and daynumbers where everythig is nill except top row
+
+/*var sampleArray = [<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
+<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
+<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
+<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
+<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
+<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
+<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
+<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
+<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
+<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
+<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
+<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
+<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
+<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>];
+*/
+
+
+
+
+
+
+var storeDayDivTypes = function() {
+    //will store arrays with the div types of each td (day) of each row (week) of each month
     
+};
+
+var generateCheckMarks = function() {
+    //will replace divs in arrayOfDivTypes with other divs (that were previously saved in an array)
 };
 
 //isolate the div types from tdContentsArray
 //var arrayOfDivTypes = [];
 //for (i=0; i <tdContentsArray.length; i++) 
-    {arrayOfDivTypes.push(tdContentsArray[1][1]);}
+//    {arrayOfDivTypes.push(tdContentsArray[1][1]);}
 
 // check if object is a array
 //if( Object.prototype.toString.call( someVar ) === '[object Array]' ) {
