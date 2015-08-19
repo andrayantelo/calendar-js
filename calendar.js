@@ -24,6 +24,7 @@ var createMonth = function() {
 
 var $week = $('.week');  //this is the class for the rows of the table
 var $month = $('.month');  //this is the class for the month tables
+var $aDay = $('.aDay'); //class for day cells
 
 $(document).ready(function() {
 
@@ -83,53 +84,27 @@ var loadFromLocalStorage = function(storageItemKey, substituteLoadItem) {
 };
 
 
-var collectDayChildrenFromMonth = function(theMonthTable) {
-    //goes through the rows of a table and stores the children of the tds of the table in $tds
-    theMonthTable.find('tr').each(function () {
-        var $tds = $(this).find('td').children();
-        console.log($tds);
-    })
+function collectTdChildrenHTML(theWeekRow){
+        //returns an array with strings of the children of 'td' div class types
+        var tdChildrenHTML = new Array();
+
+        theWeekRow.find('td').children().each(function(){
+         //array.push($(this).attr('class')); 
+             tdChildrenHTML.push($(this).html());
+         });      
+
+        return tdChildrenHTML.toString();
+        };
+
+function collectTdHTML(theWeekRow) {
+    //returns an array with the inner html of the tds
+    var tdHTML = new Array();
     
+    theWeekRow.find('td').each(function() {
+        tdHTML.push($(this).html());
+    });
     
-};
-
-var collectDayChildrenFromRow = function(theWeekRow) {
-    //goes through the rows ad collects the children of the tds
-    theWeekRow.find('td').each(function() {
-        var $tdChildren = $(this).children();
-        console.log($tdChildren);
-        console.log($tdChildren.length + " this is the length of tdChildren");
-        console.log(typeof($tdChildren) + " this is the type of tdChildren");
-    })
-};
-
-var collectDayContentFromRow = function(theWeekRow) {
-    //goes through the rows and collects the content() of the tds
-    var tdContentsArray = [];
-    console.log(tdContentsArray);
-    console.log(typeof(tdContentsArray) + " this is the before type of the contents array");
-    console.log(tdContentsArray.length + " this is the before length of the contents array");
-    theWeekRow.find('td').each(function() {
-        var $tdContents = $(this).contents();
-        //console.log($tdContents);
-        //console.log(typeof($tdContents) + " this is the type of tdContent");
-        //console.log($tdContents.length + " this is the length of tdContent");
-        tdContentsArray.push($tdContents);
-    })
-    console.log(tdContentsArray);
-    console.log(typeof(tdContentsArray) + " this is the after type of the contents array");
-    console.log(tdContentsArray.length + " this is the after length of the contents array");
-    return tdContentsArray;
-};
-
-
-var isolateDivTypes = function(tdArray) {
-    //takes an array of td.contents() and stores the div type elements in arrayofDivTypes
-    //for now each element of arrayofDivTypes is an OBJECT. Not sure if this is what I want yet
-    var arrayOfDivTypes = [];
-    for (i=0; i < tdArray.length; i++) {
-        arrayOfDivTypes.push(tdContentsArray[1][1]);}
-    return arrayOfDivTypes;
+    return tdHTML.toString();
 };
 
 
