@@ -28,21 +28,32 @@ var $aDay = $('.aDay'); //class for day cells
 
 //a sample array of saved checkmarks and daynumbers where everythig is nill except top row
 
-/*var sampleArray = [<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
-<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
-<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
-<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
-<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
-<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
-<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
-<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
-<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
-<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
-<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
-<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
-<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
-<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>];
-*/
+var sampleHTML = '<tbody><tr class="week"><td class="aDay"><div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \
+<td class="aDay"><div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td>\
+<td class="aDay"><div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \
+<td class="aDay"><div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \
+<td class="aDay"><div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \
+<td class="aDay"><div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \
+<td class="aDay"><div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \
+</tr><tr class="week"><td class="aDay"><div class="nill"></div></td> \
+<td class="aDay"><div class="nill"></div></td><td class="aDay"><div class="nill">\
+</div></td><td class="aDay"><div class="nill"></div></td><td class="aDay"><div class="nill">\
+</div></td><td class="aDay"><div class="nill"></div></td><td class="aDay">\
+<div class="nill"></div></td></tr><tr class="week"><td class="aDay">\
+<div class="nill"></div></td><td class="aDay"><div class="nill"></div></td>\
+<td class="aDay"><div class="nill"></div></td><td class="aDay"><div class="nill">\
+</div></td><td class="aDay"><div class="nill"></div></td><td class="aDay"><div class="nill">\
+</div></td><td class="aDay"><div class="nill"></div></td></tr><tr class="week"><td class="aDay">\
+<div class="nill"></div></td><td class="aDay"><div class="nill"></div></td>\
+<td class="aDay"><div class="nill"></div></td><td class="aDay"><div class="nill">\
+</div></td><td class="aDay"><div class="nill"></div></td><td class="aDay">\
+<div class="nill"></div></td><td class="aDay"><div class="nill"></div></td>\
+</tr><tr class="week"><td class="aDay"><div class="nill"></div></td>\
+<td class="aDay"><div class="nill"></div></td><td class="aDay"><div class="nill">\
+</div></td><td class="aDay"><div class="nill"></div></td><td class="aDay"><div class="nill">\
+</div></td><td class="aDay"><div class="nill"></div></td><td class="aDay">\
+<div class="nill"></div></td></tr></tbody>'
+
 $(document).ready(function() {
 
     $(".cell").click(function (event) {
@@ -113,20 +124,17 @@ function collectTdChildrenHTML(theWeekRow){
         return tdChildrenHTML;
         };
 
-function collectTdHTML(theWeekRow) {
-    //returns an array with the inner html of each td    
-    var tdHTML = new Array();
+function collectMonthHTML(monthSelector) {
+    //returns the inner html of the table with class .month  
+    var monthHTML = monthSelector.html();
     
-    theWeekRow.find('td').each(function() {
-        tdHTML.push($(this).html());
-    });
-    
-    return tdHTML;
+    return monthHTML;
 };
 
-function replaceTdHTML(theWeekRow, replacementArray) {
+function replaceMonthHTML(monthSelector, replacementHTML) {   // CURRENT LINE this does not work yet
     //replaces the inner HTML of each td with new HTML
-    theWeekRow.find('td').replaceWith(replacementArray);
+    monthSelector.html(replacementHTML);
+    
 };
 
 
