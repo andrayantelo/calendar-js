@@ -26,6 +26,23 @@ var $week = $('.week');  //this is the class for the rows of the table
 var $month = $('.month');  //this is the class for the month tables
 var $aDay = $('.aDay'); //class for day cells
 
+//a sample array of saved checkmarks and daynumbers where everythig is nill except top row
+
+/*var sampleArray = [<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
+<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
+<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
+<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
+<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
+<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
+<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
+<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
+<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
+<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
+<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
+<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
+<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
+<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>];
+*/
 $(document).ready(function() {
 
     $(".cell").click(function (event) {
@@ -85,7 +102,7 @@ var loadFromLocalStorage = function(storageItemKey, substituteLoadItem) {
 
 
 function collectTdChildrenHTML(theWeekRow){
-        //returns an array with strings of the children of 'td' div class types
+        //returns an array with the inner html of the top level children of each 'td'
         var tdChildrenHTML = new Array();
 
         theWeekRow.find('td').children().each(function(){
@@ -93,38 +110,27 @@ function collectTdChildrenHTML(theWeekRow){
              tdChildrenHTML.push($(this).html());
          });      
 
-        return tdChildrenHTML.toString();
+        return tdChildrenHTML;
         };
 
 function collectTdHTML(theWeekRow) {
-    //returns an array with the inner html of the tds
+    //returns an array with the inner html of each td    
     var tdHTML = new Array();
     
     theWeekRow.find('td').each(function() {
         tdHTML.push($(this).html());
     });
     
-    return tdHTML.toString();
+    return tdHTML;
+};
+
+function replaceTdHTML(theWeekRow, replacementArray) {
+    //replaces the inner HTML of each td with new HTML
+    theWeekRow.find('td').replaceWith(replacementArray);
 };
 
 
-//a sample array of saved checkmarks and daynumbers where everythig is nill except top row
 
-/*var sampleArray = [<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
-<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
-<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
-<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
-<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
-<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
-<div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div>,
-<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
-<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
-<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
-<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
-<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
-<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,
-<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>,<div class="nill"></div>];
-*/
 
 
 
