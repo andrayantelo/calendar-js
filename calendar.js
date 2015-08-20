@@ -25,6 +25,7 @@ var createMonth = function() {
 var $week = $('.week');  //this is the class for the rows of the table
 var $month = $('.month');  //this is the class for the month tables
 var $aDay = $('.aDay'); //class for day cells
+var temporaryStorageKey = "temporaryStorageKey";
 
 //a sample array of saved checkmarks and daynumbers where everythig is nill except top row
 
@@ -131,23 +132,23 @@ function collectMonthHTML(monthSelector) {
     return monthHTML;
 };
 
-function replaceMonthHTML(monthSelector, replacementHTML) {   // CURRENT LINE this does not work yet
+function replaceMonthHTML(monthSelector, replacementHTML) {   // CURRENT LINE is this what I want
     //replaces the inner HTML of each td with new HTML
     monthSelector.html(replacementHTML);
     
 };
 
 
-
-
-
-
-
-
-
-var storeDayDivTypes = function() {
-    //will store arrays with the div types of each td (day) of each row (week) of each month
+var storeMonthHTML = function(monthSelector) {    //CURRENT LINE working on storing and reloading
+    //will store the HTML of the table with class .month
+    var storageItem = monthSelector.html();
+    storeInLocalStorage(temporaryStorageKey, storageItem);
     
+};
+
+var loadMonthHTML = function(storageItemKey, substituteItem) {
+    //loads the stored HTML of the table with class .month from localstorage
+    return loadFromLocalStorage(storageItemKey, substituteItem);
 };
 
 var generateCheckMarks = function() {
