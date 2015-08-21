@@ -272,10 +272,10 @@ var clearCheckMarks = function() {
 
 var emptyMonthState = function() {
     return{
-        //first day of the month, a number from 0-34
-        firstDay: 0,
+        //first day of the month
+        firstIndex: 3,
         //how many days in the month, default 30
-        numberOfDays: 30,
+        numberOfDays: 31,
         //which days are checked
         checkedDays: {}
     }
@@ -285,6 +285,18 @@ var Month = function () {
     //represents a single month
     var self = this;
     self.monthState = emptyMonthState();
+    
+    self.generateMonthDiv = function() {
+        //fills in the days of the month in an empty month template
+        $week.find('td').each( function(index) {
+        
+            var dayOfMonth = index - (self.monthState.firstIndex - 1);
+            if (dayOfMonth >= 1 && dayOfMonth <= self.monthState.numberOfDays) {
+                 $(this).append(dayOfMonth);
+            }
+        })
+    };
+
     
     self.initializeMonthHTML = function(monthSelector) {   // CURRENT LINE is this what I want
     //replaces the inner HTML of each td with new HTML
