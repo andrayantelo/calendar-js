@@ -292,6 +292,7 @@ var Month = function () {
         
             var dayOfMonth = index - (self.monthState.firstIndex - 1);
             if (dayOfMonth >= 1 && dayOfMonth <= self.monthState.numberOfDays) {
+                 $(this).empty();
                  $(this).append('<div class="cell"><div class="daynumber"></div><i class="fa fa-check hidden"></i></div>')
                  $(this).find('.cell').children('.daynumber').append(dayOfMonth);
             }
