@@ -254,17 +254,6 @@ function collectTdChildrenHTML(theWeekRow){
         };
 
 
-
-function attachClickHandler() {
-    $(".cell").click(function (event) {
-    console.log(event);  // prints so you can look at the event object in the console
-    $( this ).children().toggleClass("hidden");// toggles between hidden and daynumber/fa fa-check
-    });
-};
-
-
-
-
 var clearCheckMarks = function() {
     //this will clear checkmarks from the month
     return;
@@ -286,6 +275,15 @@ var Month = function () {
     var self = this;
     self.monthState = emptyMonthState();
     
+    self.attachClickHandler = function() {
+        $(".cell").click(function (event) {
+            console.log(event);  // prints so you can look at the event object in the console
+            $( this ).children().toggleClass("hidden");// toggles between hidden and daynumber/fa fa-check
+            
+        });
+    };
+
+    
     self.generateMonthDiv = function() {
         //fills in the days of the month in an empty month template
         $week.find('td').each( function(index) {
@@ -293,7 +291,7 @@ var Month = function () {
             var dayOfMonth = index - (self.monthState.firstIndex - 1);
             if (dayOfMonth >= 1 && dayOfMonth <= self.monthState.numberOfDays) {
                  $(this).empty();
-                 $(this).append('<div class="cell"><div class="daynumber"></div><i class="fa fa-check hidden"></i></div>')
+                 $(this).append('<div class="cell"><div class="daynumber"' + ' daynumber="' + dayOfMonth.toString() + '"></div><i class="fa fa-check hidden"></i></div>')
                  $(this).find('.cell').children('.daynumber').append(dayOfMonth);
             }
         })
@@ -306,11 +304,11 @@ var Month = function () {
     
         var loadMonth = self.loadMonthHTML(temporaryStorageKey, "");
         if (!loadMonth) {
-            attachClickHandler();
+            self.attachClickHandler();
             return;
         }
         else {monthSelector.html(loadMonth);
-            attachClickHandler();
+            self.attachClickHandler();
         }
     
 };
