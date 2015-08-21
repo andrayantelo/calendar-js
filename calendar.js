@@ -312,6 +312,8 @@ var Month = function () {
         }
     
 };
+
+//NEXT LINES DON'T MAKE SENSE ANYMORE
     
     self.collectMonthHTML = function(monthSelector) {
     //returns the inner html of the table with class .month  
