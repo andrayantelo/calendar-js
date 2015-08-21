@@ -189,28 +189,22 @@ var sampleHTML = '<tr class="week"><td class="aDay"><div class="nill"> \
                 </tbody>'
 //use regex to take away all the white spaces
 var sampleHTML = sampleHTML.replace(/\s+/g, ''); 
+
 $(document).ready(function() {
 
-    $(".cell").click(function (event) {
-        console.log(event);  // prints so you can look at the event object in the console
-        $( this ).children().toggleClass("hidden");// toggles between hidden and daynumber/fa fa-check
-       });
+
     
     $('#saveButton').click(function(){
-        storeMonthHTML($month);
+        month.storeMonthHTML($month);
         alert("Progress saved");
     });
     
     $('#clearButton').click(function() {
-        replaceMonthHTML($month, sampleHTML);
+        month.initializeMonthHTML($month, sampleHTML);
         
     });
     
-    var loadMonth = loadMonthHTML(temporaryStorageKey, "");
-    if (!loadMonth) {
-        return;
-    }
-    else {replaceMonthHTML($month, loadMonth);}
+    month.initializeMonthHTML($month);
     
 });
 
@@ -239,7 +233,7 @@ var loadFromLocalStorage = function(storageItemKey, substituteLoadItem) {
  
        else {
        var storageItem = JSON.parse(storageItem);  
-       console.log(storageItem);
+      
         
        return storageItem
        }
@@ -259,34 +253,72 @@ function collectTdChildrenHTML(theWeekRow){
         return tdChildrenHTML;
         };
 
-function collectMonthHTML(monthSelector) {
-    //returns the inner html of the table with class .month  
-    var monthHTML = monthSelector.html();
-    
-    return monthHTML;
-};
 
-function replaceMonthHTML(monthSelector, replacementHTML) {   // CURRENT LINE is this what I want
-    //replaces the inner HTML of each td with new HTML
-    monthSelector.html(replacementHTML);
-    
+
+function attachClickHandler() {
+    $(".cell").click(function (event) {
+    console.log(event);  // prints so you can look at the event object in the console
+    $( this ).children().toggleClass("hidden");// toggles between hidden and daynumber/fa fa-check
+    });
 };
 
 
-var storeMonthHTML = function(monthSelector) {    //CURRENT LINE working on storing and reloading
-    //will store the HTML of the table with class .month
-    var storageItem = monthSelector.html();
-    storeInLocalStorage(temporaryStorageKey, storageItem);
-    
-};
-
-var loadMonthHTML = function(storageItemKey, substituteItem) {
-    //loads the stored HTML of the table with class .month from localstorage
-    return loadFromLocalStorage(storageItemKey, substituteItem);
-};
 
 
 var clearCheckMarks = function() {
     //this will clear checkmarks from the month
     return;
 };
+
+var emptyMonthState = function() {
+    return{
+        //first day of the month, a number from 0-34
+        firstDay: 0,
+        //how many days in the month, default 30
+        numberOfDays: 30,
+        //which days are checked
+        checkedDays: {}
+    }
+};
+
+var Month = function () {
+    //represents a single month
+    var self = this;
+    self.monthState = emptyMonthState();
+    
+    self.initializeMonthHTML = function(monthSelector) {   // CURRENT LINE is this what I want
+    //replaces the inner HTML of each td with new HTML
+    
+        var loadMonth = self.loadMonthHTML(temporaryStorageKey, "");
+        if (!loadMonth) {
+            attachClickHandler();
+            return;
+        }
+        else {monthSelector.html(loadMonth);
+            attachClickHandler();
+        }
+    
+};
+    
+    self.collectMonthHTML = function(monthSelector) {
+    //returns the inner html of the table with class .month  
+        var monthHTML = monthSelector.html();
+    
+        return monthHTML;
+};
+
+    self.storeMonthHTML = function(monthSelector) {    //CURRENT LINE working on storing and reloading
+    //will store the HTML of the table with class .month
+        var storageItem = monthSelector.html();
+        storeInLocalStorage(temporaryStorageKey, storageItem);
+    
+};
+
+    self.loadMonthHTML = function(storageItemKey, substituteItem) {
+    //loads the stored HTML of the table with class .month from localstorage
+        return loadFromLocalStorage(storageItemKey, substituteItem);
+};
+
+};
+
+var month = new Month();
