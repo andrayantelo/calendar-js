@@ -29,57 +29,191 @@ var temporaryStorageKey = "temporaryStorageKey";
 
 //a sample array of saved checkmarks and daynumbers where everythig is nill except top row
 
-var sampleHTML = '<tbody><tr class="week"><td class="aDay"><div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \
-<td class="aDay"><div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td>\
-<td class="aDay"><div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \
-<td class="aDay"><div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \
-<td class="aDay"><div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \
-<td class="aDay"><div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \
-<td class="aDay"><div class="cell"><div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \
-</tr><tr class="week"><td class="aDay"><div class="nill"></div></td> \
-<td class="aDay"><div class="nill"></div></td><td class="aDay"><div class="nill">\
-</div></td><td class="aDay"><div class="nill"></div></td><td class="aDay"><div class="nill">\
-</div></td><td class="aDay"><div class="nill"></div></td><td class="aDay">\
-<div class="nill"></div></td></tr><tr class="week"><td class="aDay">\
-<div class="nill"></div></td><td class="aDay"><div class="nill"></div></td>\
-<td class="aDay"><div class="nill"></div></td><td class="aDay"><div class="nill">\
-</div></td><td class="aDay"><div class="nill"></div></td><td class="aDay"><div class="nill">\
-</div></td><td class="aDay"><div class="nill"></div></td></tr><tr class="week"><td class="aDay">\
-<div class="nill"></div></td><td class="aDay"><div class="nill"></div></td>\
-<td class="aDay"><div class="nill"></div></td><td class="aDay"><div class="nill">\
-</div></td><td class="aDay"><div class="nill"></div></td><td class="aDay">\
-<div class="nill"></div></td><td class="aDay"><div class="nill"></div></td>\
-</tr><tr class="week"><td class="aDay"><div class="nill"></div></td>\
-<td class="aDay"><div class="nill"></div></td><td class="aDay"><div class="nill">\
-</div></td><td class="aDay"><div class="nill"></div></td><td class="aDay"><div class="nill">\
-</div></td><td class="aDay"><div class="nill"></div></td><td class="aDay">\
-<div class="nill"></div></td></tr></tbody>'
-
+var sampleHTML = '<tr class="week"><td class="aDay"><div class="nill"> \
+</div></td><td class="aDay"><div class="nill"></div></td><td class="aDay"> \
+<div class="nill"></div></td><td class="aDay"><div class="cell">\
+<div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \
+<td class="aDay"><div class="cell"><div class="daynumber">2</div>\
+<i class="fa fa-check hidden"></i></div></td><td class="aDay"><div class="cell"> \
+<div class="daynumber">3</div><i class="fa fa-check hidden"></i></div></td>\
+<td class="aDay"><div class="cell"><div class="daynumber">4</div>\
+<i class="fa fa-check hidden"></i></div></td></tr><tr class="week">\
+<td class="aDay"><div class="cell"><div class="daynumber">5</div>\
+<i class="fa fa-check hidden"></i></div></td><td class="aDay"><div class="cell">\
+<div class="daynumber">6</div><i class="fa fa-check hidden"></i></div></td>\
+<td class="aDay"><div class="cell"><div class="daynumber">7</div><i class="fa fa-check hidden"></i>\
+</div></td><td class="aDay"><div class="cell"><div class="daynumber">8</div>\
+<i class="fa fa-check hidden"></i></div></td><td class="aDay"><div class="cell">\
+<div class="daynumber">9</div><i class="fa fa-check hidden"></i></div></td>\
+<td class="aDay"><div class="cell"><div class="daynumber">10</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>   \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">11</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                    </tr>\
+                    <tr class="week">\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">12</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">13</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">14</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">15</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">16</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">17</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">18</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                    </tr>\
+                    <tr class="week">\
+                         <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">19</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">20</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>   \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">21</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">22</div></div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">23</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">24</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">25</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                    </tr>\
+                    <tr class="week">\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">26</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">27</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">28</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">29</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">30</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="cell">\
+                                <div class="daynumber">31</div>\
+                                <i class="fa fa-check hidden"></i>\
+                            </div>    \
+                        </td>\
+                        <td class="aDay">\
+                            <div class="nill">\
+                            </div>  \
+                        </td>\
+                    </tr>\
+                </tbody>'
+//use regex to take away all the white spaces
+var sampleHTML = sampleHTML.replace(/\s+/g, ''); 
 $(document).ready(function() {
 
     $(".cell").click(function (event) {
         console.log(event);  // prints so you can look at the event object in the console
         $( this ).children().toggleClass("hidden");// toggles between hidden and daynumber/fa fa-check
-       })
+       });
     
-    //$(".nill").click(function (event) {
-    //    console.log(event);
-    //    $( this ).toggleClass("cell nill");
-    //    console.log(".nill should be .cell");
-    //    console.log(this + 'here it is');
-    //    addChildrenToCell(this);
-    //})
+    $('#saveButton').click(function(){
+        storeMonthHTML($month);
+        alert("Progress saved");
+    });
+    
+    $('#clearButton').click(function() {
+        replaceMonthHTML($month, sampleHTML);
+        
+    });
+    
+    var loadMonth = loadMonthHTML(temporaryStorageKey, "");
+    if (!loadMonth) {
+        return;
+    }
+    else {replaceMonthHTML($month, loadMonth);}
+    
 });
 
-//var addChildrenToCell = function(dayDiv) {
-//    if (dayDiv === "$('.cell')") {
-//        dayDiv.append("<div class='daynumber'>1</div><i class='fa fa-check hidden'></i>");
-//        console.log(dayDiv);
-//    }
-//    else {
-//        return;
-//    }
-//};
 
 
 var storeInLocalStorage = function(storageItemKey, storageItem) {        
@@ -151,16 +285,8 @@ var loadMonthHTML = function(storageItemKey, substituteItem) {
     return loadFromLocalStorage(storageItemKey, substituteItem);
 };
 
-var generateCheckMarks = function() {
-    //will replace divs in arrayOfDivTypes with other divs (that were previously saved in an array)
+
+var clearCheckMarks = function() {
+    //this will clear checkmarks from the month
+    return;
 };
-
-//isolate the div types from tdContentsArray
-//var arrayOfDivTypes = [];
-//for (i=0; i <tdContentsArray.length; i++) 
-//    {arrayOfDivTypes.push(tdContentsArray[1][1]);}
-
-// check if object is a array
-//if( Object.prototype.toString.call( someVar ) === '[object Array]' ) {
-//    alert( 'Array!' );
-//}
