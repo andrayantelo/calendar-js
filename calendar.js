@@ -45,7 +45,10 @@ $(document).ready(function() {
         
     });
     
-    month.monthState = month.loadMonth(temporaryStorageKey);
+    month.loadMonth();
+        if (month.loadMonth() !== null) {            // IS THIS WRITTEN IN A GOOD WAY?
+            month.monthState = month.loadMonth();
+        }
     console.log(month.monthState);
     month.generateMonthDiv();
     month.attachClickHandler();
@@ -91,11 +94,13 @@ var loadFromLocalStorage = function(storageItemKey, substituteLoadItem) {
 var emptyMonthState = function() {
     return{
         //first day of the month
-        firstIndex: 3,
+        firstIndex: 4,
         //how many days in the month, default 30
         numberOfDays: 31,
         //which days are checked
-        checkedDays: {}
+        checkedDays: {},
+        //day and their indices pairs
+        dayIndex: {}
     }
 };
 
@@ -126,9 +131,13 @@ var Month = function () {
         
             var dayOfMonth = index - (self.monthState.firstIndex - 1);
             if (dayOfMonth >= 1 && dayOfMonth <= self.monthState.numberOfDays) {
+                 self.monthState.dayIndex[dayOfMonth] = index;
                  $(this).empty();
-                 $(this).append('<div class="cell"><div class="daynumber"' + ' daynumber="' + dayOfMonth.toString() + '"></div><i class="fa fa-check hidden"></i></div>')
+                 var toAdd = '<div class="cell"><div class="daynumber"'+ ' daynumber="' + dayOfMonth.toString() + '"' + 'dayIndex="' + self.monthState.dayIndex[dayOfMonth] + '" '+'></div><i class="fa fa-check hidden"></i></div>'
+                 //var toAdd = toAdd.replace(/\s+/g, ''); <-----why didn't this work?
+                 $(this).append(toAdd);
                  $(this).find('.cell').children('.daynumber').append(dayOfMonth);
+                 
             }
             
             if (self.monthState.checkedDays[index]) {
@@ -140,13 +149,15 @@ var Month = function () {
     };
     
     
-    self.retrieveCheckedDays = function() {
+    self.retrieveCheckedDays = function(selector) {
         //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
-        if ($week.find('td').find('.daynumber.hidden')) {
-            $week.find('td').find('.daynumber.hidden').each(function (index) {
+        if (selector.find('.daynumber.hidden')) {
+            selector.find('.daynumber.hidden').each(function (index) {
                 var daynumber = $(this).attr('daynumber');
                 //the key is the index of the day for now
+                index = (index + daynumber)
                 self.monthState.checkedDays[index] = daynumber;
+                console.log("retrievedCheckedDays monthState status " + self.monthState);
             });
         }
     };
@@ -168,7 +179,7 @@ var Month = function () {
     
     self.loadMonth = function(key) {
         //loads month state from localstorage
-        var loadedMonth = loadFromLocalStorage(key, sampleHTML);
+        var loadedMonth = loadFromLocalStorage(key, emptyMonthState());
         return loadedMonth;
     };
     
@@ -181,6 +192,7 @@ var Month = function () {
     
     self.getCurrentMonth = function() {
         //updates monthState with current month data
+        var today = new Date();
     };
     
     self.clearCheckMarks = function() {
