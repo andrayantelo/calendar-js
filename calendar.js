@@ -149,15 +149,13 @@ var Month = function () {
     };
     
     
-    self.retrieveCheckedDays = function(selector) {
+    self.retrieveCheckedDays = function() {
         //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
-        if (selector.find('.daynumber.hidden')) {
-            selector.find('.daynumber.hidden').each(function (index) {
+        if ($week.find('td').find('.daynumber.hidden')) {
+            $week.find('td').find('.daynumber.hidden').each(function (index) {
                 var daynumber = $(this).attr('daynumber');
                 //the key is the index of the day for now
-                index = (index + daynumber)
-                self.monthState.checkedDays[index] = daynumber;
-                console.log("retrievedCheckedDays monthState status " + self.monthState);
+                self.monthState.checkedDays[self.monthState.dayIndex[daynumber]] = daynumber;
             });
         }
     };
