@@ -137,13 +137,14 @@ var Month = function () {
         
     };
     
-    self.generateUniqueId = function() {
-    };
     
     self.retrieveCheckedDays = function() {
+        //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
         if ($week.find('td').find('.daynumber.hidden')) {
             $week.find('td').find('.daynumber.hidden').each(function (index) {
-                console.log($(this).attr('daynumber'));
+                var daynumber = $(this).attr('daynumber');
+                //the key is the index of the day for now
+                self.monthState.checkedDays[index] = daynumber;
             });
         }
     };
