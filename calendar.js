@@ -86,10 +86,7 @@ var loadFromLocalStorage = function(storageItemKey, substituteLoadItem) {
 
 
 
-var clearCheckMarks = function() {
-    //this will clear checkmarks from the month
-    return;
-};
+
 
 var emptyMonthState = function() {
     return{
@@ -133,6 +130,11 @@ var Month = function () {
                  $(this).append('<div class="cell"><div class="daynumber"' + ' daynumber="' + dayOfMonth.toString() + '"></div><i class="fa fa-check hidden"></i></div>')
                  $(this).find('.cell').children('.daynumber').append(dayOfMonth);
             }
+            
+            if (self.monthState.checkedDays[index]) {
+                $( this ).find('.cell').children().toggleClass("hidden");
+            }
+            
         })
         
     };
@@ -176,7 +178,14 @@ var Month = function () {
         storeInLocalStorage(temporaryStorageKey, storageItem);
     
     };
+    
     self.getCurrentMonth = function() {
+        //updates monthState with current month data
+    };
+    
+    self.clearCheckMarks = function() {
+    //this will clear checkmarks from the month
+    return;
     };
 
 
