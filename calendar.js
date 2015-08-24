@@ -36,7 +36,7 @@ $(document).ready(function() {
 
     
     $('#saveButton').click(function(){
-        month.storeMonthHTML($month);
+        month.storeMonth($month);
         alert("Progress saved");
     });
     
@@ -45,7 +45,10 @@ $(document).ready(function() {
         
     });
     
-    month.initializeMonthHTML($month);
+    month.monthState = month.loadMonth(temporaryStorageKey);
+    console.log(month.monthState);
+    month.generateMonthDiv();
+    month.attachClickHandler();
     
 });
 
@@ -81,18 +84,6 @@ var loadFromLocalStorage = function(storageItemKey, substituteLoadItem) {
          
 };
 
-
-function collectTdChildrenHTML(theWeekRow){
-        //returns an array with the inner html of the top level children of each 'td'
-        var tdChildrenHTML = new Array();
-
-        theWeekRow.find('td').children().each(function(){
-         //array.push($(this).attr('class')); 
-             tdChildrenHTML.push($(this).html());
-         });      
-
-        return tdChildrenHTML;
-        };
 
 
 var clearCheckMarks = function() {
@@ -146,6 +137,17 @@ var Month = function () {
         
     };
     
+    self.generateUniqueId = function() {
+    };
+    
+    self.retrieveCheckedDays = function() {
+        if ($week.find('td').find('.daynumber.hidden')) {
+            $week.find('td').find('.daynumber.hidden').each(function (index) {
+                console.log($(this).attr('daynumber'));
+            });
+        }
+    };
+    
     
     self.initializeMonthHTML = function(monthSelector) {   // CURRENT LINE is this what I want
     //replaces the inner HTML of each td with new HTML
@@ -159,28 +161,23 @@ var Month = function () {
             self.attachClickHandler();
         }
     
-};
-
-//NEXT THREE METHODS DON'T MAKE SENSE ANYMORE
+    };
     
-    self.collectMonthHTML = function(monthSelector) {
-    //returns the inner html of the table with class .month  
-        var monthHTML = monthSelector.html();
+    self.loadMonth = function(key) {
+        //loads month state from localstorage
+        var loadedMonth = loadFromLocalStorage(key, sampleHTML);
+        return loadedMonth;
+    };
     
-        return monthHTML;
-};
-
-    self.storeMonthHTML = function(monthSelector) {    //CURRENT LINE working on storing and reloading
-    //will store the HTML of the table with class .month
-        var storageItem = monthSelector.html();
+    self.storeMonth = function() {    
+    //will store the state of the month object
+        var storageItem = self.monthState;
         storeInLocalStorage(temporaryStorageKey, storageItem);
     
-};
+    };
+    self.getCurrentMonth = function() {
+    };
 
-    self.loadMonthHTML = function(storageItemKey, substituteItem) {
-    //loads the stored HTML of the table with class .month from localstorage
-        return loadFromLocalStorage(storageItemKey, substituteItem);
-};
 
 };
 
