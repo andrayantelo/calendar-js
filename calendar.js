@@ -92,14 +92,14 @@ var emptyMonthState = function() {
         firstIndex: 4,
         //how many days in the month, default 30
         numberOfDays: 31,
-        //which days are checked index:day
+        //which days are checked index:daynumber
         checkedDays: {},
-        //day and their indices pairs day:index
+        //day and their indices pairs daynumber:index
         dayIndex: {},
         //month year
         monthYear: "2015",
         //month name
-        monthName: "January"
+        monthName: "January",
     }
 };
 
@@ -118,6 +118,7 @@ var Month = function () {
 
     self.clearMonthDiv = function() {
         //clear the days of the month
+        $('.header').find(".month-year").empty();
         $week.find('td').each(function(index) {
             $(this).empty();
             $(this).append('<div class="nill"></div>');
@@ -126,7 +127,10 @@ var Month = function () {
     
     self.generateMonthDiv = function() {
         //fills in the days of the month in an empty month template
-        $('.header').find(".month-year").append(self.monthState.monthName + " " + self.monthState.monthYear);
+        self.clearMonthDiv();
+        $('.header').find(".month-year").empty();
+        $('.header').find(".month-year").append(self.monthState.monthName + " " + 2015);
+        
         $week.find('td').each( function(index) {
         
             var dayOfMonth = index - (self.monthState.firstIndex - 1);
@@ -201,6 +205,7 @@ var Month = function () {
                 var dayOfMonth = index - (self.monthState.firstIndex - 1);
                 if (dayOfMonth >= 1 && dayOfMonth <= self.monthState.numberOfDays) {
                      self.monthState.dayIndex[dayOfMonth] = index;
+                     console.log("This is running");  //   CURRENT LINE, THIS ISN'T RUNNING?
                      $(this).empty();
                      var toAdd = '<div class="cell"><div class="daynumber"' + ' daynumber="' + dayOfMonth.toString() + '"></div><i class="fa fa-check hidden"></i></div>'
                      //var toAdd = toAdd.replace(/\s+/g, ''); <-----why didn't this work?
@@ -218,15 +223,72 @@ var Month = function () {
             0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
             6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
             11:"December"};
-        var today = new Date();
-        console.log(today);
+        var numberOfDays = { 
+            "January":31, "March":31, "April":30, "May":31, "June":30, "July":31,
+            "August":31, "September": 30, "October":31, "November":30, "December":31}
+        var today = new Date('February 2, 2014 23:15:30');
+        
         self.monthState.monthYear = today.getFullYear();
         self.monthState.monthName = months[today.getMonth()];
-        console.log(self.monthState.monthYear + " " + self.monthState.monthName);
+        if (self.monthState.monthName === "February") {
+            var monthYearType = year.determineYearType(self.monthState.monthYear);
+            if (monthYearType === "common") {
+                numberOfDays["February"] = 28;
+                self.monthState.numberOfDays = numberOfDays[self.monthState.monthName];
+                
+                }
+            else if (monthYearType === "leap") {
+                numberOfDays["February"] = 29;
+                console.log(numberOfDays["February"]);
+                self.monthState.numberOfDays = numberOfDays[self.monthState.monthName];
+            }
+                
+        }
+        else {
+            self.monthState.numberOfDays = numberOfDays[self.monthState.monthName];
+            }
         
     };
+    
     
 
 };
 
+var emptyYearState = function() {
+    return{
+        //year type
+        yearType: "common",
+        //year
+        year: "2015"
+    }
+};
+
+var Year = function() {
+    //represents a single calendar year
+    var self = this;
+    self.yearState = emptyYearState();
+    
+    self.determineYearType = function(year) {
+        //determines whether the year is a common year or a leap year
+        if(year%4!==0) {
+            self.yearState.yearType = "common"
+            return "common";
+        }
+        else if (year%100!==0) {
+            self.yearState.yearType = "leap"
+            return "leap";
+        }
+        else if (year%400!==0) {
+            self.yearState.yearType = "common"
+            return "common";
+        }
+        else{
+            self.yearState.yearType = "leap"
+            return "leap";
+        }
+        
+    };
+    
+};
 var month = new Month();
+var year = new Year();
