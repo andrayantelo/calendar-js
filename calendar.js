@@ -95,7 +95,11 @@ var emptyMonthState = function() {
         //which days are checked index:day
         checkedDays: {},
         //day and their indices pairs day:index
-        dayIndex: {}
+        dayIndex: {},
+        //month year
+        monthYear: "2015",
+        //month name
+        monthName: "January"
     }
 };
 
@@ -122,6 +126,7 @@ var Month = function () {
     
     self.generateMonthDiv = function() {
         //fills in the days of the month in an empty month template
+        $('.header').find(".month-year").append(self.monthState.monthName + " " + self.monthState.monthYear);
         $week.find('td').each( function(index) {
         
             var dayOfMonth = index - (self.monthState.firstIndex - 1);
@@ -189,11 +194,6 @@ var Month = function () {
     
     };
     
-    self.getCurrentMonth = function() {
-        //updates monthState with current month data
-        var today = new Date();
-    };
-    
     self.clearCheckMarks = function() {
     //this will clear checkmarks from the month
          $week.find('td').each( function(index) {
@@ -212,7 +212,20 @@ var Month = function () {
         self.attachClickHandler();
     };
     
-
+    self.getCurrentMonth = function() {
+        //updates monthState with current month data
+        var months = {
+            0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
+            6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
+            11:"December"};
+        var today = new Date();
+        console.log(today);
+        self.monthState.monthYear = today.getFullYear();
+        self.monthState.monthName = months[today.getMonth()];
+        console.log(self.monthState.monthYear + " " + self.monthState.monthName);
+        
+    };
+    
 
 };
 
