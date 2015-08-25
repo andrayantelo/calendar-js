@@ -41,7 +41,7 @@ $(document).ready(function() {
     });
     
     $('#clearButton').click(function() {
-        month.clearMonthDiv();
+        month.clearCheckMarks();
         
     });
     
@@ -196,8 +196,20 @@ var Month = function () {
     
     self.clearCheckMarks = function() {
     //this will clear checkmarks from the month
-    return;
+         $week.find('td').each( function(index) {
+        
+                var dayOfMonth = index - (self.monthState.firstIndex - 1);
+                if (dayOfMonth >= 1 && dayOfMonth <= self.monthState.numberOfDays) {
+                     self.monthState.dayIndex[dayOfMonth] = index;
+                     $(this).empty();
+                     var toAdd = '<div class="cell"><div class="daynumber"' + ' daynumber="' + dayOfMonth.toString() + '"></div><i class="fa fa-check hidden"></i></div>'
+                     //var toAdd = toAdd.replace(/\s+/g, ''); <-----why didn't this work?
+                     $(this).append(toAdd);
+                     $(this).find('.cell').children('.daynumber').append(dayOfMonth);
+                }
+        })
     };
+    
 
 
 };
