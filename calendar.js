@@ -36,7 +36,8 @@ $(document).ready(function() {
 
     
     $('#saveButton').click(function(){
-        month.storeMonth($month);
+        month.retrieveCheckedDays();
+        month.storeMonth();
         alert("Progress saved");
     });
     
@@ -45,13 +46,7 @@ $(document).ready(function() {
         
     });
     
-    month.loadMonth();
-        if (month.loadMonth() !== null) {            // IS THIS WRITTEN IN A GOOD WAY?
-            month.monthState = month.loadMonth();
-        }
-    console.log(month.monthState);
-    month.generateMonthDiv();
-    month.attachClickHandler();
+    month.initializeMonth();
     
 });
 
@@ -138,14 +133,18 @@ var Month = function () {
                  $(this).append(toAdd);
                  $(this).find('.cell').children('.daynumber').append(dayOfMonth);
             }
-            self.retrieveCheckedDays();
+        });
+    };
+    
+    self.generateCheckmarks = function() {
+        self.retrieveCheckedDays();
+        $week.find('td').each( function(index) {
+            
             if (self.monthState.checkedDays[index]) {
                 console.log("yes, the index is a key in the checkedDays object");
                 $( this ).find(".cell").children().toggleClass("hidden");
             }
          })
-         
-    
     };
     
     
@@ -162,17 +161,18 @@ var Month = function () {
     };
     
     
-    self.initializeMonthHTML = function(monthSelector) {   // CURRENT LINE is this what I want
-    //replaces the inner HTML of each td with new HTML
+    self.initializeMonth = function(monthSelector) {   // CURRENT LINE is this what I want
+    //initialize a month
     
-        var loadMonth = self.loadMonthHTML(temporaryStorageKey, "");
-        if (!loadMonth) {
-            self.attachClickHandler();
-            return;
+        self.loadMonth();
+        if (self.loadMonth() !== null) {            // IS THIS WRITTEN IN A GOOD WAY?
+            self.monthState = self.loadMonth();
         }
-        else {monthSelector.html(loadMonth);
-            self.attachClickHandler();
-        }
+        console.log(self.monthState);
+        self.retrieveCheckedDays();
+        self.generateMonthDiv();
+        self.generateCheckmarks();
+        self.attachClickHandler();
     
     };
     
@@ -208,6 +208,8 @@ var Month = function () {
                      $(this).find('.cell').children('.daynumber').append(dayOfMonth);
                 }
         })
+        self.monthState.checkedDays = {}; //CURRENT LINE, DO I NEED THIS?
+        self.attachClickHandler();
     };
     
 
