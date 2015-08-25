@@ -97,9 +97,9 @@ var emptyMonthState = function() {
         firstIndex: 4,
         //how many days in the month, default 30
         numberOfDays: 31,
-        //which days are checked
+        //which days are checked index:day
         checkedDays: {},
-        //day and their indices pairs
+        //day and their indices pairs day:index
         dayIndex: {}
     }
 };
@@ -133,19 +133,19 @@ var Month = function () {
             if (dayOfMonth >= 1 && dayOfMonth <= self.monthState.numberOfDays) {
                  self.monthState.dayIndex[dayOfMonth] = index;
                  $(this).empty();
-                 var toAdd = '<div class="cell"><div class="daynumber"'+ ' daynumber="' + dayOfMonth.toString() + '"' + 'dayIndex="' + self.monthState.dayIndex[dayOfMonth] + '" '+'></div><i class="fa fa-check hidden"></i></div>'
+                 var toAdd = '<div class="cell"><div class="daynumber"' + ' daynumber="' + dayOfMonth.toString() + '"></div><i class="fa fa-check hidden"></i></div>'
                  //var toAdd = toAdd.replace(/\s+/g, ''); <-----why didn't this work?
                  $(this).append(toAdd);
                  $(this).find('.cell').children('.daynumber').append(dayOfMonth);
-                 
             }
-            
+            self.retrieveCheckedDays();
             if (self.monthState.checkedDays[index]) {
-                $( this ).find('.cell').children().toggleClass("hidden");
+                console.log("yes, the index is a key in the checkedDays object");
+                $( this ).find(".cell").children().toggleClass("hidden");
             }
-            
-        })
-        
+         })
+         
+    
     };
     
     
@@ -156,6 +156,7 @@ var Month = function () {
                 var daynumber = $(this).attr('daynumber');
                 //the key is the index of the day for now
                 self.monthState.checkedDays[self.monthState.dayIndex[daynumber]] = daynumber;
+                self.storeMonth();
             });
         }
     };
@@ -175,9 +176,9 @@ var Month = function () {
     
     };
     
-    self.loadMonth = function(key) {
+    self.loadMonth = function() {
         //loads month state from localstorage
-        var loadedMonth = loadFromLocalStorage(key, emptyMonthState());
+        var loadedMonth = loadFromLocalStorage(temporaryStorageKey, emptyMonthState());
         return loadedMonth;
     };
     
