@@ -21,7 +21,7 @@ $(document).ready(function() {
         
     });
     
-    month.initializeMonth();
+    month.initializeMonthDiv();
     
 });
 
@@ -57,7 +57,48 @@ var loadFromLocalStorage = function(storageItemKey, substituteLoadItem) {
          
 };
 
+var getCurrentMonthName = function() {
+        //updates monthState with current monthYear and monthName
+    var months = {
+        0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
+        6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
+        11:"December"};
+    var today = new Date();
+    return months[today.getMonth()];
+    
+};
 
+var getCurrentNumberOfDays = function(monthName) {
+    //updates monthState with current month numberOfDays
+        
+    var numberOfDays = { 
+        "January":31, "March":31, "April":30, "May":31, "June":30, "July":31,
+        "August":31, "September": 30, "October":31, "November":30, "December":31}
+        
+        
+    if (monthName === "February") {
+        var monthYearType = year.determineYearType(self.monthState.monthYear);
+        if (monthYearType === "common") {
+            numberOfDays["February"] = 28;
+            return numberOfDays[monthName];
+                
+            }
+        else if (monthYearType === "leap") {
+            numberOfDays["February"] = 29;
+            return numberOfDays[monthName];
+        }
+                
+    }
+    else {
+        return  numberOfDays[monthName];
+        }
+};
+
+var getCurrentYear = function() {
+    var today = new Date();
+    return today.getFullYear();
+        
+};
 
 
 
@@ -75,6 +116,8 @@ var emptyMonthState = function() {
         monthYear: "2015",
         //month name
         monthName: "January",
+        //current date
+        today: new Date()
     }
 };
 
@@ -145,7 +188,7 @@ var Month = function () {
     };
     
     
-    self.initializeMonth = function(monthSelector) {   // CURRENT LINE is this what I want
+    self.initializeMonthDiv = function(monthSelector) {   // CURRENT LINE is this what I want
     //initialize a month
     
         self.loadMonth();
@@ -175,54 +218,22 @@ var Month = function () {
     
     self.clearCheckMarks = function() {
     //this will clear checkmarks from the month
-    //     $week.find('td').each( function(index) {
-        
-    //            var dayOfMonth = index - (self.monthState.firstIndex - 1);
-    //            if (dayOfMonth >= 1 && dayOfMonth <= self.monthState.numberOfDays) {
-                     //self.monthState.dayIndex[dayOfMonth] = index;   //DO I EVEN NEED THIS LINE?
-    //                 $(this).empty();
-     //                var toAdd = '<div class="cell"><div class="daynumber"' + ' daynumber="' + dayOfMonth.toString() + '"></div><i class="fa fa-check hidden"></i></div>'
-    //                 //var toAdd = toAdd.replace(/\s+/g, ''); <-----why didn't this work? use .trim()?
-    //                 $(this).append(toAdd);
-    //                 $(this).find('.cell').children('.daynumber').append(dayOfMonth);
-    //            }
-    //    })
-        self.monthState.checkedDays = {}; //CURRENT LINE, DO I NEED THIS?
+        self.monthState.checkedDays = {}; 
         self.generateMonthDiv();
         self.attachClickHandler();
     };
     
-    self.getCurrentMonth = function() {
-        //updates monthState with current month data
-        var months = {
-            0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
-            6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
-            11:"December"};
-        var numberOfDays = { 
-            "January":31, "March":31, "April":30, "May":31, "June":30, "July":31,
-            "August":31, "September": 30, "October":31, "November":30, "December":31}
-        var today = new Date('February 2, 2014 23:15:30');
+    
+    self.initCurrentMonthState = function() {
+        self.monthState.monthName = getCurrentMonthName();
+        self.monthState.numberOfDays = getCurrentNumberOfDays(self.monthState.monthName);
+        self.monthState.monthYear = getCurrentYear();
+        return self.monthState;
         
-        self.monthState.monthYear = today.getFullYear();
-        self.monthState.monthName = months[today.getMonth()];
-        if (self.monthState.monthName === "February") {
-            var monthYearType = year.determineYearType(self.monthState.monthYear);
-            if (monthYearType === "common") {
-                numberOfDays["February"] = 28;
-                self.monthState.numberOfDays = numberOfDays[self.monthState.monthName];
-                
-                }
-            else if (monthYearType === "leap") {
-                numberOfDays["February"] = 29;
-                console.log(numberOfDays["February"]);
-                self.monthState.numberOfDays = numberOfDays[self.monthState.monthName];
-            }
-                
-        }
-        else {
-            self.monthState.numberOfDays = numberOfDays[self.monthState.monthName];
-            }
-        
+    };
+    
+    self.retrieveCurrentFirstIndex = function() {
+        //updates monthState with current firstIndex
     };
     
     
@@ -234,7 +245,7 @@ var emptyYearState = function() {
         //year type
         yearType: "common",
         //year
-        year: "2015"
+        currentYear: getCurrentYear()
     }
 };
 
