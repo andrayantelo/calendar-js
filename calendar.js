@@ -63,7 +63,7 @@ var getCurrentMonthName = function() {
         0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
         6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
         11:"December"};
-    var today = new Date();
+    var today = new Date();  //can i pass an argument date and have var today = new Date(date) || new Date(); ???
     return months[today.getMonth()];
     
 };
@@ -95,7 +95,7 @@ var getCurrentNumberOfDays = function(monthName) {
 };
 
 var getCurrentYear = function() {
-    var today = new Date();
+    var today = new Date(); //can i pass an argument date and have var today = new Date(date) || new Date(); ???
     return today.getFullYear();
         
 };
@@ -105,11 +105,12 @@ var diffBetweenDays = function(firstDate, secondDate) {
     var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
     return Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
 };
-var getCurrentDayOfWeek = function() {
+var getDayOfWeek = function(daynumber) {
+    //date is in 'year, month, day' form
     //retrieves the index (day of the week) of the current day
     var firstDate = new Date(1986, 09, 12);
     var today = new Date();
-    var todayDate = today.getDate();
+    var todayDate = daynumber || today.getDate();
     var todayYear = today.getFullYear();
     var todayMonth = today.getMonth();
     var secondDate = new Date(todayYear, todayMonth, todayDate);
@@ -118,21 +119,6 @@ var getCurrentDayOfWeek = function() {
     var index = diffDays%7;
     return index;
 };
-
-var getCurrentFirstIndex = function() {
-    //retrieves the index (day of week) of the first day of the current month
-    var firstDate = new Date(1986, 09, 12);
-    var today = new Date();
-    var todayDate = 1;
-    var todayYear = today.getFullYear();
-    var todayMonth = today.getMonth();
-    var secondDate = new Date(todayYear, todayMonth, todayDate);
-    
-    var diffDays = diffBetweenDays(firstDate, secondDate);
-    var index = diffDays%7;
-    return index;
-};
-
 
 
 var emptyMonthState = function() {
@@ -261,7 +247,7 @@ var Month = function () {
         self.monthState.monthName = getCurrentMonthName();
         self.monthState.numberOfDays = getCurrentNumberOfDays(self.monthState.monthName);
         self.monthState.monthYear = getCurrentYear();
-        self.monthState.firstIndex = getCurrentFirstIndex();
+        self.monthState.firstIndex = getDayOfWeek(1);
         return self.monthState;
         
     };
