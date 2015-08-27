@@ -100,6 +100,39 @@ var getCurrentYear = function() {
         
 };
 
+var diffBetweenDays = function(firstDate, secondDate) {
+    //calculates how many days between two dates
+    var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+    return Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
+};
+var getCurrentDayOfWeek = function() {
+    //retrieves the index (day of the week) of the current day
+    var firstDate = new Date(1986, 09, 12);
+    var today = new Date();
+    var todayDate = today.getDate();
+    var todayYear = today.getFullYear();
+    var todayMonth = today.getMonth();
+    var secondDate = new Date(todayYear, todayMonth, todayDate);
+        
+    var diffDays = diffBetweenDays(firstDate, secondDate);
+    var index = diffDays%7;
+    return index;
+};
+
+var getCurrentFirstIndex = function() {
+    //retrieves the index (day of week) of the first day of the current month
+    var firstDate = new Date(1986, 09, 12);
+    var today = new Date();
+    var todayDate = 1;
+    var todayYear = today.getFullYear();
+    var todayMonth = today.getMonth();
+    var secondDate = new Date(todayYear, todayMonth, todayDate);
+    
+    var diffDays = diffBetweenDays(firstDate, secondDate);
+    var index = diffDays%7;
+    return index;
+};
+
 
 
 var emptyMonthState = function() {
@@ -228,15 +261,10 @@ var Month = function () {
         self.monthState.monthName = getCurrentMonthName();
         self.monthState.numberOfDays = getCurrentNumberOfDays(self.monthState.monthName);
         self.monthState.monthYear = getCurrentYear();
+        self.monthState.firstIndex = getCurrentFirstIndex();
         return self.monthState;
         
     };
-    
-    self.retrieveCurrentFirstIndex = function() {
-        //updates monthState with current firstIndex
-    };
-    
-    
 
 };
 
