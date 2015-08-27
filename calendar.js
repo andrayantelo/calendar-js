@@ -1,34 +1,9 @@
- /*   alert("this works");  */
- var $cal = $(".calendar")
-
-/* might not need createMonth in the end 
-var createMonth = function() {
-    
-    console.log("this is happening"); // check if it's working
-    
-    var months = ["January", "February", "March", "April", "May", "June", 
-                  "July", "August", "September", "October", "November", 
-                  "December"];
-                  
-    
-    for (i = 0; i< months.length; i ++) {
-        
-            
-        $(".calendar .monthframe").children('.month-year').each(function () {
-            $(this).text(months[i]); });
-        
-        };
-    };
-*/    
-    
-
+//move these under the $document ready line?
+var $cal = $(".calendar") 
 var $week = $('.week');  //this is the class for the rows of the table
 var $month = $('.month');  //this is the class for the month tables
 var $aDay = $('.aDay'); //class for day cells
 var temporaryStorageKey = "temporaryStorageKey";
-
-//a sample array of saved checkmarks and daynumbers where everythig is nill except top row
-
 
 
 $(document).ready(function() {
@@ -50,7 +25,7 @@ $(document).ready(function() {
     
 });
 
-
+//UTILITY FUNCTIONS
 
 var storeInLocalStorage = function(storageItemKey, storageItem) {        
     
@@ -200,20 +175,20 @@ var Month = function () {
     
     self.clearCheckMarks = function() {
     //this will clear checkmarks from the month
-         $week.find('td').each( function(index) {
+    //     $week.find('td').each( function(index) {
         
-                var dayOfMonth = index - (self.monthState.firstIndex - 1);
-                if (dayOfMonth >= 1 && dayOfMonth <= self.monthState.numberOfDays) {
-                     self.monthState.dayIndex[dayOfMonth] = index;
-                     console.log("This is running");  //   CURRENT LINE, THIS ISN'T RUNNING?
-                     $(this).empty();
-                     var toAdd = '<div class="cell"><div class="daynumber"' + ' daynumber="' + dayOfMonth.toString() + '"></div><i class="fa fa-check hidden"></i></div>'
-                     //var toAdd = toAdd.replace(/\s+/g, ''); <-----why didn't this work?
-                     $(this).append(toAdd);
-                     $(this).find('.cell').children('.daynumber').append(dayOfMonth);
-                }
-        })
+    //            var dayOfMonth = index - (self.monthState.firstIndex - 1);
+    //            if (dayOfMonth >= 1 && dayOfMonth <= self.monthState.numberOfDays) {
+                     //self.monthState.dayIndex[dayOfMonth] = index;   //DO I EVEN NEED THIS LINE?
+    //                 $(this).empty();
+     //                var toAdd = '<div class="cell"><div class="daynumber"' + ' daynumber="' + dayOfMonth.toString() + '"></div><i class="fa fa-check hidden"></i></div>'
+    //                 //var toAdd = toAdd.replace(/\s+/g, ''); <-----why didn't this work? use .trim()?
+    //                 $(this).append(toAdd);
+    //                 $(this).find('.cell').children('.daynumber').append(dayOfMonth);
+    //            }
+    //    })
         self.monthState.checkedDays = {}; //CURRENT LINE, DO I NEED THIS?
+        self.generateMonthDiv();
         self.attachClickHandler();
     };
     
