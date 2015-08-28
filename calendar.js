@@ -21,7 +21,7 @@ $(document).ready(function() {
         
     });
     
-    year.generateYearDiv();
+    year.generateEmptyYearDiv();
     
 });
 
@@ -115,17 +115,22 @@ var diffBetweenDays = function(firstDate, secondDate) {
     var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
     return Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
 };
-var getDayOfWeek = function(daynumber) {
+var getDayOfWeek = function(date) {
     
     //retrieves the index (day of the week) of the given day or the current day
     //only works for current month
     var firstDate = new Date(1986, 09, 12);
-    var today = new Date();
-    var todayDate = daynumber || today.getDate();
-    var todayYear = today.getFullYear();
-    var todayMonth = today.getMonth();
-    var secondDate = new Date(todayYear, todayMonth, todayDate);
-        
+    if (date) {
+        date = new Date(date);
+    }
+    else {
+        date = new Date();
+    }
+    var dateDate = date.getDate();
+    var dateYear = date.getFullYear();
+    var dateMonth = date.getMonth();
+    var secondDate = new Date(dateYear, dateMonth, dateDate);
+    
     var diffDays = diffBetweenDays(firstDate, secondDate);
     var index = diffDays%7;
     return index;
@@ -151,10 +156,11 @@ var emptyMonthState = function() {
     }
 };
 
-var Month = function () {
+var Month = function (date) {
     //represents a single month
     var self = this;
     self.monthState = emptyMonthState();
+    self.date = date;
     
     self.attachClickHandler = function() {
         $(".cell").click(function (event) {
@@ -257,11 +263,11 @@ var Month = function () {
     };
     
     
-    self.initCurrentMonthState = function() {
-        self.monthState.monthName = getMonthName();
+    self.initCurrentMonthState = function(date) {
+        self.monthState.monthName = getMonthName(self.date);
         self.monthState.numberOfDays = getNumberOfDays(self.monthState.monthName);
-        self.monthState.monthYear = getYear();
-        self.monthState.firstIndex = getDayOfWeek(1);
+        self.monthState.monthYear = getYear(self.date);
+        self.monthState.firstIndex = getDayOfWeek(self.date);
         return self.monthState;
         
     };
@@ -274,7 +280,9 @@ var emptyYearState = function() {
         //year type
         yearType: "common",
         //year
-        currentYear: getYear()
+        currentYear: getYear(),
+        //object with 12 month objects
+        months: {}
     }
 };
 
@@ -304,12 +312,25 @@ var Year = function() {
         
     };
     
-    self.generateYearDiv = function(year) {
+    self.generateEmptyYearDiv = function() {
         //will generate the html for the given year
         for (i=0; i<=11; i++) {
             $('.calendar').append('<div class="monthframe"></div>');
         }
         $('.monthframe').append($('#template').html());
+    };
+    
+    self.fillYearDiv = function() {
+         var months = {
+        0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
+        6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
+        11:"December"};
+        for (i=0; i<=11; i++) {
+            var monthi = new Month(months[i] + ' ' + year.yearState.currentYear);
+            year.yearState.months[months[i]] = monthi;
+        }
+            
+        
     };
     
 };
