@@ -66,8 +66,9 @@ html {
     border: 1px solid #e1e1e1;
 }*/
 
-.monthframe {
+.monthframe, #template {
     margin:15px;
+    margin-bottom: 5px;
 }
 /*#calendar #calendarframe*/
 .month td {

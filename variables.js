@@ -158,3 +158,4 @@ var sampleHTML = '<tr class="week"><td class="aDay"><div class="nill"> \
                 </tbody>'
 //use regex to take away all the white spaces
 var sampleHTML = sampleHTML.replace(/\s+/g, ''); 
+

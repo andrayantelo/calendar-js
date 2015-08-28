@@ -21,8 +21,7 @@ $(document).ready(function() {
         
     });
     
-    
-    month.initializeMonthDiv();
+    year.generateYearDiv();
     
 });
 
@@ -144,9 +143,9 @@ var emptyMonthState = function() {
         //day and their indices pairs daynumber:index
         dayIndex: {},
         //month year
-        monthYear: "2015",
+        monthYear: "",
         //month name
-        monthName: "January",
+        monthName: "",
         //current date
         today: new Date()
     }
@@ -174,17 +173,17 @@ var Month = function () {
         })
     };
     
-    self.generateMonthDiv = function() {
+    self.generateMonthDiv = function(currentMonth) {
         //fills in the days of the month in an empty month template
         self.clearMonthDiv();
         $('.header').find(".month-year").empty();
-        $('.header').find(".month-year").append(self.monthState.monthName + " " + self.monthState.monthYear);
+        $('.header').find(".month-year").append(currentMonth.monthState.monthName + " " + currentMonth.monthState.monthYear);
         
         $week.find('td').each( function(index) {
         
-            var dayOfMonth = index - (self.monthState.firstIndex - 1);
-            if (dayOfMonth >= 1 && dayOfMonth <= self.monthState.numberOfDays) {
-                 self.monthState.dayIndex[dayOfMonth] = index;
+            var dayOfMonth = index - (currentMonth.monthState.firstIndex - 1);
+            if (dayOfMonth >= 1 && dayOfMonth <= currentMonth.monthState.numberOfDays) {
+                 currentMonth.monthState.dayIndex[dayOfMonth] = index;
                  $(this).empty();
                  var toAdd = '<div class="cell"><div class="daynumber"' + ' daynumber="' + dayOfMonth.toString() + '"></div><i class="fa fa-check hidden"></i></div>'
                  //var toAdd = toAdd.replace(/\s+/g, ''); <-----why didn't this work?
@@ -194,11 +193,11 @@ var Month = function () {
         });
     };
     
-    self.generateCheckmarks = function() {
+    self.generateCheckmarks = function(currentMonth) {
         self.retrieveCheckedDays();
         $week.find('td').each( function(index) {
             
-            if (self.monthState.checkedDays[index]) {
+            if (currentMonth.monthState.checkedDays[index]) {
                 console.log("yes, the index is a key in the checkedDays object");
                 $( this ).find(".cell").children().toggleClass("hidden");
             }
@@ -206,14 +205,14 @@ var Month = function () {
     };
     
     
-    self.retrieveCheckedDays = function() {
+    self.retrieveCheckedDays = function(currentMonth) {
         //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
         if ($week.find('td').find('.daynumber.hidden')) {
             $week.find('td').find('.daynumber.hidden').each(function (index) {
                 var daynumber = $(this).attr('daynumber');
                 //the key is the index of the day for now
-                self.monthState.checkedDays[self.monthState.dayIndex[daynumber]] = daynumber;
-                self.storeMonth();
+                currentMonth.monthState.checkedDays[currentMonth.monthState.dayIndex[daynumber]] = daynumber;
+                currentMonth.storeMonth();
             });
         }
     };
@@ -230,9 +229,9 @@ var Month = function () {
             self.initCurrentMonthState();
         }
         console.log(self.monthState);
-        self.retrieveCheckedDays();
-        self.generateMonthDiv();
-        self.generateCheckmarks();
+        self.retrieveCheckedDays(self);
+        self.generateMonthDiv(self);
+        self.generateCheckmarks(self);
         self.attachClickHandler();
     
     };
@@ -266,6 +265,7 @@ var Month = function () {
         return self.monthState;
         
     };
+    
 
 };
 
@@ -302,6 +302,14 @@ var Year = function() {
             return "leap";
         }
         
+    };
+    
+    self.generateYearDiv = function(year) {
+        //will generate the html for the given year
+        for (i=0; i<=11; i++) {
+            $('.calendar').append('<div class="monthframe"></div>');
+        }
+        $('.monthframe').append($('#template').html());
     };
     
 };
