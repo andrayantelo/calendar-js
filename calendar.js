@@ -21,6 +21,7 @@ $(document).ready(function() {
         
     });
     
+    
     month.initializeMonthDiv();
     
 });
@@ -36,7 +37,7 @@ var storeInLocalStorage = function(storageItemKey, storageItem) {
         //(storageString) to it 
 };
 
-var loadFromLocalStorage = function(storageItemKey, substituteLoadItem) {  
+var loadFromLocalStorage = function(storageItemKey) {  
         //loads item from localstorage with key storageItemKey and returns the item
         //if the item is not in localStorage, returns substituteLoadItem
         var storageItem = localStorage.getItem(storageItemKey)
@@ -44,7 +45,7 @@ var loadFromLocalStorage = function(storageItemKey, substituteLoadItem) {
         
         if (storageItem === null) {
             console.log(storageItemKey + "not found in localstorage");
-            return substituteLoadItem;   
+            return;   
         }
                                                                                                    
  
@@ -177,7 +178,7 @@ var Month = function () {
         //fills in the days of the month in an empty month template
         self.clearMonthDiv();
         $('.header').find(".month-year").empty();
-        $('.header').find(".month-year").append(self.monthState.monthName + " " + 2015);
+        $('.header').find(".month-year").append(self.monthState.monthName + " " + self.monthState.monthYear);
         
         $week.find('td').each( function(index) {
         
@@ -222,8 +223,11 @@ var Month = function () {
     //initialize a month
     
         self.loadMonth();
-        if (self.loadMonth() !== null) {            // IS THIS WRITTEN IN A GOOD WAY?
+        if (self.loadMonth() !== undefined) {            // IS THIS WRITTEN IN A GOOD WAY?
             self.monthState = self.loadMonth();
+        }
+        else {
+            self.initCurrentMonthState();
         }
         console.log(self.monthState);
         self.retrieveCheckedDays();
@@ -235,7 +239,7 @@ var Month = function () {
     
     self.loadMonth = function() {
         //loads month state from localstorage
-        var loadedMonth = loadFromLocalStorage(temporaryStorageKey, emptyMonthState());
+        var loadedMonth = loadFromLocalStorage(temporaryStorageKey);
         return loadedMonth;
     };
     
@@ -255,9 +259,9 @@ var Month = function () {
     
     
     self.initCurrentMonthState = function() {
-        self.monthState.monthName = getCurrentMonthName();
-        self.monthState.numberOfDays = getCurrentNumberOfDays(self.monthState.monthName);
-        self.monthState.monthYear = getCurrentYear();
+        self.monthState.monthName = getMonthName();
+        self.monthState.numberOfDays = getNumberOfDays(self.monthState.monthName);
+        self.monthState.monthYear = getYear();
         self.monthState.firstIndex = getDayOfWeek(1);
         return self.monthState;
         
