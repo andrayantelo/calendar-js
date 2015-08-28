@@ -57,27 +57,31 @@ var loadFromLocalStorage = function(storageItemKey, substituteLoadItem) {
          
 };
 
-var getCurrentMonthName = function() {
+var getMonthName = function(date) {
         //updates monthState with current monthYear and monthName
     var months = {
         0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
         6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
         11:"December"};
-    var today = new Date();  //can i pass an argument date and have var today = new Date(date) || new Date(); ???
-    return months[today.getMonth()];
-    
+    if (date) {
+        date = new Date(date);
+        return months[date.getMonth()];
+    }
+    else {
+        var today = new Date();  //can i pass an argument date and have var today = new Date(date) || new Date(); ???
+        return months[today.getMonth()];
+    }
 };
 
-var getCurrentNumberOfDays = function(monthName) {
+var getNumberOfDays = function(monthName, date) {
     //updates monthState with current month numberOfDays
-        
     var numberOfDays = { 
         "January":31, "March":31, "April":30, "May":31, "June":30, "July":31,
         "August":31, "September": 30, "October":31, "November":30, "December":31}
         
         
     if (monthName === "February") {
-        var monthYearType = year.determineYearType(self.monthState.monthYear);
+        var monthYearType = year.determineYearType(getYear(date));
         if (monthYearType === "common") {
             numberOfDays["February"] = 28;
             return numberOfDays[monthName];
@@ -94,9 +98,15 @@ var getCurrentNumberOfDays = function(monthName) {
         }
 };
 
-var getCurrentYear = function() {
-    var today = new Date(); //can i pass an argument date and have var today = new Date(date) || new Date(); ???
-    return today.getFullYear();
+var getYear = function(date) {
+    var today = new Date();
+    if (date) {
+        date = new Date(date);
+        return date.getFullYear()
+    }
+    else {
+        return today.getFullYear()
+    }
         
 };
 
@@ -106,8 +116,9 @@ var diffBetweenDays = function(firstDate, secondDate) {
     return Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
 };
 var getDayOfWeek = function(daynumber) {
-    //date is in 'year, month, day' form
-    //retrieves the index (day of the week) of the current day
+    
+    //retrieves the index (day of the week) of the given day or the current day
+    //only works for current month
     var firstDate = new Date(1986, 09, 12);
     var today = new Date();
     var todayDate = daynumber || today.getDate();
@@ -259,7 +270,7 @@ var emptyYearState = function() {
         //year type
         yearType: "common",
         //year
-        currentYear: getCurrentYear()
+        currentYear: getYear()
     }
 };
 
