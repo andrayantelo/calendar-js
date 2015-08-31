@@ -3,6 +3,7 @@ var $cal = $(".calendar")
 var $week = $('.week');  //this is the class for the rows of the table
 var $month = $('.month');  //this is the class for the month tables
 var $aDay = $('.aDay'); //class for day cells
+var $monthframe = $('.monthframe');
 var temporaryStorageKey = "temporaryStorageKey";
 
 
@@ -21,7 +22,8 @@ $(document).ready(function() {
         
     });
     
-    //year.generateEmptyYearDiv();
+    year.generateEmptyYearDiv();
+    year.fillYearDiv();
     
 });
 
@@ -196,7 +198,8 @@ var Month = function (date) {
                  $(this).append(toAdd);
                  $(this).find('.cell').children('.daynumber').append(dayOfMonth);
             }
-        });
+        })
+        
     };
     
     self.generateCheckmarks = function() {
@@ -317,18 +320,19 @@ var Year = function() {
         for (i=0; i<=11; i++) {
             $('.calendar').append('<div class="monthframe"></div>');
         }
-        $('.monthframe').append($('#template').html());
+        $('.monthframe').append($('#template').html()); //having $monthframe didn't work here
     };
     
     self.fillYearDiv = function() {
-         var months = {
+    //fills an empty year div with appropriate months and their data
+         var monthNames = {
         0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
         6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
         11:"December"};
         for (i=0; i<=11; i++) {
-            var monthi = new Month(months[i] + ' ' + year.yearState.currentYear);
+            var monthi = new Month(monthNames[i] + ' ' + year.yearState.currentYear);
             monthi.initCurrentMonthState();
-            //monthi.monthState
+            //console.log(monthi.monthState);
             year.yearState.months[i] = monthi;
             
             year.addAttrToMonthFrame($('.monthframe'));
@@ -338,10 +342,18 @@ var Year = function() {
     };
     
     self.addAttrToMonthFrame = function(monthFrame) {  //should probably be a method in month object
+    //adds a unique id to each month
         monthFrame.each(function(index) {
             $(this).attr('id', 'month'+index);
-        });
-        
+        })
+    };
+    
+    self.attachYearClickHandler = function() {
+    //attaches clickhandler to each month in a year
+        for(i=0;i<=11;i++) {
+            year.yearState.months[i].attachClickHandler();
+        }
+
     };
 };
 var month = new Month();
