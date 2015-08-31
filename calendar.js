@@ -164,8 +164,8 @@ var Month = function (date) {
     self.monthState = emptyMonthState();
     self.date = date;
     
-    self.attachClickHandler = function() {
-        $(".cell").click(function (event) {
+    self.attachClickHandler = function(monthId) {
+        monthId.find('.cell').click(function (event) {
             console.log(event);  // prints so you can look at the event object in the console
             $( this ).children().toggleClass("hidden");// toggles between hidden and daynumber/fa fa-check
             
@@ -351,7 +351,7 @@ var Year = function() {
     self.attachYearClickHandler = function() {
     //attaches clickhandler to each month in a year
         for(i=0;i<=11;i++) {
-            year.yearState.months[i].attachClickHandler();
+            self.yearState.months[i].attachClickHandler($('#month' + i));
         }
 
     };
