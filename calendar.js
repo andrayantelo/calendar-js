@@ -21,7 +21,7 @@ $(document).ready(function() {
         
     });
     
-    year.generateEmptyYearDiv();
+    //year.generateEmptyYearDiv();
     
 });
 
@@ -170,26 +170,26 @@ var Month = function (date) {
         });
     };
 
-    self.clearMonthDiv = function() {
+    self.clearMonthDiv = function(monthId) {
         //clear the days of the month
-        $('.header').find(".month-year").empty();
-        $week.find('td').each(function(index) {
+        monthId.find('.header').find('.month-year').empty();
+        monthId.find($week).find('td').each(function(index) {
             $(this).empty();
             $(this).append('<div class="nill"></div>');
         })
     };
     
-    self.generateMonthDiv = function(currentMonth) {
+    self.generateMonthDiv = function(monthId) {
         //fills in the days of the month in an empty month template
-        self.clearMonthDiv();
-        $('.header').find(".month-year").empty();
-        $('.header').find(".month-year").append(currentMonth.monthState.monthName + " " + currentMonth.monthState.monthYear);
+        self.clearMonthDiv(monthId);
+        monthId.find(".month-year").empty();
+        monthId.find(".month-year").append(self.monthState.monthName + " " + self.monthState.monthYear);
         
-        $week.find('td').each( function(index) {
+        monthId.find($('.week')).find('td').each( function(index) {
         
-            var dayOfMonth = index - (currentMonth.monthState.firstIndex - 1);
-            if (dayOfMonth >= 1 && dayOfMonth <= currentMonth.monthState.numberOfDays) {
-                 currentMonth.monthState.dayIndex[dayOfMonth] = index;
+            var dayOfMonth = index - (self.monthState.firstIndex - 1);
+            if (dayOfMonth >= 1 && dayOfMonth <= self.monthState.numberOfDays) {
+                 self.monthState.dayIndex[dayOfMonth] = index;
                  $(this).empty();
                  var toAdd = '<div class="cell"><div class="daynumber"' + ' daynumber="' + dayOfMonth.toString() + '"></div><i class="fa fa-check hidden"></i></div>'
                  //var toAdd = toAdd.replace(/\s+/g, ''); <-----why didn't this work?
@@ -199,11 +199,11 @@ var Month = function (date) {
         });
     };
     
-    self.generateCheckmarks = function(currentMonth) {
+    self.generateCheckmarks = function() {
         self.retrieveCheckedDays();
         $week.find('td').each( function(index) {
             
-            if (currentMonth.monthState.checkedDays[index]) {
+            if (self.monthState.checkedDays[index]) {
                 console.log("yes, the index is a key in the checkedDays object");
                 $( this ).find(".cell").children().toggleClass("hidden");
             }
@@ -211,14 +211,14 @@ var Month = function (date) {
     };
     
     
-    self.retrieveCheckedDays = function(currentMonth) {
+    self.retrieveCheckedDays = function() {
         //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
         if ($week.find('td').find('.daynumber.hidden')) {
             $week.find('td').find('.daynumber.hidden').each(function (index) {
                 var daynumber = $(this).attr('daynumber');
                 //the key is the index of the day for now
-                currentMonth.monthState.checkedDays[currentMonth.monthState.dayIndex[daynumber]] = daynumber;
-                currentMonth.storeMonth();
+                self.monthState.checkedDays[self.monthState.dayIndex[daynumber]] = daynumber;
+                self.storeMonth();
             });
         }
     };
@@ -263,7 +263,7 @@ var Month = function (date) {
     };
     
     
-    self.initCurrentMonthState = function(date) {
+    self.initCurrentMonthState = function() {
         self.monthState.monthName = getMonthName(self.date);
         self.monthState.numberOfDays = getNumberOfDays(self.monthState.monthName);
         self.monthState.monthYear = getYear(self.date);
@@ -327,12 +327,22 @@ var Year = function() {
         11:"December"};
         for (i=0; i<=11; i++) {
             var monthi = new Month(months[i] + ' ' + year.yearState.currentYear);
-            year.yearState.months[months[i]] = monthi;
-        }
+            monthi.initCurrentMonthState();
+            //monthi.monthState
+            year.yearState.months[i] = monthi;
             
-        
+            year.addAttrToMonthFrame($('.monthframe'));
+            monthi.generateMonthDiv($('#month' + i));
+            
+        }
     };
     
+    self.addAttrToMonthFrame = function(monthFrame) {  //should probably be a method in month object
+        monthFrame.each(function(index) {
+            $(this).attr('id', 'month'+index);
+        });
+        
+    };
 };
 var month = new Month();
 var year = new Year();
