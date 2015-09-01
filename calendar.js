@@ -22,9 +22,9 @@ $(document).ready(function() {
         
     });
     
-    year.generateEmptyYearDiv();
-    year.fillYearDiv();
-    year.attachYearClickHandler();
+    //year.generateEmptyYearDiv();
+    //year.fillYearDiv();
+    //year.attachYearClickHandler();
     
 });
 
@@ -58,6 +58,10 @@ var loadFromLocalStorage = function(storageItemKey) {
        return storageItem
        }
          
+};
+
+var getMonthIndex = function(date) {
+    date.getMonth
 };
 
 var getMonthName = function(date) {
@@ -155,7 +159,7 @@ var emptyMonthState = function() {
         //month name
         monthName: "",
         //current date
-        today: new Date(),
+        //today: new Date(),
         //monthID
         monthId: ""
     }
@@ -165,7 +169,7 @@ var Month = function (date) {
     //represents a single month
     var self = this;
     self.monthState = emptyMonthState();
-    self.date = date;
+    self.date = date || new Date();
     
     self.attachClickHandler = function(monthId) {
         monthId.find('.cell').click(function (event) {
@@ -177,15 +181,23 @@ var Month = function (date) {
 
     self.clearMonthDiv = function(monthId) {
         //clear the days of the month
-        monthId.find('.header').find('.month-year').empty();
-        monthId.find($week).find('td').each(function(index) {
+        var $monthId = $('#' + monthId);
+        $monthId.find('.header').find('.month-year').empty();
+        $monthId.find($week).find('td').each(function(index) {
             $(this).empty();
             $(this).append('<div class="nill"></div>');
         })
     };
     
+    self.generateEmptyMonthDiv = function() {
+        //generates an empty month div template
+         $('.calendar').append('<div class="monthframe"></div>');
+         $('.monthframe').append($('#template').html());
+    };
+    
     self.generateMonthDiv = function(monthId) {
         //fills in the days of the month in an empty month template
+        
         self.clearMonthDiv(monthId);
         monthId.find(".month-year").empty();
         monthId.find(".month-year").append(self.monthState.monthName + " " + self.monthState.monthYear);
@@ -206,8 +218,9 @@ var Month = function (date) {
     };
     
     self.generateCheckmarks = function(monthId) {
+        var $monthId = $('#' + monthId);
         self.retrieveCheckedDays();
-        monthId.find($week).find('td').each( function(index) {
+        $monthId.find($week).find('td').each( function(index) {
             
             if (self.monthState.checkedDays[index]) {
                 console.log("yes, the index is a key in the checkedDays object");
@@ -218,9 +231,10 @@ var Month = function (date) {
     
     
     self.retrieveCheckedDays = function(monthId) {
+        var $monthId = $('#' + monthId);
         //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
-        if (monthId.find($week).find('td').find('.daynumber.hidden')) {
-            monthId.find($week).find('td').find('.daynumber.hidden').each(function (index) {
+        if ($monthId.find($week).find('td').find('.daynumber.hidden')) {
+            $monthId.find($week).find('td').find('.daynumber.hidden').each(function (index) {
                 var daynumber = $(this).attr('daynumber');
                 //the key is the index of the day for now
                 self.monthState.checkedDays[self.monthState.dayIndex[daynumber]] = daynumber;
@@ -230,9 +244,8 @@ var Month = function (date) {
     };
     
     
-    self.initializeMonthDiv = function(monthSelector) {   // CURRENT LINE is this what I want
+    self.initializeMonthDiv = function(monthId) {   // CURRENT LINE is this what I want
     //initialize a month
-    
         self.loadMonth();
         if (self.loadMonth() !== undefined) {            // IS THIS WRITTEN IN A GOOD WAY?
             self.monthState = self.loadMonth();
@@ -242,9 +255,9 @@ var Month = function (date) {
         }
         console.log(self.monthState);
         self.retrieveCheckedDays(self.monthState.monthId);
-        self.generateMonthDiv(self);
-        self.generateCheckmarks(self);
-        self.attachClickHandler(self);
+        self.generateMonthDiv(self.monthState.monthId);
+        self.generateCheckmarks(self.monthState.monthId);
+        self.attachClickHandler(self.monthState.monthId);
     
     };
     
@@ -264,8 +277,8 @@ var Month = function (date) {
     self.clearCheckMarks = function() {
     //this will clear checkmarks from the month
         self.monthState.checkedDays = {}; 
-        self.generateMonthDiv();
-        self.attachClickHandler();
+        self.generateMonthDiv(self.monthState.monthId);
+        self.attachClickHandler(self.monthState.monthId);
     };
     
   
@@ -280,13 +293,10 @@ var Month = function (date) {
     
     self.addAttrToMonthFrame = function(monthFrame) {  
     //adds a unique id to each month
-    var monthIds = {"January":0, "February":1, "March":2, "April":3,
+        var monthIds = {"January":0, "February":1, "March":2, "April":3,
             "May":4, "June":5, "July":6, "August":7, "September":8, 
             "October":9, "November":10, "December":11};
-        monthFrame.each(function(index) {
-            $(this).attr('id', 'month'+index);
-            self.monthState.monthId = 'month' + monthIds[self.monthState.monthName]; //is there a better way to do this?
-        })
+        monthFrame.attr('id', 'month'+ monthIds[self.monthState.monthName]);
     };
 
 };
