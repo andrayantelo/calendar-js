@@ -221,7 +221,7 @@ var Month = function (date) {
     self.generateCheckmarks = function(monthId) {
         var $monthId = $('#'+monthId);
         self.retrieveCheckedDays();
-        $monthId.find($week).find('td').each( function(index) {
+        $monthId.find('td').each( function(index) {
             
             if (self.monthState.checkedDays[index]) {
                 console.log("yes, the index is a key in the checkedDays object");
@@ -234,8 +234,8 @@ var Month = function (date) {
     self.retrieveCheckedDays = function(monthId) {
         var $monthId = $('#'+monthId);
         //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
-        if ($week.find('td').find('.daynumber.hidden')) {
-            $week.find('td').find('.daynumber.hidden').each(function (index) {
+        if ($monthId.find('.daynumber.hidden')) {
+           $monthId.find('.daynumber.hidden').each(function (index) {
                 var daynumber = $(this).attr('daynumber');
                 //the key is the index of the day for now
                 self.monthState.checkedDays[self.monthState.dayIndex[daynumber]] = daynumber;
