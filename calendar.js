@@ -24,6 +24,7 @@ $(document).ready(function() {
     
     year.generateEmptyYearDiv();
     year.fillYearDiv();
+    year.attachYearClickHandler();
     
 });
 
@@ -154,7 +155,9 @@ var emptyMonthState = function() {
         //month name
         monthName: "",
         //current date
-        today: new Date()
+        today: new Date(),
+        //monthID
+        monthId: ""
     }
 };
 
@@ -202,9 +205,9 @@ var Month = function (date) {
         
     };
     
-    self.generateCheckmarks = function() {
+    self.generateCheckmarks = function(monthId) {
         self.retrieveCheckedDays();
-        $week.find('td').each( function(index) {
+        monthId.find($week).find('td').each( function(index) {
             
             if (self.monthState.checkedDays[index]) {
                 console.log("yes, the index is a key in the checkedDays object");
@@ -214,10 +217,10 @@ var Month = function (date) {
     };
     
     
-    self.retrieveCheckedDays = function() {
+    self.retrieveCheckedDays = function(monthId) {
         //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
-        if ($week.find('td').find('.daynumber.hidden')) {
-            $week.find('td').find('.daynumber.hidden').each(function (index) {
+        if (monthId.find($week).find('td').find('.daynumber.hidden')) {
+            monthId.find($week).find('td').find('.daynumber.hidden').each(function (index) {
                 var daynumber = $(this).attr('daynumber');
                 //the key is the index of the day for now
                 self.monthState.checkedDays[self.monthState.dayIndex[daynumber]] = daynumber;
@@ -238,10 +241,10 @@ var Month = function (date) {
             self.initCurrentMonthState();
         }
         console.log(self.monthState);
-        self.retrieveCheckedDays(self);
+        self.retrieveCheckedDays(self.monthState.monthId);
         self.generateMonthDiv(self);
         self.generateCheckmarks(self);
-        self.attachClickHandler();
+        self.attachClickHandler(self);
     
     };
     
@@ -265,7 +268,7 @@ var Month = function (date) {
         self.attachClickHandler();
     };
     
-    
+  
     self.initCurrentMonthState = function() {
         self.monthState.monthName = getMonthName(self.date);
         self.monthState.numberOfDays = getNumberOfDays(self.monthState.monthName);
@@ -275,6 +278,16 @@ var Month = function (date) {
         
     };
     
+    self.addAttrToMonthFrame = function(monthFrame) {  
+    //adds a unique id to each month
+    var monthIds = {"January":0, "February":1, "March":2, "April":3,
+            "May":4, "June":5, "July":6, "August":7, "September":8, 
+            "October":9, "November":10, "December":11};
+        monthFrame.each(function(index) {
+            $(this).attr('id', 'month'+index);
+            self.monthState.monthId = 'month' + monthIds[self.monthState.monthName]; //is there a better way to do this?
+        })
+    };
 
 };
 
@@ -325,6 +338,7 @@ var Year = function() {
     
     self.fillYearDiv = function() {
     //fills an empty year div with appropriate months and their data
+   
          var monthNames = {
         0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
         6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
@@ -335,18 +349,13 @@ var Year = function() {
             //console.log(monthi.monthState);
             year.yearState.months[i] = monthi;
             
-            year.addAttrToMonthFrame($('.monthframe'));
+            monthi.addAttrToMonthFrame($('.monthframe'));
             monthi.generateMonthDiv($('#month' + i));
             
         }
     };
     
-    self.addAttrToMonthFrame = function(monthFrame) {  //should probably be a method in month object
-    //adds a unique id to each month
-        monthFrame.each(function(index) {
-            $(this).attr('id', 'month'+index);
-        })
-    };
+    
     
     self.attachYearClickHandler = function() {
     //attaches clickhandler to each month in a year
