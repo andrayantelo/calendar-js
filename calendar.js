@@ -4,7 +4,8 @@ var $week = $('.week');  //this is the class for the rows of the table
 var $month = $('.month');  //this is the class for the month tables
 var $aDay = $('.aDay'); //class for day cells
 var $monthframe = $('.monthframe');
-var temporaryStorageKey = "temporaryStorageKey";
+var temporaryStorageKey = "temporaryStorageKey"; //temporary storage key for month object
+var yearKey = "yearKey"; //temporaryStorageKey for year object
 
 
 $(document).ready(function() {
@@ -235,8 +236,8 @@ var Month = function (date) {
     self.retrieveCheckedDays = function(monthId) {
         var $monthId = $('#'+monthId);
         //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
-        if ($monthId.find('.daynumber.hidden')) {
-           $monthId.find('.daynumber.hidden').each(function (index) {
+        if ($monthId.find('.month').find('.daynumber.hidden')) {
+           $monthId.find('.month').find('.daynumber.hidden').each(function (index) {
                 var daynumber = $(this).attr('daynumber');
                 //the key is the index of the day for now
                 self.monthState.checkedDays[self.monthState.dayIndex[daynumber]] = daynumber;
@@ -260,7 +261,7 @@ var Month = function (date) {
         self.addAttrToMonthFrame('monthframe');
         self.retrieveCheckedDays(self.monthState.monthId);
         self.generateMonthDiv(self.monthState.monthId);
-       // self.generateCheckmarks(self.monthState.monthId);
+        self.generateCheckmarks(self.monthState.monthId);
         self.attachClickHandler(self.monthState.monthId);
     
     };
@@ -372,15 +373,24 @@ var Year = function() {
         }
     };
     
-    
-    
     self.attachYearClickHandler = function() {
     //attaches clickhandler to each month in a year
         for(i=0;i<=11;i++) {
             self.yearState.months[i].attachClickHandler($('#month' + i));
         }
-
     };
+    
+    self.storeYear = function() {
+        //stores the yearState
+        var storageItem = year.yearState;
+        storeInLocalStorage(yearKey, storageItem);
+    }
+    
+    self.loadYear = function() {
+        //loads the yearState
+        var loadedYear = loadFromLocalStorage(yearKey);
+        return loadedYear;
+    }
 };
 var month = new Month();
 var year = new Year();
