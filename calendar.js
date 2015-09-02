@@ -185,7 +185,7 @@ var Month = function (date) {
         //clear the days of the month
         var $monthId = $('#'+monthId);
         $monthId.find('.header').find('.month-year').empty();
-        $monthId.find($week).find('td').each(function(index) {
+        $monthId.find('.month').find('td').each(function(index) {
             $(this).empty();
             $(this).append('<div class="nill"></div>');
         })
@@ -241,7 +241,6 @@ var Month = function (date) {
                 var daynumber = $(this).attr('daynumber');
                 //the key is the index of the day for now
                 self.monthState.checkedDays[self.monthState.dayIndex[daynumber]] = daynumber;
-                self.storeMonth();
             });
         }
     };
