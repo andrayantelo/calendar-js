@@ -219,13 +219,14 @@ var Month = function (date) {
     };
     
     self.generateCheckmarks = function(monthId) {
+        console.log("generateCheckMarks is about to run");
+        //checked days index: daynumber
         var $monthId = $('#'+monthId);
-        self.retrieveCheckedDays();
-        $monthId.find('td').each( function(index) {
+        $monthId.find('.month').find('td').each( function(index) {
             
             if (self.monthState.checkedDays[index]) {
                 console.log("yes, the index is a key in the checkedDays object");
-                $( this ).find(".cell").children().toggleClass("hidden");
+                $(this).find('.cell').children().toggleClass("hidden");
             }
          })
     };
@@ -239,7 +240,6 @@ var Month = function (date) {
                 var daynumber = $(this).attr('daynumber');
                 //the key is the index of the day for now
                 self.monthState.checkedDays[self.monthState.dayIndex[daynumber]] = daynumber;
-                console.log(daynumber);
                 self.storeMonth();
             });
         }
@@ -260,7 +260,7 @@ var Month = function (date) {
         self.addAttrToMonthFrame('monthframe');
         self.retrieveCheckedDays(self.monthState.monthId);
         self.generateMonthDiv(self.monthState.monthId);
-        self.generateCheckmarks(self.monthState.monthId);
+       // self.generateCheckmarks(self.monthState.monthId);
         self.attachClickHandler(self.monthState.monthId);
     
     };
