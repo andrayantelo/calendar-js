@@ -31,6 +31,11 @@ $(document).ready(function() {
 
 //UTILITY FUNCTIONS
 
+var hideTemplate = function() {
+    //hides the month template
+    $('#template').toggleClass("hidden");
+};
+
 var storeInLocalStorage = function(storageItemKey, storageItem) {        
     
         // convert a javascript value (storageItem) to a JSON string
