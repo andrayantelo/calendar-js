@@ -241,16 +241,12 @@ var Month = function (date) {
     self.monthState = emptyMonthState();
     self.date = date || new Date();
     
-    self.attachClickHandler = function(monthId) {
+    self.attachClickHandler = function() {
         // Attaches a function to the divs with class "cell" to be triggered
         // when "cell" is clicked. The function toggles the hidden class
         // between the children (daynumber and fa fa-check) of "cell"
         
-        // Parameters:
-        //  monthId: string
-        //      the Id of the div containing the month's cell divs we want to use.
-        
-        var $monthId = $('#' + monthId);
+        var $monthId = $('#' + self.monthState.monthId);
         $monthId.find('.cell').click(function (event) {
             console.log(event);  // prints so you can look at the event object in the console
             $( this ).children().toggleClass("hidden");
@@ -258,14 +254,10 @@ var Month = function (date) {
         });
     };
 
-    self.clearMonthDiv = function(monthId) {
+    self.clearMonthDiv = function() {
         // Clears the days of the month and leaves an empty month template.
         
-        // Parameters:
-        //  monthId: string
-        //      the Id of the div containing the month's cell divs we want to use.
-        
-        var $monthId = $('#'+monthId);
+        var $monthId = $('#'+ self.monthState.monthId);
         $monthId.find('.header').find('.month-year').empty();
         $monthId.find('.month').find('td').each(function(index) {
             $(this).empty();
@@ -280,16 +272,12 @@ var Month = function (date) {
          $('.monthframe').append($('#template').html());
     };
     
-    self.generateMonthDiv = function(monthId) {
+    self.generateMonthDiv = function() {
         // Fills in the days of the month, month name, and
         // year in an empty month template
         
-        // Parameters:
-        //  monthId: string
-        //      the Id of the div containing the month's cell divs we want to use.
-        
-        var $monthId = $('#'+monthId);
-        self.clearMonthDiv(monthId);
+        var $monthId = $('#'+ self.monthState.monthId);
+        self.clearMonthDiv();
         $monthId.find(".month-year").empty();
         $monthId.find(".month-year").append(self.monthState.monthName + " " + self.monthState.monthYear);
         
@@ -308,16 +296,12 @@ var Month = function (date) {
         
     };
     
-    self.generateCheckmarks = function(monthId) {
+    self.generateCheckmarks = function() {
         // Toggles the hidden class between the children of the div class="cell" 
         // of the cells whose indices are in the monthState.checkedDays
         // object.
         
-        // Parameters:
-        //  monthId: string
-        //      the Id of the div containing the month's cell divs we want to use.
-        
-        var $monthId = $('#'+monthId);
+        var $monthId = $('#'+ self.monthState.monthId);
         $monthId.find('.month').find('td').each( function(index) {
             
             if (self.monthState.checkedDays[index]) {
@@ -327,15 +311,11 @@ var Month = function (date) {
     };
     
     
-    self.retrieveCheckedDays = function(monthId) {
+    self.retrieveCheckedDays = function() {
         // Stores index: daynumber pairs in monthState.checkedDays. These
         // pertain to the days which have the daynumber div hidden.
         
-        // Parameters:
-        //  monthId: string
-        //      the Id of the div containing the month's cell divs we want to use.
-        
-        var $monthId = $('#'+monthId);
+        var $monthId = $('#'+ self.monthState.monthId);
         //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
         if ($monthId.find('.month').find('.daynumber.hidden')) {
            $monthId.find('.month').find('.daynumber.hidden').each(function (index) {
@@ -348,7 +328,8 @@ var Month = function (date) {
     
     
     self.initializeMonthDiv = function() {   // CURRENT LINE is this what I want
-    //initialize a month
+    // Initializes a month div. 
+    
         self.loadMonth();
         if (self.loadMonth() !== undefined) {            // IS THIS WRITTEN IN A GOOD WAY?
             self.monthState = self.loadMonth();
@@ -356,13 +337,13 @@ var Month = function (date) {
         else {
             self.initCurrentMonthState();
         }
-        console.log(self.monthState);
+        
         self.generateEmptyMonthDiv();
-        self.addAttrToMonthFrame('monthframe');
-        self.retrieveCheckedDays(self.monthState.monthId);
-        self.generateMonthDiv(self.monthState.monthId);
-        self.generateCheckmarks(self.monthState.monthId);
-        self.attachClickHandler(self.monthState.monthId);
+        self.addAttrToMonthFrame();
+        self.retrieveCheckedDays();
+        self.generateMonthDiv();
+        self.generateCheckmarks();
+        self.attachClickHandler();
     
     };
     
@@ -374,7 +355,7 @@ var Month = function (date) {
     };
     
     self.storeMonth = function() {    
-    //Will store the state of the month object
+        // Stores the state of the month object in localstorage
     
         var storageItem = self.monthState;
         storeInLocalStorage(temporaryStorageKey, storageItem);
@@ -382,29 +363,32 @@ var Month = function (date) {
     };
     
     self.clearCheckMarks = function() {
-    // Clear checkmarks from the month
+        // Clear checkmarks from the month div.
     
         self.monthState.checkedDays = {}; 
-        self.generateMonthDiv(self.monthState.monthId);
-        self.attachClickHandler(self.monthState.monthId);
+        self.generateMonthDiv();
+        self.attachClickHandler();
     };
     
   
     self.initCurrentMonthState = function() {
+        // Initializes a month object.
+        
         self.monthState.monthName = getMonthName(self.date);
-        self.monthState.numberOfDays = getNumberOfDays(self.monthState.monthName);
         self.monthState.monthYear = getYear(self.date);
+        self.monthState.numberOfDays = getNumberOfDays(self.monthState.monthName
+                                                     + ' ' + self.monthState.monthYear);
         self.monthState.firstIndex = getDayOfWeek(self.date);
         self.monthState.monthIndex = getMonthIndex(self.date);
-        self.monthState.monthId = 'month'+self.monthState.monthIndex;
+        self.monthState.monthId = 'month' + self.monthState.monthIndex;
         return self.monthState;
         
     };
     
-    self.addAttrToMonthFrame = function(monthFrame) {  
-    //adds a unique id to each month
-        var $monthframe = $('.' + monthFrame);
-        $monthframe.attr('id', 'month'+ self.monthState.monthIndex);
+    self.addAttrToMonthFrame = function() {  
+        // Adds a unique ID to the month div with class .monthframe
+        
+        $('.monthframe').attr('id', 'month'+ self.monthState.monthIndex);
         self.monthState.monthId = 'month'+ self.monthState.monthIndex;
         
     };
@@ -414,22 +398,25 @@ var Month = function (date) {
 
 var emptyYearState = function() {
     return{
-        //year type
+        // year type
         yearType: "common",
-        //year
-        currentYear: '2013',
-        //array with 12 month objects
+        // year
+        currentYear: 2013,
+        // array with 12 month objects
         months: []
     }
 };
 
 var Year = function() {
-    //represents a single calendar year
+    // Represents a single calendar year
+    
     var self = this;
     self.yearState = emptyYearState();
     
-    self.determineYearType = function(year) {
-        //determines whether the year is a common year or a leap year
+    self.determineYearType = function() {
+        // Determines whether the year is a common year or a leap year.
+        
+        year = year.yearState.currentYear;
         if(year%4!==0) {
             self.yearState.yearType = "common"
             return "common";
@@ -450,20 +437,20 @@ var Year = function() {
     };
     
     self.generateEmptyYearDiv = function() {
-        //will generate the html for the given year
+        //will generate the html for 12 empty month divs
+        var $monthframe = $('.monthframe');
+        
         for (i=0; i<=11; i++) {
             $('.calendar').append('<div class="monthframe id="month"' + i + '"></div>');
         }
         $('.monthframe').append($('#template').html()); //having $monthframe didn't work here
     };
     
-    self.getMonthsOfGivenYear = function(year) {
-    //An array of month objects for that year is generated and stored in
-    //the months array of the yearState object. 
-    //Parameters: 
-    //year: string
-    //    The year desired for the month objects. If no year is given, 
-    //    current year is used.
+    self.getMonthsOfGivenYear = function() {
+    // An array of month objects for yearState.currentYear is generated and stored in
+    // the months array of the yearState object. 
+    
+    var year = self.yearState.currentYear;
     var monthNames = {
             0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
             6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
@@ -497,20 +484,23 @@ var Year = function() {
     };
     
     self.attachYearClickHandler = function() {
-    //attaches clickhandler to each month in a year
+    // Attaches month object's clickhandler to each month in a year.
+    
         for(i=0;i<=11;i++) {
             self.yearState.months[i].attachClickHandler($('#month' + i));
         }
     };
     
     self.storeYear = function() {
-        //stores the yearState
+        // Stores the yearState in localstorage.
+        
         var storageItem = year.yearState;
         storeInLocalStorage(yearKey, storageItem);
     }
     
     self.loadYear = function() {
-        //loads the yearState
+        // Loads the yearState from localstorage.
+        
         var loadedYear = loadFromLocalStorage(yearKey);
         return loadedYear;
     }
