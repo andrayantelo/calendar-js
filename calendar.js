@@ -32,69 +32,112 @@ $(document).ready(function() {
 //UTILITY FUNCTIONS
 
 var hideTemplate = function() {
-    //hides the month template
+    //  Hides the month template
+    
     $('#template').toggleClass("hidden");
 };
 
 var storeInLocalStorage = function(storageItemKey, storageItem) {        
     
-        // convert a javascript value (storageItem) to a JSON string
-        localStorage.setItem(storageItemKey, JSON.stringify(storageItem));
+    // Convert a javascript value (storageItem) to a JSON string and
+    // accesses the current domain's local Storage object and adds a data item
+    //  (storageString) to it.
     
-        // access the current domain's local Storage object and add a data item
-        //(storageString) to it 
+    //  Parameters:
+    //  storageItemKey: string
+    //      The localstorage key to be used to store the data item.
+    //  storageItem: string
+    //      The item to be stored in localstorage
+    
+    localStorage.setItem(storageItemKey, JSON.stringify(storageItem));
+    
+       
 };
 
 var loadFromLocalStorage = function(storageItemKey) {  
-        //loads item from localstorage with key storageItemKey and returns the item
-        //if the item is not in localStorage, returns substituteLoadItem
-        var storageItem = localStorage.getItem(storageItemKey)
+    //  Loads an item from localstorage with key storageItemKey and returns the item
+    //  if the item is not in localStorage, then it returns null
+        
+    //  Parameters:
+    //  storageItemKey: "string"
+    //      The key used to store the item and to be used to retrieve it from
+    //      localstorage.
+    
+    var storageItem = localStorage.getItem(storageItemKey)
         
         
-        if (storageItem === null) {
-            console.log(storageItemKey + "not found in localstorage");
-            return;   
-        }
+    if (storageItem === null) {
+        console.log(storageItemKey + "not found in localstorage");
+        return;   
+    }
                                                                                                    
- 
-       else {
-       var storageItem = JSON.parse(storageItem);  
+    else {
+        var storageItem = JSON.parse(storageItem);  
       
         
        return storageItem
-       }
-         
+    }         
 };
 
 var getMonthIndex = function(date) {
+    //  Returns the index of the month of a given date. If no date is given,
+    //  returns the month of current date.
+    
+    //  Parameters:
+    //  date: string
+    //      "month year" format. Example: "October 2013"
+    //      or "year month" format. Example "2013 10" (10 is October)
+    
+    if (!date) {
+        var today = new Date();
+        return today.getMonth();
+    }
     date = new Date(date);
     return date.getMonth();
 };
 
 var getMonthName = function(date) {
-        //updates monthState with current monthYear and monthName
+    //  Returns the name of the month of the given date. If no date is given,
+    //  returns the name of the month of the current date.
+    
+    //  Parameters: 
+    //  date: string
+    //      "month year" format.
+    //      or "year month" format. Example "2013 10" (10 is October)
+    
     var months = {
         0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
         6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
         11:"December"};
-    if (date) {
-        date = new Date(date);
-        return months[date.getMonth()];
-    }
-    else {
+    if (!date) {
         var today = new Date();  //can i pass an argument date and have var today = new Date(date) || new Date(); ???
         return months[today.getMonth()];
     }
+    date = new Date(date);
+    return months[date.getMonth()];
 };
 
-var getNumberOfDays = function(monthName, date) {
-    //updates monthState with current month numberOfDays
+var getNumberOfDays = function(date) {
+    //  Returns the number of days of the month of a given date or if no
+    //  date is given, of the current date.
+    
+    //  Parameters: 
+    //  date: string
+    //      "month year" format.
+    //      or "year month" format. Example "2013 10" (10 is October)
+    
     var numberOfDays = { 
         "January":31, "March":31, "April":30, "May":31, "June":30, "July":31,
         "August":31, "September": 30, "October":31, "November":30, "December":31}
-        
-        
-    if (monthName === "February") {
+    
+    if (!date) {
+        date = new Date();
+    }
+    else {
+        date = new Date(date);
+    }
+    var monthName = getMonthName(date);
+    if ( monthName === "February") {
         var monthYearType = year.determineYearType(getYear(date));
         if (monthYearType === "common") {
             numberOfDays["February"] = 28;
@@ -113,6 +156,14 @@ var getNumberOfDays = function(monthName, date) {
 };
 
 var getYear = function(date) {
+    // Returns the full year of the date given or if none give, the current
+    // date.
+    
+    //  Parameters: 
+    //  date: string
+    //      "month year" format.
+    //      or "year month" format. Example "2013 10" (10 is October)   
+      
     var today = new Date();
     if (date) {
         date = new Date(date);
@@ -125,14 +176,25 @@ var getYear = function(date) {
 };
 
 var diffBetweenDays = function(firstDate, secondDate) {
-    //calculates how many days between two dates
+    //  Calculates the number of days between firstDate and secondDate.
+    
+    //  Parameters:
+    //      firstDate: date object
+    //      secondDate: date object
+    
     var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
     return Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
 };
 var getDayOfWeek = function(date) {
+    //  Returns the index (day of the week) of the given date or the current
+    //  date if no date is given.
     
-    //retrieves the index (day of the week) of the given day or the current day
-    //only works for current month
+    //  Parameters: 
+    //  date: string
+    //      "month day year" format. Example "October 12 1995"
+    //      or "year month day" format. Example "2013 10 12" (10 is October) 
+    //      If no day number is given, the 1st of the month is used.
+     
     var firstDate = new Date(1986, 09, 12);
     if (date) {
         date = new Date(date);
@@ -153,44 +215,56 @@ var getDayOfWeek = function(date) {
 
 var emptyMonthState = function() {
     return{
-        //first day of the month
+        // first day of the month
         firstIndex: 4,
-        //how many days in the month, default 30
+        // how many days in the month, default 30
         numberOfDays: 31,
-        //which days are checked index:daynumber
+        // which days are checked index:daynumber
         checkedDays: {},
-        //day and their indices pairs daynumber:index
+        // day and their indices pairs daynumber:index
         dayIndex: {},
-        //month year
+        // month year
         monthYear: "",
-        //month name
+        // month name
         monthName: "",
-        //index of month
+        // index of month
         monthIndex: 0,
-        //current date
-        //today: new Date(),
-        //monthID
+        // monthID
         monthId: ""
     }
 };
 
 var Month = function (date) {
-    //represents a single month
+    //Represents a single month
+    
     var self = this;
     self.monthState = emptyMonthState();
     self.date = date || new Date();
     
     self.attachClickHandler = function(monthId) {
+        // Attaches a function to the divs with class "cell" to be triggered
+        // when "cell" is clicked. The function toggles the hidden class
+        // between the children (daynumber and fa fa-check) of "cell"
+        
+        // Parameters:
+        //  monthId: string
+        //      the Id of the div containing the month's cell divs we want to use.
+        
         var $monthId = $('#' + monthId);
         $monthId.find('.cell').click(function (event) {
             console.log(event);  // prints so you can look at the event object in the console
-            $( this ).children().toggleClass("hidden");// toggles between hidden and daynumber/fa fa-check
+            $( this ).children().toggleClass("hidden");
             
         });
     };
 
     self.clearMonthDiv = function(monthId) {
-        //clear the days of the month
+        // Clears the days of the month and leaves an empty month template.
+        
+        // Parameters:
+        //  monthId: string
+        //      the Id of the div containing the month's cell divs we want to use.
+        
         var $monthId = $('#'+monthId);
         $monthId.find('.header').find('.month-year').empty();
         $monthId.find('.month').find('td').each(function(index) {
@@ -200,13 +274,20 @@ var Month = function (date) {
     };
     
     self.generateEmptyMonthDiv = function() {
-        //generates an empty month div template
+        // Generates an empty month div template
+        
          $('.calendar').append('<div class="monthframe"></div>');
          $('.monthframe').append($('#template').html());
     };
     
     self.generateMonthDiv = function(monthId) {
-        //fills in the days of the month in an empty month template
+        // Fills in the days of the month, month name, and
+        // year in an empty month template
+        
+        // Parameters:
+        //  monthId: string
+        //      the Id of the div containing the month's cell divs we want to use.
+        
         var $monthId = $('#'+monthId);
         self.clearMonthDiv(monthId);
         $monthId.find(".month-year").empty();
@@ -228,13 +309,18 @@ var Month = function (date) {
     };
     
     self.generateCheckmarks = function(monthId) {
-        console.log("generateCheckMarks is about to run");
-        //checked days index: daynumber
+        // Toggles the hidden class between the children of the div class="cell" 
+        // of the cells whose indices are in the monthState.checkedDays
+        // object.
+        
+        // Parameters:
+        //  monthId: string
+        //      the Id of the div containing the month's cell divs we want to use.
+        
         var $monthId = $('#'+monthId);
         $monthId.find('.month').find('td').each( function(index) {
             
             if (self.monthState.checkedDays[index]) {
-                console.log("yes, the index is a key in the checkedDays object");
                 $(this).find('.cell').children().toggleClass("hidden");
             }
          })
@@ -242,6 +328,13 @@ var Month = function (date) {
     
     
     self.retrieveCheckedDays = function(monthId) {
+        // Stores index: daynumber pairs in monthState.checkedDays. These
+        // pertain to the days which have the daynumber div hidden.
+        
+        // Parameters:
+        //  monthId: string
+        //      the Id of the div containing the month's cell divs we want to use.
+        
         var $monthId = $('#'+monthId);
         //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
         if ($monthId.find('.month').find('.daynumber.hidden')) {
@@ -274,20 +367,23 @@ var Month = function (date) {
     };
     
     self.loadMonth = function() {
-        //loads month state from localstorage
+        // Loads month state from localstorage
+        
         var loadedMonth = loadFromLocalStorage(temporaryStorageKey);
         return loadedMonth;
     };
     
     self.storeMonth = function() {    
-    //will store the state of the month object
+    //Will store the state of the month object
+    
         var storageItem = self.monthState;
         storeInLocalStorage(temporaryStorageKey, storageItem);
     
     };
     
     self.clearCheckMarks = function() {
-    //this will clear checkmarks from the month
+    // Clear checkmarks from the month
+    
         self.monthState.checkedDays = {}; 
         self.generateMonthDiv(self.monthState.monthId);
         self.attachClickHandler(self.monthState.monthId);
@@ -362,7 +458,12 @@ var Year = function() {
     };
     
     self.getMonthsOfGivenYear = function(year) {
-    //given a year, an array of month objects for that year is generated
+    //An array of month objects for that year is generated and stored in
+    //the months array of the yearState object. 
+    //Parameters: 
+    //year: string
+    //    The year desired for the month objects. If no year is given, 
+    //    current year is used.
     var monthNames = {
             0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
             6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
