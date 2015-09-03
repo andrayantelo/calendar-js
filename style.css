@@ -6,8 +6,17 @@ html {
 .calendar{
     margin: 50px auto;
     font: 0.95em/1.5 "Helvetica Neue", Helvatica, Arial, san-serif;
-    display:table;
+    display: table;
+    
+    
    }
+   
+.mainContainer {
+    position: relative;
+    text-align: center;
+    display: block;
+}
+
    
 .header {
     cursor: default;
@@ -18,10 +27,12 @@ html {
     border-top-right-radius: 5px; 
     font-weight:bold;
     text-transform: uppercase;
+    
 }
 
 .mainheader {
     /*text-transform: uppercase;*/
+    margin: 10px auto;
     font-weight: bold;
     text-align: center;
     font-size: 2.5em;
@@ -69,6 +80,7 @@ html {
 .monthframe, #template {
     margin:15px;
     margin-bottom: 5px;
+    position: relative;
 }
 /*#calendar #calendarframe*/
 .month td {

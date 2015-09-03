@@ -23,6 +23,10 @@ $(document).ready(function() {
         
     });
     
+    $('#hideButton').click(function() {
+        hideTemplate();
+    });
+    
     //year.generateEmptyYearDiv();
     //year.fillYearDiv();
     //year.attachYearClickHandler();
@@ -34,7 +38,7 @@ $(document).ready(function() {
 var hideTemplate = function() {
     //  Hides the month template
     
-    $('#template').toggleClass("hidden");
+    $('#template').toggleClass('hidden');
 };
 
 var storeInLocalStorage = function(storageItemKey, storageItem) {        
@@ -438,12 +442,13 @@ var Year = function() {
     
     self.generateEmptyYearDiv = function() {
         //will generate the html for 12 empty month divs
-        var $monthframe = $('.monthframe');
+        
         
         for (i=0; i<=11; i++) {
             $('.calendar').append('<div class="monthframe id="month"' + i + '"></div>');
         }
-        $('.monthframe').append($('#template').html()); //having $monthframe didn't work here
+        var $monthframe = $('.monthframe');
+        $monthframe.append($('#template').html()); 
     };
     
     self.getMonthsOfGivenYear = function() {
