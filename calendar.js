@@ -67,7 +67,8 @@ var loadFromLocalStorage = function(storageItemKey) {
 };
 
 var getMonthIndex = function(date) {
-    date.getMonth
+    date = new Date(date);
+    return date.getMonth();
 };
 
 var getMonthName = function(date) {
@@ -164,6 +165,8 @@ var emptyMonthState = function() {
         monthYear: "",
         //month name
         monthName: "",
+        //index of month
+        monthIndex: 0,
         //current date
         //today: new Date(),
         //monthID
@@ -296,6 +299,8 @@ var Month = function (date) {
         self.monthState.numberOfDays = getNumberOfDays(self.monthState.monthName);
         self.monthState.monthYear = getYear(self.date);
         self.monthState.firstIndex = getDayOfWeek(self.date);
+        self.monthState.monthIndex = getMonthIndex(self.date);
+        self.monthState.monthId = 'month'+self.monthState.monthIndex;
         return self.monthState;
         
     };
@@ -303,13 +308,11 @@ var Month = function (date) {
     self.addAttrToMonthFrame = function(monthFrame) {  
     //adds a unique id to each month
         var $monthframe = $('.' + monthFrame);
-        var monthIds = {"January":0, "February":1, "March":2, "April":3,
-            "May":4, "June":5, "July":6, "August":7, "September":8, 
-            "October":9, "November":10, "December":11};
-        $monthframe.attr('id', 'month'+ monthIds[self.monthState.monthName]);
-        self.monthState.monthId = 'month'+ monthIds[self.monthState.monthName]
+        $monthframe.attr('id', 'month'+ self.monthState.monthIndex);
+        self.monthState.monthId = 'month'+ self.monthState.monthIndex;
         
     };
+    
 
 };
 
@@ -318,9 +321,9 @@ var emptyYearState = function() {
         //year type
         yearType: "common",
         //year
-        currentYear: getYear(),
-        //object with 12 month objects
-        months: {}
+        currentYear: '2013',
+        //array with 12 month objects
+        months: []
     }
 };
 
@@ -353,28 +356,43 @@ var Year = function() {
     self.generateEmptyYearDiv = function() {
         //will generate the html for the given year
         for (i=0; i<=11; i++) {
-            $('.calendar').append('<div class="monthframe"></div>');
+            $('.calendar').append('<div class="monthframe id="month"' + i + '"></div>');
         }
         $('.monthframe').append($('#template').html()); //having $monthframe didn't work here
     };
     
-    self.fillYearDiv = function() {
-    //fills an empty year div with appropriate months and their data
-   
-         var monthNames = {
-        0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
-        6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
-        11:"December"};
-        for (i=0; i<=11; i++) {
-            var monthi = new Month(monthNames[i] + ' ' + year.yearState.currentYear);
-            monthi.initCurrentMonthState();
-            //console.log(monthi.monthState);
-            year.yearState.months[i] = monthi;
-            
-            monthi.addAttrToMonthFrame($('.monthframe'));
-            monthi.generateMonthDiv($('#month' + i));
-            
+    self.getMonthsOfGivenYear = function(year) {
+    //given a year, an array of month objects for that year is generated
+    var monthNames = {
+            0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
+            6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
+            11:"December"};
+        if (!year) {
+            var today = new Date();
+            year = today.getFullYear();
         }
+        for (i=0; i<=11; i++) {
+            var monthi = new Month(monthNames[i] + ' ' + year);
+            //monthi.generateEmptyMonthDiv();
+            monthi.initCurrentMonthState();
+            self.yearState.months.push(monthi);
+        }
+            
+    self.fillYearDiv = function() {
+    }
+           // year.yearState.months[i] = monthi;
+            //if (!$('.monthframe[id]').length) {
+            //    monthi.addAttrToMonthFrame('monthframe');
+            //}
+            //monthi.generateMonthDiv($('#month' + i));
+        
+        //$('.calendar').find('.monthframe').each( function(index) {
+        //        year.yearState.months[index].addAttrToMonthFrame('monthframe');
+        //        return;
+        //})
+
+        
+        
     };
     
     self.attachYearClickHandler = function() {
