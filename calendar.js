@@ -27,9 +27,10 @@ $(document).ready(function() {
         hideTemplate();
     });
     
-    //year.generateEmptyYearDiv();
-    //year.fillYearDiv();
-    //year.attachYearClickHandler();
+    year.getMonthsOfGivenYear();
+    year.generateEmptyYearDiv();
+    year.fillYearDiv();
+    year.attachYearClickHandler();
     
 });
 
@@ -478,11 +479,8 @@ var Year = function() {
         // Fills the empty year div with correct month information.
         
         for (i=0; i<= 11; i++) {
-            console.log(self.yearState.months[i])
             self.yearState.months[i].generateMonthDiv();
-            console.log("this ran");
-        //$('.calendar').find('#month' + index)
-            //self.yearState.months[index].generateMonthDiv();
+            
         }
     
     };
