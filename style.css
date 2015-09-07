@@ -58,6 +58,7 @@ html {
     height: 30px;
     text-align: center;
     cursor:default;
+    border:1px solid #e6e6e6;
     
 }
     
@@ -71,32 +72,17 @@ html {
     width: 100%;
 }
 
-/*#calendar #calendarframe .month {
-    width: 100%;
-    position: relative; 
-    border:1px solid #e6e6e6;
-    border: 1px solid #e1e1e1;
-}*/
-
 .monthframe, #template {
     margin:15px;
     margin-bottom: 5px;
     position: relative;
 }
-/*#calendar #calendarframe*/
-.month td {
-    border:1px solid #e6e6e6;
-    
-    }
 
 
-
-
-.dayhighlight {
+/*.dayhighlight {
     background: red
 }
 
-/*#calendar #calendarframe td.today*/
 .today {
     background:#e1e1e1; 
     color:#8c8c8c; 
@@ -106,7 +92,7 @@ html {
     -webkit-box-shadow:1px 1px 0px #fff inset; 
     height: 29px;
     
-}
+} */
 
 .fa fa-check {
     width: 30px;
