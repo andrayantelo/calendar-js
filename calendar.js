@@ -455,21 +455,25 @@ var Year = function() {
     // An array of month objects for yearState.currentYear is generated and stored in
     // the months array of the yearState object. 
     
-    var year = self.yearState.currentYear;
-    var monthNames = {
+        var currentYear = self.yearState.currentYear;
+        var monthNames = {
             0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
             6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
             11:"December"};
-        if (!year) {
+        if (!currentYear) {
+            console.log("!currentYear ran");
             var today = new Date();
-            year = today.getFullYear();
+            currentYear = today.getFullYear();
         }
         for (i=0; i<=11; i++) {
-            var monthi = new Month(monthNames[i] + ' ' + year);
+            console.log("code after conditonal is running");
+            var monthi = new Month(monthNames[i] + ' ' + currentYear);
             //monthi.generateEmptyMonthDiv();
             monthi.initCurrentMonthState();
             self.yearState.months.push(monthi);
         }
+        console.log(self.yearState.months);
+    };
             
     self.fillYearDiv = function() {
     }
@@ -484,9 +488,6 @@ var Year = function() {
         //        return;
         //})
 
-        
-        
-    };
     
     self.attachYearClickHandler = function() {
     // Attaches month object's clickhandler to each month in a year.
