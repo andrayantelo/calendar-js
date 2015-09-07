@@ -445,15 +445,16 @@ var Year = function() {
         
         
         for (i=0; i<=11; i++) {
-            $('.calendar').append('<div class="monthframe id="month"' + i + '"></div>');
+            console.log(i.toString().length);
+            $('.calendar').append('<div class="monthframe" id="month' + i + '" ></div>');
         }
         var $monthframe = $('.monthframe');
         $monthframe.append($('#template').html()); 
     };
     
     self.getMonthsOfGivenYear = function() {
-    // An array of month objects for yearState.currentYear is generated and stored in
-    // the months array of the yearState object. 
+      // An array of month objects for yearState.currentYear is generated and stored in
+      // the months array of the yearState object. 
     
         var currentYear = self.yearState.yearGiven;
         var monthNames = {
@@ -466,9 +467,7 @@ var Year = function() {
             currentYear = today.getFullYear();
         }
         for (i=0; i<=11; i++) {
-            console.log("code after conditonal is running");
             var monthi = new Month(monthNames[i] + ' ' + currentYear);
-            //monthi.generateEmptyMonthDiv();
             monthi.initCurrentMonthState();
             self.yearState.months.push(monthi);
         }
@@ -476,21 +475,21 @@ var Year = function() {
     };
             
     self.fillYearDiv = function() {
-    }
-           // year.yearState.months[i] = monthi;
-            //if (!$('.monthframe[id]').length) {
-            //    monthi.addAttrToMonthFrame('monthframe');
-            //}
-            //monthi.generateMonthDiv($('#month' + i));
+        // Fills the empty year div with correct month information.
         
-        //$('.calendar').find('.monthframe').each( function(index) {
-        //        year.yearState.months[index].addAttrToMonthFrame('monthframe');
-        //        return;
-        //})
+        for (i=0; i<= 11; i++) {
+            console.log(self.yearState.months[i])
+            self.yearState.months[i].generateMonthDiv();
+            console.log("this ran");
+        //$('.calendar').find('#month' + index)
+            //self.yearState.months[index].generateMonthDiv();
+        }
+    
+    };
 
     
     self.attachYearClickHandler = function() {
-    // Attaches month object's clickhandler to each month in a year.
+        // Attaches month object's clickhandler to each month in a year.
     
         for(i=0;i<=11;i++) {
             self.yearState.months[i].attachClickHandler($('#month' + i));
