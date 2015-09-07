@@ -405,7 +405,7 @@ var emptyYearState = function() {
         // year type
         yearType: "common",
         // year
-        currentYear: 2013,
+        yearGiven: 2013,
         // array with 12 month objects
         months: []
     }
@@ -420,16 +420,16 @@ var Year = function() {
     self.determineYearType = function() {
         // Determines whether the year is a common year or a leap year.
         
-        year = year.yearState.currentYear;
-        if(year%4!==0) {
+        currentYear = year.yearState.yearGiven;
+        if(currentYear%4!==0) {
             self.yearState.yearType = "common"
             return "common";
         }
-        else if (year%100!==0) {
+        else if (currentYear%100!==0) {
             self.yearState.yearType = "leap"
             return "leap";
         }
-        else if (year%400!==0) {
+        else if (currentYear%400!==0) {
             self.yearState.yearType = "common"
             return "common";
         }
@@ -455,7 +455,7 @@ var Year = function() {
     // An array of month objects for yearState.currentYear is generated and stored in
     // the months array of the yearState object. 
     
-        var currentYear = self.yearState.currentYear;
+        var currentYear = self.yearState.yearGiven;
         var monthNames = {
             0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
             6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
@@ -500,7 +500,7 @@ var Year = function() {
     self.storeYear = function() {
         // Stores the yearState in localstorage.
         
-        var storageItem = year.yearState;
+        var storageItem = self.yearState;
         storeInLocalStorage(yearKey, storageItem);
     }
     
