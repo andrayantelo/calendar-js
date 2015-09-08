@@ -19,7 +19,7 @@ $(document).ready(function() {
     });
     
     $('#clearButton').click(function() {
-        month.clearCheckMarks();
+        clearPage();
         
     });
     
@@ -40,6 +40,11 @@ var hideTemplate = function() {
     //  Hides the month template
     
     $('#template').toggleClass('hidden');
+};
+
+var clearPage = function() {
+    // Remove all divs from page except #template
+    $('.monthframe').remove();
 };
 
 var storeInLocalStorage = function(storageItemKey, storageItem) {        
@@ -472,7 +477,6 @@ var Year = function() {
             monthi.initCurrentMonthState();
             self.yearState.months.push(monthi);
         }
-        console.log(self.yearState.months);
     };
             
     self.fillYearDiv = function() {
@@ -507,6 +511,11 @@ var Year = function() {
         var loadedYear = loadFromLocalStorage(yearKey);
         return loadedYear;
     }
+    
+    self.initCurrentYearState = function() {
+        
+    }
+    
 };
 var month = new Month();
 var year = new Year();
