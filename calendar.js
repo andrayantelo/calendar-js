@@ -27,10 +27,10 @@ $(document).ready(function() {
         hideTemplate();
     });
     
-    year.getMonthsOfGivenYear();
-    year.generateEmptyYearDiv();
-    year.fillYearDiv();
-    year.attachYearClickHandler();
+    //year.getMonthsOfGivenYear();
+    //year.generateEmptyYearDiv();
+    //year.fillYearDiv();
+    //year.attachYearClickHandler();
     
 });
 
@@ -340,16 +340,16 @@ var Month = function (date) {
     self.initializeMonthDiv = function() {   // CURRENT LINE is this what I want
     // Initializes a month div. 
     
-        self.loadMonth();
-        if (self.loadMonth() !== undefined) {            // IS THIS WRITTEN IN A GOOD WAY?
-            self.monthState = self.loadMonth();
-        }
-        else {
-            self.initCurrentMonthState();
-        }
+        //self.loadMonth();
+        //if (self.loadMonth() !== undefined) {            // IS THIS WRITTEN IN A GOOD WAY?
+        //    self.monthState = self.loadMonth();
+        //}
+        //else {
+        //    self.initCurrentMonthState();
+        //}
         
-        self.generateEmptyMonthDiv();
-        self.addAttrToMonthFrame();
+        //self.generateEmptyMonthDiv();
+        //self.addAttrToMonthFrame();
         self.retrieveCheckedDays();
         self.generateMonthDiv();
         self.generateCheckmarks();
@@ -426,7 +426,7 @@ var Year = function() {
     self.determineYearType = function() {
         // Determines whether the year is a common year or a leap year.
         
-        currentYear = year.yearState.yearGiven;
+        currentYear = self.yearState.yearGiven;
         if(currentYear%4!==0) {
             self.yearState.yearType = "common"
             return "common";
@@ -494,7 +494,8 @@ var Year = function() {
         // Attaches month object's clickhandler to each month in a year.
     
         for(i=0;i<=11;i++) {
-            self.yearState.months[i].attachClickHandler($('#month' + i));
+            self.yearState.months[i].attachClickHandler();
+            //$('#month' + i)
         }
     };
     
@@ -511,6 +512,14 @@ var Year = function() {
         var loadedYear = loadFromLocalStorage(yearKey);
         return loadedYear;
     }
+    
+    //self.retrieveYearCheckedDays() = function() {
+        // Retrieve checked days for each month in a year.
+        
+    //    for(i=0;i<=11;i++) {
+    //        self.yearState.months[i].retrieveCheckedDays();
+    //    }
+    //};
     
     self.initCurrentYearState = function(currentYear) {
         // initializes year object's yearState
@@ -534,11 +543,12 @@ var Year = function() {
             self.initCurrentYearState();
         }
         
+        console.log(self.yearState);
         self.generateEmptyYearDiv();
-        //self.retrieveCheckedDays();  have to write one for year object
-        self.fillYearDiv();
-        //self.generateCheckmarks();   probably need one for year object
-        self.attachYearClickHandler();
+        for (i=0; i<= 11; i++) {
+            self.yearState.months[i].initializeMonthDiv();
+            
+        }
     
     };
     
