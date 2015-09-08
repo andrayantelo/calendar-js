@@ -411,7 +411,7 @@ var emptyYearState = function() {
         // year type
         yearType: "common",
         // year
-        yearGiven: 2013,
+        yearGiven: '',
         // array with 12 month objects
         months: []
     }
@@ -512,9 +512,35 @@ var Year = function() {
         return loadedYear;
     }
     
-    self.initCurrentYearState = function() {
+    self.initCurrentYearState = function(currentYear) {
+        // initializes year object's yearState
         
+        //Parameters:
+        //currentYear: int
+            //the year you want a calendar generated for
+        self.yearState.yearGiven = currentYear;
+        self.determineYearType();
+        self.getMonthsOfGivenYear();
     }
+    
+    self.initializeYearDiv = function() {   // CURRENT LINE is this what I want
+    // Initializes a year div. 
+    
+        self.loadYear();
+        if (self.loadYear() !== undefined) {            // IS THIS WRITTEN IN A GOOD WAY?
+            self.yearState = self.loadYear();
+        }
+        else {
+            self.initCurrentYearState();
+        }
+        
+        self.generateEmptyYearDiv();
+        //self.retrieveCheckedDays();  have to write one for year object
+        self.fillYearDiv();
+        //self.generateCheckmarks();   probably need one for year object
+        self.attachYearClickHandler();
+    
+    };
     
 };
 var month = new Month();
