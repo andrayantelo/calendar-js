@@ -39,7 +39,9 @@ $(document).ready(function() {
 
 var checkFirstOf = function() {
     // Checks the first day of each month
-    console.log($('.monthframe').find([daynumber='1']).parent('.cell'));
+    //console.log($('.monthframe').find([daynumber='1']).parent('.cell'));
+    $('.cell').first().children().toggleClass("hidden");
+    //([daynumber='1']).replaceWith( "<i class='fa fa-check'></i>" )
 };
 
 var hideTemplate = function() {
