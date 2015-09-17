@@ -37,11 +37,12 @@ $(document).ready(function() {
 
 //UTILITY/HELPER FUNCTIONS
 
-var checkFirstOf = function() {
+var checkFirstOf = function(yearObject) {
     // Checks the first day of each month
-    //console.log($('.monthframe').find([daynumber='1']).parent('.cell'));
-    $('.cell').first().children().toggleClass("hidden");
-    //([daynumber='1']).replaceWith( "<i class='fa fa-check'></i>" )
+    $('.monthframe').each( function( index) {
+        $(this).find('.cell').first().children().toggleClass("hidden");
+    })
+   
 };
 
 var hideTemplate = function() {
