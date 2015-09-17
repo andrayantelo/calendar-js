@@ -27,6 +27,7 @@ $(document).ready(function() {
         hideTemplate();
     });
     
+    year.initializeYearDiv();
     //year.getMonthsOfGivenYear();
     //year.generateEmptyYearDiv();
     //year.fillYearDiv();
@@ -34,7 +35,12 @@ $(document).ready(function() {
     
 });
 
-//UTILITY FUNCTIONS
+//UTILITY/HELPER FUNCTIONS
+
+var checkFirstOf = function() {
+    // Checks the first day of each month
+    console.log($('.monthframe').find([daynumber='1']).parent('.cell'));
+};
 
 var hideTemplate = function() {
     //  Hides the month template
@@ -83,9 +89,7 @@ var loadFromLocalStorage = function(storageItemKey) {
                                                                                                    
     else {
         var storageItem = JSON.parse(storageItem);  
-      
-        
-       return storageItem
+        return storageItem
     }         
 };
 
@@ -148,7 +152,7 @@ var getNumberOfDays = function(date) {
     }
     var monthName = getMonthName(date);
     if ( monthName === "February") {
-        var monthYearType = year.determineYearType(getYear(date));
+        var monthYearType = determineYearType(date);
         if (monthYearType === "common") {
             numberOfDays["February"] = 28;
             return numberOfDays[monthName];
@@ -243,6 +247,31 @@ var emptyMonthState = function() {
         monthId: ""
     }
 };
+
+var determineYearType = function(date) {
+        // Determines whether the year is a common year or a leap year.
+        if (date) {
+            date = new Date(date);
+        }
+        else {
+            date = new Date();
+        }
+        currentYear = date.getFullYear();
+        
+        if(currentYear%4!==0) {
+            return "common";
+        }
+        else if (currentYear%100!==0) {
+            return "leap";
+        }
+        else if (currentYear%400!==0) {
+            return "common";
+        }
+        else{
+            return "leap";
+        }
+        
+    };
 
 var Month = function (date) {
     //Represents a single month
@@ -350,6 +379,7 @@ var Month = function (date) {
         
         //self.generateEmptyMonthDiv();
         //self.addAttrToMonthFrame();
+        
         self.retrieveCheckedDays();
         self.generateMonthDiv();
         self.generateCheckmarks();
@@ -360,15 +390,15 @@ var Month = function (date) {
     self.loadMonth = function() {
         // Loads month state from localstorage
         
-        var loadedMonth = loadFromLocalStorage(temporaryStorageKey);
+        var loadedMonth = loadFromLocalStorage(self.monthState.monthId);
         return loadedMonth;
     };
     
-    self.storeMonth = function() {    
+    self.storeMonth = function(storageKey) {    
         // Stores the state of the month object in localstorage
     
         var storageItem = self.monthState;
-        storeInLocalStorage(temporaryStorageKey, storageItem);
+        storeInLocalStorage(self.monthState.monthId, storageItem);
     
     };
     
@@ -423,28 +453,7 @@ var Year = function() {
     var self = this;
     self.yearState = emptyYearState();
     
-    self.determineYearType = function() {
-        // Determines whether the year is a common year or a leap year.
-        
-        currentYear = self.yearState.yearGiven;
-        if(currentYear%4!==0) {
-            self.yearState.yearType = "common"
-            return "common";
-        }
-        else if (currentYear%100!==0) {
-            self.yearState.yearType = "leap"
-            return "leap";
-        }
-        else if (currentYear%400!==0) {
-            self.yearState.yearType = "common"
-            return "common";
-        }
-        else{
-            self.yearState.yearType = "leap"
-            return "leap";
-        }
-        
-    };
+    
     
     self.generateEmptyYearDiv = function() {
         //will generate the html for 12 empty month divs
@@ -471,6 +480,7 @@ var Year = function() {
             console.log("!currentYear ran");
             var today = new Date();
             currentYear = today.getFullYear();
+            self.yearState.yearGiven = currentYear;
         }
         for (i=0; i<=11; i++) {
             var monthi = new Month(monthNames[i] + ' ' + currentYear);
@@ -499,27 +509,38 @@ var Year = function() {
         }
     };
     
+    self.retrieveYearCheckedDays = function() {
+        // Retrieves the checked days for each month in a year.
+        
+        for(i=0;i<=11;i++) {
+            self.yearState.months[i].retrieveCheckedDays();
+        }
+    };
+    
+    
     self.storeYear = function() {
         // Stores the yearState in localstorage.
         
+        //for(i=0; i<=11 ; i++){
+        //    self.yearState.months[i].storeMonth();
+       // }
         var storageItem = self.yearState;
         storeInLocalStorage(yearKey, storageItem);
-    }
+    };
     
     self.loadYear = function() {
         // Loads the yearState from localstorage.
         
+        if (!self.yearState.months) {
+            console.log("self.yearState.months is true");
+            for (i=0; i<=11;i++) {
+                self.yearState.months[i].loadMonth();
+            }
+        }
         var loadedYear = loadFromLocalStorage(yearKey);
         return loadedYear;
-    }
+    };
     
-    //self.retrieveYearCheckedDays() = function() {
-        // Retrieve checked days for each month in a year.
-        
-    //    for(i=0;i<=11;i++) {
-    //        self.yearState.months[i].retrieveCheckedDays();
-    //    }
-    //};
     
     self.initCurrentYearState = function(currentYear) {
         // initializes year object's yearState
@@ -528,7 +549,7 @@ var Year = function() {
         //currentYear: int
             //the year you want a calendar generated for
         self.yearState.yearGiven = currentYear;
-        self.determineYearType();
+        determineYearType(self.yearState.yearGiven);
         self.getMonthsOfGivenYear();
     }
     
@@ -538,16 +559,23 @@ var Year = function() {
         self.loadYear();
         if (self.loadYear() !== undefined) {            // IS THIS WRITTEN IN A GOOD WAY?
             self.yearState = self.loadYear();
+            console.log("it loaded inside of initializeYearDiv");
         }
         else {
-            self.initCurrentYearState();
+            var today = new Date();
+            self.initCurrentYearState(today.getFullYear());
         }
         
         console.log(self.yearState);
+        self.getMonthsOfGivenYear();
         self.generateEmptyYearDiv();
+        self.fillYearDiv();
+        self.attachYearClickHandler();
         for (i=0; i<= 11; i++) {
-            self.yearState.months[i].initializeMonthDiv();
-            
+            self.yearState.months[i].retrieveCheckedDays();
+            self.yearState.months[i].generateMonthDiv();
+            self.yearState.months[i].generateCheckmarks();
+            self.yearState.months[i].attachClickHandler();
         }
     
     };
