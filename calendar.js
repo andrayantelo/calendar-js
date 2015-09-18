@@ -27,12 +27,7 @@ $(document).ready(function() {
         hideTemplate();
     });
     
-    year.initializeYearDiv();
-    //year.getMonthsOfGivenYear();
-    //year.generateEmptyYearDiv();
-    //year.fillYearDiv();
-    //year.attachYearClickHandler();
-    
+    year.initYear(2015);
 });
 
 //UTILITY/HELPER FUNCTIONS
@@ -42,8 +37,8 @@ var checkFirstOf = function(yearObject) {
     $('.monthframe').each( function( index) {
         $(this).find('.cell').first().children().toggleClass("hidden");
     })
-   
 };
+
 
 var hideTemplate = function() {
     //  Hides the month template
@@ -497,7 +492,6 @@ var Year = function() {
         
         for (i=0; i<= 11; i++) {
             self.yearState.months[i].generateMonthDiv();
-            
         }
     
     };
@@ -520,13 +514,18 @@ var Year = function() {
         }
     };
     
+    self.extractMonthStates = function() {
+        // Extracts the monthStates of each month object in the yearState.months
+        // array and replaces the month object in that array.
+    };
     
     self.storeYear = function() {
         // Stores the yearState in localstorage.
         
         //for(i=0; i<=11 ; i++){
         //    self.yearState.months[i].storeMonth();
-       // }
+        //}
+         
         var storageItem = self.yearState;
         storeInLocalStorage(yearKey, storageItem);
     };
@@ -545,8 +544,8 @@ var Year = function() {
     };
     
     
-    self.initCurrentYearState = function(currentYear) {
-        // initializes year object's yearState
+    self.initYear = function(currentYear) {
+        // initializes year object's yearState, 
         
         //Parameters:
         //currentYear: int
@@ -554,34 +553,12 @@ var Year = function() {
         self.yearState.yearGiven = currentYear;
         determineYearType(self.yearState.yearGiven);
         self.getMonthsOfGivenYear();
-    }
-    
-    self.initializeYearDiv = function() {   // CURRENT LINE is this what I want
-    // Initializes a year div. 
-    
-        self.loadYear();
-        if (self.loadYear() !== undefined) {            // IS THIS WRITTEN IN A GOOD WAY?
-            self.yearState = self.loadYear();
-            console.log("it loaded inside of initializeYearDiv");
-        }
-        else {
-            var today = new Date();
-            self.initCurrentYearState(today.getFullYear());
-        }
-        
-        console.log(self.yearState);
-        self.getMonthsOfGivenYear();
         self.generateEmptyYearDiv();
         self.fillYearDiv();
         self.attachYearClickHandler();
-        for (i=0; i<= 11; i++) {
-            self.yearState.months[i].retrieveCheckedDays();
-            self.yearState.months[i].generateMonthDiv();
-            self.yearState.months[i].generateCheckmarks();
-            self.yearState.months[i].attachClickHandler();
-        }
+    }
     
-    };
+
     
 };
 var month = new Month();
