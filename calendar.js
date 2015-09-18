@@ -482,11 +482,37 @@ var Year = function() {
         }
         for (i=0; i<=11; i++) {
             var monthi = new Month(monthNames[i] + ' ' + currentYear);
-            monthi.monthState = self.yearState.months[i];
-            //monthi.initCurrentMonthState();
-            console.log(monthi.monthState);
+           // monthi.monthState = self.yearState.months[i];
+            monthi.initCurrentMonthState();
             self.yearState.months.push(monthi);
         }
+    };
+    
+    self.getMonthObjects = function() {
+        // Returns an array of 12 month objects with empty monthStates that
+        // can be changed to whatever monthState was stored in localStorage (if any)
+        emptyMonthObjectsArray = [];
+        for (i=0; i<=11; i++) {
+            var monthi = new Month(self.yearState.yearGiven);
+            emptyMonthObjectsArray.push(monthi);
+        }
+        return emptyMonthObjectsArray;
+        
+    };
+    
+    self.updateMonthStates = function(monthObjects, monthStates) {
+        // Takes an array of month object instances and updates their monthStates.
+        // Returns this array of updated month objects.
+        
+        //  Parameters:
+        //  monthObjects: array
+        //      array of month object instances, must have length of 12
+        
+        for(i=0;i<=11;i++) {
+            monthObjects[i].monthState = monthStates[i];
+        }
+        return monthObjects
+        
     };
             
     self.fillYearDiv = function() {
@@ -544,7 +570,7 @@ var Year = function() {
         
         var loadedYear = loadFromLocalStorage(yearKey);
         if(loadedYear == undefined){
-            self.initYearState();
+            return;
         }
         
         return loadedYear;
@@ -566,15 +592,30 @@ var Year = function() {
         //currentYear: int
             //the year you want a calendar generated for
         today = new Date();
-        self.yearState.yearGiven = today.getFullyear();
+        currentYear = today.getFullYear();
+        self.yearState.yearGiven = currentYear;
         self.yearState.yearType = determineYearType(self.yearState.yearGiven);
-        self.yearState.months = self.emptyMonthStateArray;
-        //self.loadYear();
-        //self.getMonthsOfGivenYear();
-        //self.generateEmptyYearDiv();
-        //self.fillYearDiv();
-        //self.attachYearClickHandler();
+        self.yearState.months = self.getMonthObjects();
+        
     }
+    
+    self.initYearDiv = function() {
+        var yState = self.loadYear();
+        if(yState == undefined) {
+            self.initYearState;
+        }
+        else {
+            console.log("something was loaded when initYearDiv ran");
+            self.yearState = yState;
+        }
+        var emptyMonths = self.getMonthObjects();
+        var updatedStates = self.updateMonthStates(emptyMonths, self.yearState.months);
+        self.yearState.months = updatedStates;
+            
+        self.generateEmptyYearDiv();
+        self.fillYearDiv();
+        self.attachYearClickHandler();
+    };
     
 
     
