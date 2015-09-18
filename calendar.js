@@ -91,6 +91,30 @@ var loadFromLocalStorage = function(storageItemKey) {
     }         
 };
 
+var getMonthsOfGivenYear = function(currentYear) {
+      // An array of month objects for currentYear is generated returned
+      
+      // Parameters:
+      // currentYear: int
+      
+        var monthsOfYear = [];
+        var monthNames = {
+            0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
+            6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
+            11:"December"};
+        if (!currentYear) {
+            console.log("!currentYear ran");
+            var today = new Date();
+            currentYear = today.getFullYear();
+            self.yearState.yearGiven = currentYear;
+        }
+        for (i=0; i<=11; i++) {
+            var monthi = new Month(monthNames[i] + ' ' + currentYear);
+            monthi.initCurrentMonthState();
+            monthsOfYear.push(monthi);
+        }
+    };
+
 var getMonthIndex = function(date) {
     //  Returns the index of the month of a given date. If no date is given,
     //  returns the month of current date.
@@ -465,28 +489,6 @@ var Year = function() {
         $monthframe.append($('#template').html()); 
     };
     
-    self.getMonthsOfGivenYear = function() {
-      // An array of month objects for yearState.currentYear is generated and stored in
-      // the months array of the yearState object. 
-    
-        var currentYear = self.yearState.yearGiven;
-        var monthNames = {
-            0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
-            6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
-            11:"December"};
-        if (!currentYear) {
-            console.log("!currentYear ran");
-            var today = new Date();
-            currentYear = today.getFullYear();
-            self.yearState.yearGiven = currentYear;
-        }
-        for (i=0; i<=11; i++) {
-            var monthi = new Month(monthNames[i] + ' ' + currentYear);
-           // monthi.monthState = self.yearState.months[i];
-            monthi.initCurrentMonthState();
-            self.yearState.months.push(monthi);
-        }
-    };
     
     self.getMonthObjects = function() {
         // Returns an array of 12 month objects with empty monthStates that
@@ -514,33 +516,27 @@ var Year = function() {
         return monthObjects
         
     };
+    
+    self.retrieveYearCheckmarks = function() {
+        // Collects the checked days of the year.
+        
+        for(i=0; i<=11; i++) {
+            self.yearState.months[i].retrieveCheckedDays();
+        }
+    };
             
     self.fillYearDiv = function() {
         // Fills the empty year div with correct month information.
         
         for (i=0; i<= 11; i++) {
+            //self.yearState.months[i].retrieveCheckedDays();
             self.yearState.months[i].generateMonthDiv();
+            self.yearState.months[i].generateCheckmarks();
+            self.yearState.months[i].attachClickHandler();
         }
     
     };
 
-    
-    self.attachYearClickHandler = function() {
-        // Attaches month object's clickhandler to each month in a year.
-    
-        for(i=0;i<=11;i++) {
-            self.yearState.months[i].attachClickHandler();
-            //$('#month' + i)
-        }
-    };
-    
-    self.retrieveYearCheckedDays = function() {
-        // Retrieves the checked days for each month in a year.
-        
-        for(i=0;i<=11;i++) {
-            self.yearState.months[i].retrieveCheckedDays();
-        }
-    };
     
     self.extractMonthStates = function() {
         // Extracts the monthStates of each month object in the yearState.months
@@ -613,8 +609,8 @@ var Year = function() {
         self.yearState.months = updatedStates;
             
         self.generateEmptyYearDiv();
+        //self.retrieveYearCheckmarks;
         self.fillYearDiv();
-        self.attachYearClickHandler();
     };
     
 
