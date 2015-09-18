@@ -27,7 +27,7 @@ $(document).ready(function() {
         hideTemplate();
     });
     
-    year.initYear(2015);
+    //year.initYear(2015);
 });
 
 //UTILITY/HELPER FUNCTIONS
@@ -482,7 +482,9 @@ var Year = function() {
         }
         for (i=0; i<=11; i++) {
             var monthi = new Month(monthNames[i] + ' ' + currentYear);
-            monthi.initCurrentMonthState();
+            monthi.monthState = self.yearState.months[i];
+            //monthi.initCurrentMonthState();
+            console.log(monthi.monthState);
             self.yearState.months.push(monthi);
         }
     };
@@ -536,35 +538,42 @@ var Year = function() {
         storeInLocalStorage(yearKey, storageItem);
     };
     
-    self.initYearMonths = function() {
-    }
     
     self.loadYear = function() {
         // Loads the yearState from localstorage.
         
-        if (!self.yearState.months) {
-            console.log("self.yearState.months is true");
-            for (i=0; i<=11;i++) {
-                self.yearState.months[i].loadMonth();
-            }
-        }
         var loadedYear = loadFromLocalStorage(yearKey);
+        if(loadedYear == undefined){
+            self.initYearState();
+        }
+        
         return loadedYear;
     };
     
+    self.emptyMonthStateArray = function() {
+        //Generates an array of 12 empty monthStates.
+        emptyMonthStateArray = [];
+        for(i=0;i<=11;i++) {
+            emptyMonthStateArray.push(emptyMonthState());
+        }
+        return emptyMonthStateArray;
+    };
     
-    self.initYear = function(currentYear) {
+    self.initYearState = function() {
         // initializes year object's yearState, 
         
         //Parameters:
         //currentYear: int
             //the year you want a calendar generated for
-        self.yearState.yearGiven = currentYear;
-        determineYearType(self.yearState.yearGiven);
-        self.getMonthsOfGivenYear();
-        self.generateEmptyYearDiv();
-        self.fillYearDiv();
-        self.attachYearClickHandler();
+        today = new Date();
+        self.yearState.yearGiven = today.getFullyear();
+        self.yearState.yearType = determineYearType(self.yearState.yearGiven);
+        self.yearState.months = self.emptyMonthStateArray;
+        //self.loadYear();
+        //self.getMonthsOfGivenYear();
+        //self.generateEmptyYearDiv();
+        //self.fillYearDiv();
+        //self.attachYearClickHandler();
     }
     
 
