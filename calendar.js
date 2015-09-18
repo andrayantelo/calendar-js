@@ -517,6 +517,11 @@ var Year = function() {
     self.extractMonthStates = function() {
         // Extracts the monthStates of each month object in the yearState.months
         // array and replaces the month object in that array.
+        var newMonthsArray = [];
+        for(i=0;i<=11;i++) {
+            newMonthsArray.push(self.yearState.months[i].monthState);
+        }
+        self.yearState.months = newMonthsArray;
     };
     
     self.storeYear = function() {
@@ -525,10 +530,14 @@ var Year = function() {
         //for(i=0; i<=11 ; i++){
         //    self.yearState.months[i].storeMonth();
         //}
-         
+        
+        self.extractMonthStates();
         var storageItem = self.yearState;
         storeInLocalStorage(yearKey, storageItem);
     };
+    
+    self.initYearMonths = function() {
+    }
     
     self.loadYear = function() {
         // Loads the yearState from localstorage.
