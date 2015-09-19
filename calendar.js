@@ -537,31 +537,19 @@ var Year = function() {
     
     
     self.getMonthObjects = function() {
-        // Returns an array of 12 month objects with empty monthStates that
-        // can be changed to whatever monthState was stored in localStorage (if any)
-        emptyMonthObjectsArray = [];
+        // Returns an array of 12 month objects with monthStates that
+        // correspond to the monthStates stored in yearState.monthStates
+        
+        monthObjectsArray = [];
         for (i=0; i<=11; i++) {
             var monthi = new Month(self.yearState.yearGiven);
+            monthi.monthState = self.yearState.monthStates[i];
             emptyMonthObjectsArray.push(monthi);
         }
-        return emptyMonthObjectsArray;
+        return monthObjectsArray;
         
     };
     
-    self.updateMonthStates = function(monthObjects, monthStates) {
-        // Takes an array of month object instances and updates their monthStates.
-        // Returns this array of updated month objects.
-        
-        //  Parameters:
-        //  monthObjects: array
-        //      array of month object instances, must have length of 12
-        
-        for(i=0;i<=11;i++) {
-            monthObjects[i].monthState = monthStates[i];
-        }
-        return monthObjects
-        
-    };
     
     self.retrieveYearCheckmarks = function() {
         // Collects the checked days of the year.
@@ -584,16 +572,6 @@ var Year = function() {
     };
 
     
-    self.extractMonthStates = function() {
-        // Extracts the monthStates of each month object in the yearState.months
-        // array and replaces the month object in that array.
-        var newMonthsArray = [];
-        for(i=0;i<=11;i++) {
-            newMonthsArray.push(self.yearState.monthStates[i].monthState);
-        }
-        self.yearState.monthStates = newMonthsArray;
-    };
-    
     self.storeYear = function() {
         // Stores the yearState in localstorage.
         
@@ -601,25 +579,28 @@ var Year = function() {
         //    self.yearState.months[i].storeMonth();
         //}
         
-        self.extractMonthStates();
         var storageItem = self.yearState;
         storeInLocalStorage(yearKey, storageItem);
     };
     
     
     self.loadYear = function() {
-        // Loads the yearState from localstorage.
+        // Loads the yearState from localstorage and returns it. If there
+        // is no yearState in localStorage, returns yearState for current year.
         
         var loadedYear = loadFromLocalStorage(yearKey);
         if(loadedYear == undefined){
-            return;
+            today = new Date();
+            loadedYear = self.initYearState(today.getFullYear());
+            return loadedYear;
         }
         
         return loadedYear;
     };
     
     self.emptyMonthStateArray = function() {
-        //Generates an array of 12 empty monthStates.
+        // Returns an array of 12 empty monthStates.
+        
         emptyMonthStateArray = [];
         for(i=0;i<=11;i++) {
             emptyMonthStateArray.push(emptyMonthState());
@@ -627,29 +608,22 @@ var Year = function() {
         return emptyMonthStateArray;
     };
     
-    self.initYearState = function() {
+    self.initYearState = function(desiredYear) {
         // initializes year object's yearState, 
         
         //Parameters:
-        //currentYear: int
+        //desiredYear: int
             //the year you want a calendar generated for
-        today = new Date();
-        currentYear = today.getFullYear();
-        self.yearState.yearGiven = currentYear;
+        
+        self.yearState.yearGiven = desiredYear;
         self.yearState.yearType = determineYearType(self.yearState.yearGiven);
-        self.yearState.months = self.getMonthObjects();
+        self.yearState.months = self.emptyMonthStateArray();
         
     }
     
-    self.initYearDiv = function() {
+    self.initYear = function() {
         var yState = self.loadYear();
-        if(yState == undefined) {
-            self.initYearState;
-        }
-        else {
-            console.log("something was loaded when initYearDiv ran");
-            self.yearState = yState;
-        }
+    
         var emptyMonths = self.getMonthObjects();
         var updatedStates = self.updateMonthStates(emptyMonths, self.yearState.months);
         self.yearState.months = updatedStates;
