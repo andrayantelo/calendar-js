@@ -281,7 +281,7 @@ var generateMonthObj = function(mState) {
     // mState: dictionary
     //     contains month information (numberOfDays, firstIndex, etc)
     
-    var month = new Month();
+    var month = new Month(mState.monthName + mState.monthYear);
     month.monthState = mState;
     return month;
 };
@@ -536,13 +536,13 @@ var Year = function() {
     };
     
     
-    self.getMonthObjects = function() {
+    self.getMonthObjects = function(state) {
         // Returns an array of 12 month objects with monthStates that
         // correspond to the monthStates stored in yearState.monthStates
         
         monthObjectsArray = [];
         for (i=0; i<=11; i++) {
-            var monthi = generateMonthObj();
+            var monthi = generateMonthObj(state[i]);
             monthObjectsArray.push(monthi);
         }
         return monthObjectsArray;
@@ -574,7 +574,7 @@ var Year = function() {
         // Collects the checked days of the year.
         
         for(i=0; i<=11; i++) {
-            self.year.monthObjects[i].retrieveCheckedDays();
+            self.monthObjects[i].retrieveCheckedDays();
         }
     };
             
@@ -582,10 +582,10 @@ var Year = function() {
         // Fills the empty year div with correct month information.
         
         for (i=0; i<= 11; i++) {
-            self.yearState.months[i].retrieveYearCheckedmarks();
-            self.year.monthObjects[i].generateMonthDiv();
-            self.year.monthObjects[i].generateCheckmarks();
-            self.year.monthObjects[i].attachClickHandler();
+            self.monthObjects[i].retrieveCheckedDays();
+            self.monthObjects[i].generateMonthDiv();
+            self.monthObjects[i].generateCheckmarks();
+            self.monthObjects[i].attachClickHandler();
         }
     
     };
@@ -615,9 +615,7 @@ var Year = function() {
         
         var loadedYear = loadFromLocalStorage(yearKey);
         if(loadedYear == undefined){
-            today = new Date();
-            loadedYear = self.initYearState(today.getFullYear());
-            return loadedYear;
+            return;
         }
         
         return loadedYear;
@@ -649,9 +647,14 @@ var Year = function() {
     
     self.initYear = function() {
         var yState = self.loadYear();
-    
-        self.months = getMonthObjects();
-            
+        if (yState == undefined) {
+            today = new Date();
+            yState = self.initYearState(today.getFullYear());
+        }
+        else {
+            self.yearState = yState;
+        }
+        self.monthObjects = self.getMonthObjects(self.yearState.monthStates);
         self.generateEmptyYearDiv();
         self.fillYearDiv();
     };
