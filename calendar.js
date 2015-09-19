@@ -345,7 +345,7 @@ var Month = function (date) {
     
     var self = this;
     self.monthState = emptyMonthState();
-    self.date = date || new Date();
+    self.date = new Date(date) || new Date();
     
     self.attachClickHandler = function() {
         // Attaches a function to the divs with class "cell" to be triggered
@@ -550,6 +550,26 @@ var Year = function() {
     };
     
     
+    self.getMonthStatesOfGivenYear = function(desiredYear) {
+        var monthStatesOfYear = [];
+        var monthNames = {
+            0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
+            6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
+            11:"December"};
+        if (!desiredYear) {
+            console.log("!yearGiven ran");
+            var today = new Date();
+            desiredYear = today.getFullYear();
+            self.yearState.yearGiven = desiredYear;
+        }
+        for (i=0; i<=11; i++) {
+            var monthi = new Month(monthNames[i] + ' ' + desiredYear);
+            monthi.initCurrentMonthState();
+            monthStatesOfYear.push(monthi.monthState);
+        }
+        return monthStatesOfYear;
+    };
+    
     self.retrieveYearCheckmarks = function() {
         // Collects the checked days of the year.
         
@@ -622,7 +642,7 @@ var Year = function() {
         
         self.yearState.yearGiven = desiredYear;
         self.yearState.yearType = determineYearType(self.yearState.yearGiven);
-        self.yearState.months = self.emptyMonthStateArray();
+        self.yearState.monthStates = self.getMonthStatesOfGivenYear(desiredYear);
         
     }
     
