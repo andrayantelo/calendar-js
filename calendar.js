@@ -249,27 +249,6 @@ var getDayOfWeek = function(date) {
 };
 
 
-var emptyMonthState = function() {
-    return{
-        // first day of the month
-        firstIndex: 4,
-        // how many days in the month, default 30
-        numberOfDays: 31,
-        // which days are checked index:daynumber
-        checkedDays: {},
-        // day and their indices pairs daynumber:index
-        dayIndex: {},
-        // month year
-        monthYear: "",
-        // month name
-        monthName: "",
-        // index of month
-        monthIndex: 0,
-        // monthID
-        monthId: ""
-    }
-};
-
 var determineYearType = function(date) {
         // Determines whether the year is a common year or a leap year.
         if (date) {
@@ -294,6 +273,72 @@ var determineYearType = function(date) {
         }
         
     };
+    
+var generateMonthObj = function(mState) {
+    // Returns a month object with the given state as it's monthState.
+    
+    // Parameters:
+    // mState: dictionary
+    //     contains month information (numberOfDays, firstIndex, etc)
+    
+    var month = new Month();
+    month.monthState = mState;
+    return month;
+};
+
+var extractMonthState = function(monthObj) {
+    // Takes a month object, extracts it's monthState, and returns it.
+    
+    // Parameters:
+    // monthObj: object
+    //     An instance of the Month class
+    
+    return monthObj.monthState;
+};
+
+var generateYearObj = function(yState) {
+    // Returns a year object with the given state as it's yearState.
+    
+    // Parameters:
+    // yState: dictionary
+    //     contains year information (yearType, givenYear, etc)
+    
+    var year = new Year();
+    year.yearState = yState;
+    return year;
+};
+
+var extractYearState = function(yearObj) {
+    // Takes a year object, extracts it's yearState, and returns it.
+    
+    // Parameters:
+    // yearObj: object
+    //     An instance of the Year class
+    
+    return yearObj.yearState;
+};
+    
+var emptyMonthState = function() {
+    return{
+        // first day of the month
+        firstIndex: 4,
+        // how many days in the month, default 30
+        numberOfDays: 31,
+        // which days are checked index:daynumber
+        checkedDays: {},
+        // day and their indices pairs daynumber:index
+        dayIndex: {},
+        // month year
+        monthYear: "",
+        // month name
+        monthName: "",
+        // index of month
+        monthIndex: 0,
+        // monthID
+        monthId: ""
+    }
+};
+
 
 var Month = function (date) {
     //Represents a single month
@@ -465,7 +510,7 @@ var emptyYearState = function() {
         // year
         yearGiven: '',
         // array with 12 month objects
-        months: []
+        monthStates: []
     }
 };
 
@@ -474,6 +519,7 @@ var Year = function() {
     
     var self = this;
     self.yearState = emptyYearState();
+    self.monthObjects = [];
     
     
     
@@ -521,7 +567,7 @@ var Year = function() {
         // Collects the checked days of the year.
         
         for(i=0; i<=11; i++) {
-            self.yearState.months[i].retrieveCheckedDays();
+            self.year.monthObjects[i].retrieveCheckedDays();
         }
     };
             
@@ -530,9 +576,9 @@ var Year = function() {
         
         for (i=0; i<= 11; i++) {
             //self.yearState.months[i].retrieveCheckedDays();
-            self.yearState.months[i].generateMonthDiv();
-            self.yearState.months[i].generateCheckmarks();
-            self.yearState.months[i].attachClickHandler();
+            self.year.monthObjects[i].generateMonthDiv();
+            self.year.monthObjects[i].generateCheckmarks();
+            self.year.monthObjects[i].attachClickHandler();
         }
     
     };
@@ -543,9 +589,9 @@ var Year = function() {
         // array and replaces the month object in that array.
         var newMonthsArray = [];
         for(i=0;i<=11;i++) {
-            newMonthsArray.push(self.yearState.months[i].monthState);
+            newMonthsArray.push(self.yearState.monthStates[i].monthState);
         }
-        self.yearState.months = newMonthsArray;
+        self.yearState.monthStates = newMonthsArray;
     };
     
     self.storeYear = function() {
