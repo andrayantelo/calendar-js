@@ -542,9 +542,8 @@ var Year = function() {
         
         monthObjectsArray = [];
         for (i=0; i<=11; i++) {
-            var monthi = new Month(self.yearState.yearGiven);
-            monthi.monthState = self.yearState.monthStates[i];
-            emptyMonthObjectsArray.push(monthi);
+            var monthi = generateMonthObj();
+            monthObjectsArray.push(monthi);
         }
         return monthObjectsArray;
         
@@ -563,21 +562,27 @@ var Year = function() {
         // Fills the empty year div with correct month information.
         
         for (i=0; i<= 11; i++) {
-            //self.yearState.months[i].retrieveCheckedDays();
+            self.yearState.months[i].retrieveYearCheckedmarks();
             self.year.monthObjects[i].generateMonthDiv();
             self.year.monthObjects[i].generateCheckmarks();
             self.year.monthObjects[i].attachClickHandler();
         }
     
     };
-
+    
+    self.updateMonthStates = function() {
+        // Updates the yearState's monthStates array with current information.
+        
+        monthStates = [];
+        for(i=0; i<=11 ; i++){
+            monthStates.push(extractMonthState(self.months[i]));
+        }
+        self.yearState = monthStates;
+        
+    };
     
     self.storeYear = function() {
         // Stores the yearState in localstorage.
-        
-        //for(i=0; i<=11 ; i++){
-        //    self.yearState.months[i].storeMonth();
-        //}
         
         var storageItem = self.yearState;
         storeInLocalStorage(yearKey, storageItem);
@@ -621,15 +626,13 @@ var Year = function() {
         
     }
     
+    
     self.initYear = function() {
         var yState = self.loadYear();
     
-        var emptyMonths = self.getMonthObjects();
-        var updatedStates = self.updateMonthStates(emptyMonths, self.yearState.months);
-        self.yearState.months = updatedStates;
+        self.months = getMonthObjects();
             
         self.generateEmptyYearDiv();
-        //self.retrieveYearCheckmarks;
         self.fillYearDiv();
     };
     
