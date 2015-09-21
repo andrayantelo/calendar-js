@@ -371,11 +371,16 @@ var Month = function (date) {
         })
     };
     
-    self.generateEmptyMonthDiv = function() {
+    self.generateEmptyMonthDiv = function(divClass) {
         // Generates an empty month div template
         
-         $('.calendar').append('<div class="monthframe"></div>');
-         $('.monthframe').append($('#template').html());
+        // Parameters:
+        //   divClass: String
+        //     the class of the div where you want to place your month.
+        
+        var $divClass = $('.' + divClass)
+        $divClass.append('<div class="monthframe"></div>');
+        $('.monthframe').append($('#template').html());
     };
     
     self.generateMonthDiv = function() {
@@ -444,7 +449,7 @@ var Month = function (date) {
         //    self.initCurrentMonthState();
         //}
         
-        //self.generateEmptyMonthDiv();
+        //self.generateEmptyMonthDiv('calendar');
         //self.addAttrToMonthFrame();
         
         self.retrieveCheckedDays();
@@ -523,13 +528,16 @@ var Year = function() {
     
     
     
-    self.generateEmptyYearDiv = function() {
-        //will generate the html for 12 empty month divs
+    self.generateEmptyYearDiv = function(divClass) {
+        // will generate the html for 12 empty month divs
         
+        // Parameters:
+        //     divClass: The div where you want to generate the months
         
+        var $divClass = $('.' + divClass);
         for (i=0; i<=11; i++) {
             console.log(i.toString().length);
-            $('.calendar').append('<div class="monthframe" id="month' + i + '" ></div>');
+            $divClass.append('<div class="monthframe" id="month' + i + '" ></div>');
         }
         var $monthframe = $('.monthframe');
         $monthframe.append($('#template').html()); 
@@ -655,7 +663,7 @@ var Year = function() {
             self.yearState = yState;
         }
         self.monthObjects = self.getMonthObjects(self.yearState.monthStates);
-        self.generateEmptyYearDiv();
+        self.generateEmptyYearDiv('calendar');
         self.fillYearDiv();
     };
     
