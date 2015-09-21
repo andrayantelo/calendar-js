@@ -30,7 +30,7 @@ $(document).ready(function() {
 
 //UTILITY/HELPER FUNCTIONS
 
-var checkFirstOf = function(yearObject) {
+var checkFirstOf = function() {
     // Checks the first day of each month
     $('.monthframe').each( function( index) {
         $(this).find('.cell').first().children().toggleClass("hidden");
@@ -110,7 +110,7 @@ var getMonthsOfGivenYear = function(currentYear) {
             monthi.initCurrentMonthState();
             monthsOfYear.push(monthi);
         }
-    return monthsOfyear;
+    return monthsOfYear;
     };
 
 var getMonthIndex = function(date) {
@@ -131,7 +131,7 @@ var getMonthIndex = function(date) {
 };
 
 var getMonthName = function(index) {
-    //  Returns the name of the month of the given date. If no date is given,
+    //  Returns the name of the month of the given index. If no index is given,
     //  returns the name of the month of the current date.
     
     //  Parameters: 
