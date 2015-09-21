@@ -9,8 +9,6 @@ var yearKey = "yearKey"; //temporaryStorageKey for year object
 
 
 $(document).ready(function() {
-
-
     
     $('#saveButton').click(function(){
         month.retrieveCheckedDays();
@@ -27,7 +25,7 @@ $(document).ready(function() {
         hideTemplate();
     });
     
-    //year.initYear(2015);
+    year.initYear(2015);
 });
 
 //UTILITY/HELPER FUNCTIONS
@@ -92,39 +90,39 @@ var loadFromLocalStorage = function(storageItemKey) {
 };
 
 var getMonthsOfGivenYear = function(currentYear) {
-      // An array of month objects for currentYear is generated returned
-      
-      // Parameters:
-      // currentYear: int
-      
+    // An array of month objects for currentYear is generated and returned
+    
+    // Parameters:
+    // currentYear: int
+    var monthsOfYear = [];
         var monthsOfYear = [];
         var monthNames = {
             0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
             6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
             11:"December"};
-        if (!currentYear) {
+        if (currentYear === undefined) {
             console.log("!currentYear ran");
             var today = new Date();
             currentYear = today.getFullYear();
-            self.yearState.yearGiven = currentYear;
         }
         for (i=0; i<=11; i++) {
             var monthi = new Month(monthNames[i] + ' ' + currentYear);
             monthi.initCurrentMonthState();
             monthsOfYear.push(monthi);
         }
+    return monthsOfyear;
     };
 
 var getMonthIndex = function(date) {
     //  Returns the index of the month of a given date. If no date is given,
-    //  returns the month of current date.
+    //  returns the month index of current date.
     
     //  Parameters:
     //  date: string
     //      "month year" format. Example: "October 2013"
     //      or "year month" format. Example "2013 10" (10 is October)
     
-    if (!date) {
+    if (date === undefined) {
         var today = new Date();
         return today.getMonth();
     }
@@ -132,7 +130,7 @@ var getMonthIndex = function(date) {
     return date.getMonth();
 };
 
-var getMonthName = function(date) {
+var getMonthName = function(index) {
     //  Returns the name of the month of the given date. If no date is given,
     //  returns the name of the month of the current date.
     
@@ -145,12 +143,11 @@ var getMonthName = function(date) {
         0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
         6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
         11:"December"};
-    if (!date) {
+    if (index === undefined) {
         var today = new Date();  //can i pass an argument date and have var today = new Date(date) || new Date(); ???
         return months[today.getMonth()];
     }
-    date = new Date(date);
-    return months[date.getMonth()];
+    return months[index];
 };
 
 var getNumberOfDays = function(date) {
@@ -163,31 +160,31 @@ var getNumberOfDays = function(date) {
     //      or "year month" format. Example "2013 10" (10 is October)
     
     var numberOfDays = { 
-        "January":31, "March":31, "April":30, "May":31, "June":30, "July":31,
-        "August":31, "September": 30, "October":31, "November":30, "December":31}
+        0:31, 2:31, 3:30, 4:31, 5:30, 6:31,
+        7:31, 8: 30, 9:31, 10:30, 11:31}
     
-    if (!date) {
+    if (date === undefined) {
         date = new Date();
     }
     else {
         date = new Date(date);
     }
-    var monthName = getMonthName(date);
-    if ( monthName === "February") {
+    var monthIndex = getMonthIndex(date);
+    if ( monthIndex === 1) {
         var monthYearType = determineYearType(date);
         if (monthYearType === "common") {
-            numberOfDays["February"] = 28;
-            return numberOfDays[monthName];
+            numberOfDays[1] = 28;
+            return numberOfDays[monthIndex];
                 
             }
         else if (monthYearType === "leap") {
-            numberOfDays["February"] = 29;
-            return numberOfDays[monthName];
+            numberOfDays[1] = 29;
+            return numberOfDays[monthIndex];
         }
                 
     }
     else {
-        return  numberOfDays[monthName];
+        return  numberOfDays[monthIndex];
         }
 };
 
@@ -200,19 +197,22 @@ var getYear = function(date) {
     //      "month year" format.
     //      or "year month" format. Example "2013 10" (10 is October)   
       
-    var today = new Date();
-    if (date) {
-        date = new Date(date);
-        return date.getFullYear()
+   
+    if (date === undefined) {
+        var today = new Date();
+        return today.getFullYear()
+        
     }
     else {
-        return today.getFullYear()
+        date = new Date(date);
+        return date.getFullYear()
     }
         
 };
 
 var diffBetweenDays = function(firstDate, secondDate) {
-    //  Calculates the number of days between firstDate and secondDate.
+    //  Calculates the number of days between firstDate and secondDate and
+    // returns it.
     
     //  Parameters:
     //      firstDate: date object
@@ -232,11 +232,11 @@ var getDayOfWeek = function(date) {
     //      If no day number is given, the 1st of the month is used.
      
     var firstDate = new Date(1986, 09, 12);
-    if (date) {
-        date = new Date(date);
+    if (date === undefined) {
+        date = new Date();
     }
     else {
-        date = new Date();
+        date = new Date(date);
     }
     var dateDate = date.getDate();
     var dateYear = date.getFullYear();
@@ -251,11 +251,11 @@ var getDayOfWeek = function(date) {
 
 var determineYearType = function(date) {
         // Determines whether the year is a common year or a leap year.
-        if (date) {
-            date = new Date(date);
+        if (date === undefined) {
+            date = new Date();
         }
         else {
-            date = new Date();
+            date = new Date(date);
         }
         currentYear = date.getFullYear();
         
@@ -480,13 +480,13 @@ var Month = function (date) {
   
     self.initCurrentMonthState = function() {
         // Initializes a month object.
-        
-        self.monthState.monthName = getMonthName(self.date);
+        self.monthState.monthIndex = getMonthIndex(self.date);
+        self.monthState.monthName = getMonthName(self.monthState.monthIndex);
         self.monthState.monthYear = getYear(self.date);
         self.monthState.numberOfDays = getNumberOfDays(self.monthState.monthName
                                                      + ' ' + self.monthState.monthYear);
         self.monthState.firstIndex = getDayOfWeek(self.date);
-        self.monthState.monthIndex = getMonthIndex(self.date);
+        
         self.monthState.monthId = 'month' + self.monthState.monthIndex;
         return self.monthState;
         
