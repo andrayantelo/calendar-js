@@ -1,4 +1,18 @@
-var sampleHTML = '<tr class="week"><td class="aDay"><div class="nill"> \
+var sampleHTML = '<div id="testmonth" >\
+        <div class="header">\
+            <span class="month-year"> 2015 </span>\
+        </div>\
+        <div>\
+            <table id="days">\
+                <td>S</td>\
+                <td>M</td>\
+                <td>T</td>\
+                <td>W</td>\
+                <td>T</td>\
+                <td>F</td>\
+                <td>S</td>\
+            </table>\
+        </div><div class="monthContainer"><table class="month"><tbody><tr class="week"><td class="aDay"><div class="nill"> \
 </div></td><td class="aDay"><div class="nill"></div></td><td class="aDay"> \
 <div class="nill"></div></td><td class="aDay"><div class="cell">\
 <div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \

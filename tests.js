@@ -206,5 +206,21 @@ test("attachClickHandler test", function() {
 });
 
 test("clearMonthDiv test", function() {
+    var testMonth = new Month();
+    testMonth.monthState.monthId = "testmonth";
+    var fixture = $('#qunit-fixture');
+    fixture.append('<div id="testmonth" >\
+        <div class="header">\
+            <span class="month-year"> 2015 </span>\
+        </div>\
+        <table class="month"><tbody><tr class="week">\
+        <td class="aDay"><div class="cell">\
+<div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \
+<td class="aDay"><div class="cell"><div class="daynumber">2</div>\
+<i class="fa fa-check hidden"></i></div></tr></tbody></table>');
+    equal($('#testmonth').find('.header').find('.month-year').text(), 2015);
+    testMonth.clearMonthDiv();
+    equal($('#testmonth').find('.header').find('.month-year').text(), '');
+    
 });
 
