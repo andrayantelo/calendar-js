@@ -89,7 +89,36 @@ test("getMonthName test", function() {
 });
 
 test("getNumberOfDays test", function() {
+    var today = new Date();
+    var monthNames = {
+            0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
+            6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
+            11:"December"};
     equal(getNumberOfDays('October 2015'), 31);
     equal(getNumberOfDays('February 2016'), 29);
     equal(getNumberOfDays('February 2015'), 28);
+    console.log(monthNames[today.getMonth()] + ' ' + today.getFullYear());
+    equal(getNumberOfDays(), getNumberOfDays(monthNames[today.getMonth()] + ' ' + today.getFullYear()));
+});
+
+test("getYear test", function() {
+    var today = new Date();
+    equal(getYear('October 2014'), '2014');
+    equal(getYear(), today.getFullYear());
+});
+
+test("diffBetweenDays test", function() {
+    first = new Date("October 15 1986");
+    second = new Date("October 12 1986");
+    equal(diffBetweenDays(first, second), 3);
+    first = new Date("January 1 2015");
+    second = new Date("January 1 2014");
+    equal(diffBetweenDays(first, second), 365);
+});
+
+test("getDayOfWeek test", function() {
+    birthday = new Date("October 12 1986");
+    equal(getDayOfWeek(birthday), 0);
+    today = new Date();
+    
 });

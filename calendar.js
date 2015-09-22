@@ -25,7 +25,7 @@ $(document).ready(function() {
         hideTemplate();
     });
     
-    year.initYear(2015);
+    year.initYear(1986);
 });
 
 //UTILITY/HELPER FUNCTIONS
@@ -161,7 +161,7 @@ var getNumberOfDays = function(date) {
     
     var numberOfDays = { 
         0:31, 2:31, 3:30, 4:31, 5:30, 6:31,
-        7:31, 8: 30, 9:31, 10:30, 11:31}
+        7:31, 8:30, 9:31, 10:30, 11:31}
     
     if (date === undefined) {
         date = new Date();
@@ -243,8 +243,9 @@ var getDayOfWeek = function(date) {
     var dateMonth = date.getMonth();
     var secondDate = new Date(dateYear, dateMonth, dateDate);
     
-    var diffDays = diffBetweenDays(firstDate, secondDate);
-    var index = diffDays%7;
+    //var diffDays = diffBetweenDays(firstDate, secondDate);
+    //var index = diffDays%7;
+    var index = date.getDay();
     return index;
 };
 
@@ -655,11 +656,17 @@ var Year = function() {
     }
     
     
-    self.initYear = function() {
+    self.initYear = function(desiredYear) {
+        clearPage();
         var yState = self.loadYear();
         if (yState == undefined) {
-            today = new Date();
-            yState = self.initYearState(today.getFullYear());
+            if (desiredYear === undefined) {
+                today = new Date();
+                yState = self.initYearState(desiredYear);
+            }
+            else {
+                yState = self.initYearState(desiredYear);
+            }
         }
         else {
             self.yearState = yState;
