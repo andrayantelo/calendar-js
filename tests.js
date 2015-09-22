@@ -120,5 +120,74 @@ test("getDayOfWeek test", function() {
     birthday = new Date("October 12 1986");
     equal(getDayOfWeek(birthday), 0);
     today = new Date();
+    equal(getDayOfWeek(), today.getDay());
     
+});
+
+test("determineYearType test", function() {
+    var rightNow = new Date("September 22 2015");
+    equal(determineYearType(rightNow), "common");
+    var then = new Date("October 1904");
+    equal(determineYearType(then), "leap");
+    var today = new Date();
+    equal(determineYearType(today), determineYearType(today.getFullYear()));
+});
+
+test("generateMonthObj test", function() {
+    var mState = {"test":1, "monthName":"September"};
+    var testObj = generateMonthObj(mState);
+    equal(testObj instanceof Month, true);
+    equal(testObj.monthState.monthYear, undefined);
+    equal(testObj.monthState.monthName, "September");
+});
+
+test("extractMonthState test", function() {
+    var testMonth = new Month("October 12 1986");
+    deepEqual(extractMonthState(testMonth), emptyMonthState());
+    equal(extractMonthState(testMonth) instanceof Object, true);
+});
+
+test("generateYearObj test", function() {
+    var yState = {"test":2, yearGiven: 2015}
+    var testYear = generateYearObj(yState);
+    equal(testYear instanceof Year, true);
+    equal(testYear.yearState.yearName, undefined);
+    equal(testYear.yearState.yearGiven, 2015);  
+});
+
+test("ExtractYearState test", function() {
+    var yState = {"test":2, yearGiven: 2015}
+    var testYear = generateYearObj(yState);
+    equal(extractYearState(testYear), yState);
+});
+
+test("emptyMonthState test", function() {
+    var mState = emptyMonthState();
+    equal(mState.firstIndex, 4);
+    equal(mState.numberOfDays, 31);
+    deepEqual(mState.checkedDays, {});
+    mState.monthName = "October";
+    mState = emptyMonthState();
+    equal(mState.monthName, '');
+});
+
+test("monthObject test", function() {
+    var newMonth = new Month("October 2015");
+    equal(newMonth instanceof Month, true);
+    equal(newMonth.date instanceof Date, true);
+    deepEqual(newMonth.monthState, emptyMonthState());
+    var newMonth = new Month();
+    equal(newMonth instanceof Month, true);
+    equal(newMonth.date instanceof Date, true);
+    today = new Date();
+    equal(newMonth.date.getFullYear(), today.getFullYear());
+});
+
+test("emptyYearState test", function() {
+    yState = emptyYearState();
+    deepEqual(yState, emptyYearState());
+    equal(yState.yearType, "common");
+    equal(yState.yearGiven, '');
+    yState.yearGiven = 2015;
+    notEqual(yState.yearGiven, '');
 });

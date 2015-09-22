@@ -231,20 +231,13 @@ var getDayOfWeek = function(date) {
     //      or "year month day" format. Example "2013 10 12" (10 is October) 
     //      If no day number is given, the 1st of the month is used.
      
-    var firstDate = new Date(1986, 09, 12);
     if (date === undefined) {
         date = new Date();
     }
     else {
         date = new Date(date);
     }
-    var dateDate = date.getDate();
-    var dateYear = date.getFullYear();
-    var dateMonth = date.getMonth();
-    var secondDate = new Date(dateYear, dateMonth, dateDate);
     
-    //var diffDays = diffBetweenDays(firstDate, secondDate);
-    //var index = diffDays%7;
     var index = date.getDay();
     return index;
 };
@@ -340,13 +333,29 @@ var emptyMonthState = function() {
     }
 };
 
+var emptyYearState = function() {
+    return{
+        // year type
+        yearType: "common",
+        // year
+        yearGiven: '',
+        // array with 12 month objects
+        monthStates: []
+    }
+};
+
 
 var Month = function (date) {
     //Represents a single month
     
     var self = this;
     self.monthState = emptyMonthState();
-    self.date = new Date(date) || new Date();
+    if (date === undefined) {
+        self.date = new Date();
+    }
+    else{
+        self.date = new Date(date);
+    }
     
     self.attachClickHandler = function() {
         // Attaches a function to the divs with class "cell" to be triggered
@@ -509,16 +518,6 @@ var Month = function (date) {
 
 };
 
-var emptyYearState = function() {
-    return{
-        // year type
-        yearType: "common",
-        // year
-        yearGiven: '',
-        // array with 12 month objects
-        monthStates: []
-    }
-};
 
 var Year = function() {
     // Represents a single calendar year
@@ -551,11 +550,15 @@ var Year = function() {
         // Returns an array of 12 month objects with monthStates that
         // correspond to the monthStates stored in yearState.monthStates
         
+        // Parameters:
+        //   state: array
+        //     stores monthStates
+        
         monthObjectsArray = [];
-        for (i=0; i<=11; i++) {
-            var monthi = generateMonthObj(state[i]);
+        state.forEach (function(state) {
+            var monthi = generateMonthObj(state);
             monthObjectsArray.push(monthi);
-        }
+        })
         return monthObjectsArray;
         
     };
@@ -584,20 +587,20 @@ var Year = function() {
     self.retrieveYearCheckmarks = function() {
         // Collects the checked days of the year.
         
-        for(i=0; i<=11; i++) {
-            self.monthObjects[i].retrieveCheckedDays();
-        }
+        self.monthObjects.forEach( function(month) {
+            month.retrieveCheckedDays();
+        })
     };
             
     self.fillYearDiv = function() {
         // Fills the empty year div with correct month information.
         
-        for (i=0; i<= 11; i++) {
-            self.monthObjects[i].retrieveCheckedDays();
-            self.monthObjects[i].generateMonthDiv();
-            self.monthObjects[i].generateCheckmarks();
-            self.monthObjects[i].attachClickHandler();
-        }
+        self.monthObjects.forEach( function(month) {
+            month.retrieveCheckedDays();
+            month.generateMonthDiv();
+            month.generateCheckmarks();
+            month.attachClickHandler();
+        })
     
     };
     
@@ -605,9 +608,10 @@ var Year = function() {
         // Updates the yearState's monthStates array with current information.
         
         monthStates = [];
-        for(i=0; i<=11 ; i++){
-            monthStates.push(extractMonthState(self.months[i]));
-        }
+        self.monthObjects.forEach (function(monthObj) {
+            var state = extractMonthState(monthObj);
+            monthStates.push(state);
+        })
         self.yearState = monthStates;
         
     };
