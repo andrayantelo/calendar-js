@@ -191,3 +191,20 @@ test("emptyYearState test", function() {
     yState.yearGiven = 2015;
     notEqual(yState.yearGiven, '');
 });
+
+test("attachClickHandler test", function() {
+    var testMonth = new Month();
+    testMonth.monthState.monthId = "month0";
+    var fixture = $('#qunit-fixture');
+    fixture.append('<div id="month0"><div class="cell"><div class="one"></div>\
+    <div class="two" class="hidden"></div></div></div>');
+    testMonth.attachClickHandler();
+    $('.cell').click();
+    equal(fixture.find('.one').attr('class'), 'one hidden');
+    $('.cell').click();
+    equal(fixture.find('.one').attr('class'), 'one');
+});
+
+test("clearMonthDiv test", function() {
+});
+

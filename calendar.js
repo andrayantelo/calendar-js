@@ -361,7 +361,6 @@ var Month = function (date) {
         // Attaches a function to the divs with class "cell" to be triggered
         // when "cell" is clicked. The function toggles the hidden class
         // between the children (daynumber and fa fa-check) of "cell"
-        
         var $monthId = $('#' + self.monthState.monthId);
         $monthId.find('.cell').click(function (event) {
             console.log(event);  // prints so you can look at the event object in the console
