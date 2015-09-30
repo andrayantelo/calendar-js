@@ -215,12 +215,45 @@ test("clearMonthDiv test", function() {
         </div>\
         <table class="month"><tbody><tr class="week">\
         <td class="aDay"><div class="cell">\
-<div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \
-<td class="aDay"><div class="cell"><div class="daynumber">2</div>\
-<i class="fa fa-check hidden"></i></div></tr></tbody></table>');
+        <div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \
+        <td class="aDay"><div class="cell"><div class="daynumber">2</div>\
+        <i class="fa fa-check hidden"></i></div></tr></tbody></table>');
     equal($('#testmonth').find('.header').find('.month-year').text(), 2015);
     testMonth.clearMonthDiv();
     equal($('#testmonth').find('.header').find('.month-year').text(), '');
+    equal($('#testmonth').find('.aDay').children().attr('class'), 'nill');
     
 });
 
+
+test("generateEmptyMonthDiv test", function() {
+    var testMonth = new Month();
+    testMonth.monthState.monthId = "testmonth";
+    var fixture = $('#qunit-fixture');
+    fixture.append('<div id="testmonth"></div>');
+    equal($('#testmonth').text(), '');
+    testMonth.generateEmptyMonthDiv('#testmonth');
+    equal($('#testmonth').children().attr('class'), 'monthframe');
+});
+
+test("generateMonthDiv test", function() {
+    var testMonth = new Month();
+    testMonth.monthState.monthId = "testmonth";
+    var fixture = $('#qunit-fixture');
+    fixture.append('<div id="testmonth"></div>');
+    testMonth.generateEmptyMonthDiv('#testmonth');
+    testMonth.generateMonthDiv();
+    equal($('#testmonth').find('.month-year').text(), testMonth.monthState.monthName + " " + testMonth.monthState.monthYear);
+    equal($('.monthframe').children().attr('class'), 'header')
+});
+
+test("generateCheckMarks test", function() {
+    var testMonth = new Month();
+    testMonth.monthState.monthId = "month0";
+    testMonth.monthState.checkedDays = {0:1, 1:2, 2:3}
+    var fixture = $('#qunit-fixture');
+    fixture.append('<div id="month0"><div class="month"><td><div class="cell"><div class="daynumber">1</div>\
+    <i class="fa fa-check hidden"></i></div></td></div></div>');
+    testMonth.generateCheckmarks();
+    equal(fixture.find('.daynumber').attr('class'), 'daynumber hidden');
+});

@@ -406,7 +406,7 @@ var Month = function (date) {
             var dayOfMonth = index - (self.monthState.firstIndex - 1);
             if (dayOfMonth >= 1 && dayOfMonth <= self.monthState.numberOfDays) {
                  self.monthState.dayIndex[dayOfMonth] = index;
-                 $(this).empty();
+                 $(this).empty();   
                  var toAdd = '<div class="cell"><div class="daynumber"' + ' daynumber="' + dayOfMonth.toString() + '"></div><i class="fa fa-check hidden"></i></div>'
                  //var toAdd = toAdd.replace(/\s+/g, ''); <-----why didn't this work?
                  $(this).append(toAdd);
