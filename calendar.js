@@ -11,8 +11,8 @@ var yearKey = "yearKey"; //temporaryStorageKey for year object
 $(document).ready(function() {
     
     $('#saveButton').click(function(){
-        month.retrieveCheckedDays();
-        month.storeMonth();
+        year.retrieveYearCheckmarks();
+        year.storeYear();
         alert("Progress saved");
     });
     
@@ -475,7 +475,7 @@ var Month = function (date) {
         return loadedMonth;
     };
     
-    self.storeMonth = function(storageKey) {    
+    self.storeMonth = function() {    
         // Stores the state of the month object in localstorage
     
         var storageItem = self.monthState;

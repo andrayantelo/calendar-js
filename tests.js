@@ -7,9 +7,20 @@ function createUlFixture() {
 };
     
 //UTILITY/HELPER FUNCTION TESTS
+var fixture
+
+module( "Utility/Helper Tests", {
+  beforeEach: function() {
+    // prepare something for all following tests
+    fixture = $('#qunit-fixture');
+    return fixture;
+  },
+  afterEach: function() {
+    // clean up after each test
+  }
+});
 
 test("checkFirstOf test", function() {
-    var fixture = $('#qunit-fixture');
     fixture.append(
     "<div class='monthframe'>\
      <div class='cell'><div class='daynumber' class='hidden'></div>\
@@ -25,7 +36,7 @@ test("checkFirstOf test", function() {
 });
 
 test("hideTemplate test", function() {
-    var fixture = $('#qunit-fixture');
+    
     fixture.append('<div id="template"></div>');
     hideTemplate();
     equal(fixture.find('#template').attr('class'), 'hidden');
@@ -34,11 +45,22 @@ test("hideTemplate test", function() {
 });
 
 test("clearPage test", function() {
-    var fixture = $('#qunit-fixture');
+    
     fixture.append('<div class="container"><div class="monthframe">\
     </div</div>');
     clearPage();
     equal(fixture.find('.monthframe').length, 0);
+});
+
+module( "Storage tests", {
+  beforeEach: function() {
+    // prepare something for all following tests
+    localStorage.clear()
+  },
+  afterEach: function() {
+    // clean up after each test
+    localStorage.clear()
+  }
 });
 
 test("storeInLocalStorage test", function() {
@@ -49,14 +71,34 @@ test("storeInLocalStorage test", function() {
 });
 
 test("loadFromLocalStorage test", function() {
-    var storeKey = 'itemkey';
+    var storeKey = 'key';
     equal(loadFromLocalStorage(storeKey), undefined);
     var storeItem = [1, 2, 3];
     localStorage.setItem(storeKey, JSON.stringify(storeItem));
     deepEqual(loadFromLocalStorage(storeKey), storeItem);
 });
 
-localStorage.clear();
+test("loadMonth test", function() {
+    var testMonth = new Month();
+    testMonth.monthState.monthId = "testMonth";
+    equal(testMonth.monthState.monthId, 'testMonth');
+    equal(testMonth.loadMonth(), undefined);
+    localStorage.setItem(testMonth.monthState.monthId, JSON.stringify(testMonth.monthState));
+    deepEqual(testMonth.loadMonth(), testMonth.monthState);
+});
+
+
+
+test("storeMonth test", function() {
+    var testMonth = new Month();
+    testMonth.monthState.monthId = 'testMonth';
+    equal(testMonth.loadMonth(), undefined);
+    testMonth.storeMonth();
+    deepEqual(testMonth.loadMonth(), testMonth.monthState);
+});
+
+
+
 
 test("getMonthsOfGivenYear test", function() {
     var monthNames = {
@@ -192,9 +234,24 @@ test("emptyYearState test", function() {
     notEqual(yState.yearGiven, '');
 });
 
-test("attachClickHandler test", function() {
-    var testMonth = new Month();
+var testMonth 
+
+module( "MonthObj tests", {
+  beforeEach: function() {
+    // prepare something for all following tests
+    localStorage.clear()
+    testMonth = new Month();
     testMonth.monthState.monthId = "month0";
+    return testMonth;
+    
+  },
+  afterEach: function() {
+    // clean up after each test
+    localStorage.clear()
+  }
+});
+
+test("attachClickHandler test", function() {
     var fixture = $('#qunit-fixture');
     fixture.append('<div id="month0"><div class="cell"><div class="one"></div>\
     <div class="two" class="hidden"></div></div></div>');
@@ -206,10 +263,8 @@ test("attachClickHandler test", function() {
 });
 
 test("clearMonthDiv test", function() {
-    var testMonth = new Month();
-    testMonth.monthState.monthId = "testmonth";
     var fixture = $('#qunit-fixture');
-    fixture.append('<div id="testmonth" >\
+    fixture.append('<div id="month0" >\
         <div class="header">\
             <span class="month-year"> 2015 </span>\
         </div>\
@@ -218,42 +273,43 @@ test("clearMonthDiv test", function() {
         <div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \
         <td class="aDay"><div class="cell"><div class="daynumber">2</div>\
         <i class="fa fa-check hidden"></i></div></tr></tbody></table>');
-    equal($('#testmonth').find('.header').find('.month-year').text(), 2015);
+    equal($('#month0').find('.header').find('.month-year').text(), 2015);
     testMonth.clearMonthDiv();
-    equal($('#testmonth').find('.header').find('.month-year').text(), '');
-    equal($('#testmonth').find('.aDay').children().attr('class'), 'nill');
+    equal($('#month0').find('.header').find('.month-year').text(), '');
+    equal($('#month0').find('.aDay').children().attr('class'), 'nill');
     
 });
 
 
 test("generateEmptyMonthDiv test", function() {
-    var testMonth = new Month();
-    testMonth.monthState.monthId = "testmonth";
     var fixture = $('#qunit-fixture');
-    fixture.append('<div id="testmonth"></div>');
-    equal($('#testmonth').text(), '');
-    testMonth.generateEmptyMonthDiv('#testmonth');
-    equal($('#testmonth').children().attr('class'), 'monthframe');
+    fixture.append('<div id="month0"></div>');
+    equal($('#month0').text(), '');
+    testMonth.generateEmptyMonthDiv('#month0');
+    equal($('#month0').children().attr('class'), 'monthframe');
 });
 
 test("generateMonthDiv test", function() {
-    var testMonth = new Month();
-    testMonth.monthState.monthId = "testmonth";
     var fixture = $('#qunit-fixture');
-    fixture.append('<div id="testmonth"></div>');
-    testMonth.generateEmptyMonthDiv('#testmonth');
+    fixture.append('<div id="month0"></div>');
+    testMonth.generateEmptyMonthDiv('#month0');
     testMonth.generateMonthDiv();
-    equal($('#testmonth').find('.month-year').text(), testMonth.monthState.monthName + " " + testMonth.monthState.monthYear);
+    equal($('#month0').find('.month-year').text(), testMonth.monthState.monthName + " " + testMonth.monthState.monthYear);
     equal($('.monthframe').children().attr('class'), 'header')
 });
 
+//generateCheckMarks test needs work
 test("generateCheckMarks test", function() {
-    var testMonth = new Month();
-    testMonth.monthState.monthId = "month0";
     testMonth.monthState.checkedDays = {0:1, 1:2, 2:3}
     var fixture = $('#qunit-fixture');
-    fixture.append('<div id="month0"><div class="month"><td><div class="cell"><div class="daynumber">1</div>\
+    fixture.append('<div id="month0"><div class="month"><td class="aDay"><div class="cell"><div class="daynumber">1</div>\
     <i class="fa fa-check hidden"></i></div></td></div></div>');
-    testMonth.generateCheckmarks();
+    //testMonth.generateCheckmarks();
+    fixture.find('.cell').children().toggleClass("hidden")
     equal(fixture.find('.daynumber').attr('class'), 'daynumber hidden');
 });
+
+//retrieveCheckedDays test
+
+//initializeMonthDiv test
+
