@@ -1,26 +1,16 @@
 //Test code for calendar.js
 
-function createUlFixture() {
+function createUFixture() {
     var $qunit = $('#qunit-fixture');
-    var fixture = $('#qunit-fixture').append("<ul></ul>");
+    return $qunit;
     
 };
     
 //UTILITY/HELPER FUNCTION TESTS
-var fixture
 
-module( "Utility/Helper Tests", {
-  beforeEach: function() {
-    // prepare something for all following tests
-    fixture = $('#qunit-fixture');
-    return fixture;
-  },
-  afterEach: function() {
-    // clean up after each test
-  }
-});
 
 test("checkFirstOf test", function() {
+    var fixture = createUFixture(); 
     fixture.append(
     "<div class='monthframe'>\
      <div class='cell'><div class='daynumber' class='hidden'></div>\
@@ -36,7 +26,7 @@ test("checkFirstOf test", function() {
 });
 
 test("hideTemplate test", function() {
-    
+    var fixture = createUFixture(); 
     fixture.append('<div id="template"></div>');
     hideTemplate();
     equal(fixture.find('#template').attr('class'), 'hidden');
@@ -45,7 +35,7 @@ test("hideTemplate test", function() {
 });
 
 test("clearPage test", function() {
-    
+    var fixture = createUFixture(); 
     fixture.append('<div class="container"><div class="monthframe">\
     </div</div>');
     clearPage();
@@ -252,7 +242,7 @@ module( "MonthObj tests", {
 });
 
 test("attachClickHandler test", function() {
-    var fixture = $('#qunit-fixture');
+    var fixture = createUFixture(); 
     fixture.append('<div id="month0"><div class="cell"><div class="one"></div>\
     <div class="two" class="hidden"></div></div></div>');
     testMonth.attachClickHandler();
@@ -263,7 +253,7 @@ test("attachClickHandler test", function() {
 });
 
 test("clearMonthDiv test", function() {
-    var fixture = $('#qunit-fixture');
+    var fixture = createUFixture(); 
     fixture.append('<div id="month0" >\
         <div class="header">\
             <span class="month-year"> 2015 </span>\
@@ -282,7 +272,7 @@ test("clearMonthDiv test", function() {
 
 
 test("generateEmptyMonthDiv test", function() {
-    var fixture = $('#qunit-fixture');
+    var fixture = createUFixture(); 
     fixture.append('<div id="month0"></div>');
     equal($('#month0').text(), '');
     testMonth.generateEmptyMonthDiv('#month0');
@@ -290,7 +280,7 @@ test("generateEmptyMonthDiv test", function() {
 });
 
 test("generateMonthDiv test", function() {
-    var fixture = $('#qunit-fixture');
+    var fixture = createUFixture(); 
     fixture.append('<div id="month0"></div>');
     testMonth.generateEmptyMonthDiv('#month0');
     testMonth.generateMonthDiv();
@@ -301,7 +291,7 @@ test("generateMonthDiv test", function() {
 //generateCheckMarks test needs work
 test("generateCheckMarks test", function() {
     testMonth.monthState.checkedDays = {0:1, 1:2, 2:3}
-    var fixture = $('#qunit-fixture');
+    var fixture = createUFixture(); 
     fixture.append('<div id="month0"><div class="month"><td class="aDay"><div class="cell"><div class="daynumber">1</div>\
     <i class="fa fa-check hidden"></i></div></td></div></div>');
     //testMonth.generateCheckmarks();
