@@ -25,7 +25,7 @@ $(document).ready(function() {
         hideTemplate();
     });
     
-    year.initYear(1986);
+    //year.initYear(1986);
 });
 
 //UTILITY/HELPER FUNCTIONS
@@ -449,17 +449,18 @@ var Month = function (date) {
     
     self.initializeMonthDiv = function() {   // CURRENT LINE is this what I want
     // Initializes a month div. 
+        clearPage();
     
-        //self.loadMonth();
-        //if (self.loadMonth() !== undefined) {            // IS THIS WRITTEN IN A GOOD WAY?
-        //    self.monthState = self.loadMonth();
-        //}
-        //else {
-        //    self.initCurrentMonthState();
-        //}
+        self.loadMonth();
+        if (self.loadMonth() !== undefined) {            // IS THIS WRITTEN IN A GOOD WAY?
+            self.monthState = self.loadMonth();
+        }
+        else {
+            self.initCurrentMonthState();
+        }
         
-        //self.generateEmptyMonthDiv('.calendar');
-        //self.addAttrToMonthFrame();
+        self.generateEmptyMonthDiv('.calendar');
+        self.addAttrToMonthFrame();
         
         self.retrieveCheckedDays();
         self.generateMonthDiv();
@@ -483,7 +484,7 @@ var Month = function (date) {
     
     };
     
-    self.clearCheckMarks = function() {
+    self.clearCheckmarks = function() {
         // Clear checkmarks from the month div.
     
         self.monthState.checkedDays = {}; 

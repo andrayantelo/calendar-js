@@ -313,5 +313,24 @@ test("retrieveCheckedDays test", function() {
     deepEqual(testMonth.monthState.checkedDays, {0:"1"})
     
 });
-//initializeMonthDiv test
+//don't know if I need this one
+//test("initializeMonthDiv test", function() {
+//});
+
+test("clearCheckMarks test", function() {
+    testMonth.monthState.checkedDays = {0:"1"};
+    testMonth.clearCheckmarks();
+    deepEqual(testMonth.monthState.checkedDays, {});
+});
+
+test("initCurrentMonthState test", function() {
+    var newMonth = new Month("November 2015");
+    deepEqual(newMonth.monthState, emptyMonthState());
+    newMonth.initCurrentMonthState();
+    equal(newMonth.monthState.monthName, "November");
+    equal(newMonth.monthState.monthYear, 2015);
+    equal(newMonth.monthState.numberOfDays, 30);
+    equal(newMonth.monthState.firstIndex, 0);
+});
+
 
