@@ -290,13 +290,18 @@ test("generateMonthDiv test", function() {
 
 //generateCheckMarks test needs work
 test("generateCheckMarks test", function() {
-    testMonth.monthState.checkedDays = {0:1, 1:2, 2:3}
+    testMonth.monthState.checkedDays = {0:"1", 1:"2" };
     var fixture = createUFixture(); 
-    fixture.append('<div id="month0"><div class="month"><td class="aDay"><div class="cell"><div class="daynumber">1</div>\
-    <i class="fa fa-check hidden"></i></div></td></div></div>');
-    //testMonth.generateCheckmarks();
-    fixture.find('.cell').children().toggleClass("hidden")
-    equal(fixture.find('.daynumber').attr('class'), 'daynumber hidden');
+    fixture.append('<div id="qunit-fixture"><table class="month"><td class="aDay"><div class="cell"><div class="daynumber" daynumber="1">1</div>\
+    <i class="fa fa-check hidden"></i></div></td><td class="aDay"><div class="cell"><div class="daynumber" daynumber="2">2</div>\
+    <i class ="fa fa-check hidden"></i></div></td></table></div>');
+    testMonth.generateCheckmarks('qunit-fixture');
+    equal(fixture.find('.cell').find('.daynumber').attr('class'), 'daynumber hidden');
+    fixture.find('.cell').children().toggleClass('hidden');
+    testMonth.monthState.checkedDays = {};
+    testMonth.generateCheckmarks('qunit-fixture');
+    equal(fixture.find('.cell').find('.daynumber').attr('class'), 'daynumber');
+
 });
 
 //retrieveCheckedDays test

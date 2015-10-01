@@ -416,12 +416,12 @@ var Month = function (date) {
         
     };
     
-    self.generateCheckmarks = function() {
+    self.generateCheckmarks = function(monthId) {
         // Toggles the hidden class between the children of the div class="cell" 
         // of the cells whose indices are in the monthState.checkedDays
         // object.
-        
-        var $monthId = $('#'+ self.monthState.monthId);
+        var id = monthId || self.monthState.monthId;
+        var $monthId = $('#'+ id);
         $monthId.find('.month').find('td').each( function(index) {
             
             if (self.monthState.checkedDays[index]) {
