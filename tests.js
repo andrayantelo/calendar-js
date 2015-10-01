@@ -288,7 +288,6 @@ test("generateMonthDiv test", function() {
     equal($('.monthframe').children().attr('class'), 'header')
 });
 
-//generateCheckMarks test needs work
 test("generateCheckMarks test", function() {
     testMonth.monthState.checkedDays = {0:"1", 1:"2" };
     var fixture = createUFixture(); 
@@ -304,7 +303,15 @@ test("generateCheckMarks test", function() {
 
 });
 
-//retrieveCheckedDays test
-
+test("retrieveCheckedDays test", function() {
+    testMonth.monthState.dayIndex = {1:0, 2:1}
+    var fixture = createUFixture(); 
+    fixture.append('<div id="qunit-fixture"><table class="month"><td class="aDay"><div class="cell"><div class="daynumber hidden" daynumber="1">1</div>\
+    <i class="fa fa-check"></i></div></td><td class="aDay"><div class="cell"><div class="daynumber" daynumber="2">2</div>\
+    <i class ="fa fa-check hidden"></i></div></td></table></div>');
+    testMonth.retrieveCheckedDays('qunit-fixture');
+    deepEqual(testMonth.monthState.checkedDays, {0:"1"})
+    
+});
 //initializeMonthDiv test
 
