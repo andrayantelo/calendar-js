@@ -562,10 +562,12 @@ var Year = function() {
         // whether it is an ID or class. eg ".calendar" or "#month0"
         
         var $div = $(div);
-        for (i=0; i<=11; i++) {
-            //console.log(i.toString().length);
-            $div.append('<div class="monthframe" id="month' + i + '" ></div>');
-        }
+        
+        self.monthObjects.forEach (function(monthObj) {     
+            $div.append('<div class="monthframe" id="' + monthObj.monthState.monthId + '" ></div>');
+        })
+            
+        
         var $monthframe = $('.monthframe');
         $monthframe.append($('#template').html()); 
     };
@@ -613,7 +615,7 @@ var Year = function() {
         // Updates the yearState's monthStates array with current information.
         
         monthStates = [];
-        self.monthObjects.forEach (function(monthObj) {
+        self.monthObjects.forEach (function(monthObj) {     
             var state = extractMonthState(monthObj);
             monthStates.push(state);
         })
@@ -680,6 +682,7 @@ var Year = function() {
         else {
             self.yearState = yState;
         }
+        
         self.monthObjects = self.getMonthObjects(self.yearState.monthStates);
         self.generateEmptyYearDiv('.calendar');
         self.fillYearDiv();
