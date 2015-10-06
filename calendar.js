@@ -460,7 +460,7 @@ var Month = function (date) {
         }
         
         self.generateEmptyMonthDiv('.calendar');
-        self.addAttrToMonthFrame();
+        self.addAttrToMonthFrame('.monthframe');
         
         self.retrieveCheckedDays();
         self.generateMonthDiv();
@@ -507,10 +507,11 @@ var Month = function (date) {
         
     };
     
-    self.addAttrToMonthFrame = function() {  
+    self.addAttrToMonthFrame = function(div) {  
         // Adds a unique ID to the month div with class .monthframe
         
-        $('.monthframe').attr('id', 'month'+ self.monthState.monthIndex);
+        $div = $(div);
+        $div.attr('id', 'month'+ self.monthState.monthIndex);
         self.monthState.monthId = 'month'+ self.monthState.monthIndex;
         
     };

@@ -317,7 +317,7 @@ test("retrieveCheckedDays test", function() {
 //test("initializeMonthDiv test", function() {
 //});
 
-test("clearCheckMarks test", function() {
+test("clearCheckmarks test", function() {
     testMonth.monthState.checkedDays = {0:"1"};
     testMonth.clearCheckmarks();
     deepEqual(testMonth.monthState.checkedDays, {});
@@ -333,4 +333,10 @@ test("initCurrentMonthState test", function() {
     equal(newMonth.monthState.firstIndex, 0);
 });
 
-
+test("addAttrToMonthFrame test", function() {
+    var fixture = createUFixture(); 
+    fixture.append('<div class="test"></div>');
+    testMonth.monthState.monthIndex = 0;
+    testMonth.addAttrToMonthFrame(".test");
+    equal(fixture.find('.test').attr('id'), 'month0');
+});
