@@ -552,6 +552,23 @@ var Year = function() {
         return monthStatesOfYear;
     };
     
+    self.getMonthObjects = function(state) {
+        // Returns an array of 12 month objects with monthStates that
+        // correspond to the monthStates stored in yearState.monthStates
+        
+        // Parameters:
+        //   state: array
+        //     stores monthStates
+        
+        monthObjectsArray = [];
+        state.forEach (function(state) {
+            var monthi = generateMonthObj(state);
+            monthObjectsArray.push(monthi);
+        })
+        return monthObjectsArray;
+        
+    };
+    
     
     self.generateEmptyYearDiv = function(div) {
         // will generate the html for 12 empty month divs
@@ -570,24 +587,6 @@ var Year = function() {
         
         var $monthframe = $('.monthframe');
         $monthframe.append($('#template').html()); 
-    };
-    
-    
-    self.getMonthObjects = function(state) {
-        // Returns an array of 12 month objects with monthStates that
-        // correspond to the monthStates stored in yearState.monthStates
-        
-        // Parameters:
-        //   state: array
-        //     stores monthStates
-        
-        monthObjectsArray = [];
-        state.forEach (function(state) {
-            var monthi = generateMonthObj(state);
-            monthObjectsArray.push(monthi);
-        })
-        return monthObjectsArray;
-        
     };
     
     

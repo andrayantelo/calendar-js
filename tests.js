@@ -362,6 +362,34 @@ test("yearObj test", function() {
     deepEqual(testYear.monthObjects, []);
 });
 
+test("getMonthStatesOfGivenYear test", function() {
+    year.yearState.monthStates = year.getMonthStatesOfGivenYear(2015);
+    equal(year.yearState.monthStates.length, 12);
+    ok(year.yearState.monthStates instanceof Array); 
+    equal(year.yearState.monthStates[0].monthName, "January");
+    equal(year.yearState.monthStates[11].monthName, "December");
+});
+
+test("getMonthObjects test", function() {
+    var monthStates = [{monthName: "January", monthYear:2015}, {monthName: "February",
+        monthYear:2015}, {monthName: "March", monthYear: 2015}];
+    year.monthObjects = year.getMonthObjects(monthStates);
+    equal(year.monthObjects.length, 3);
+    ok(year.monthObjects instanceof Array);
+    ok(year.monthObjects[0] instanceof Month);
+    equal(year.monthObjects[0].monthState.monthName, "January");
+});
+
 test("generateEmptyYearDiv test", function() {
+    var fixture = createUFixture(); 
+    fixture.append('<div id="template"> <p>Template text.</p></div><div class="test"></div>');
+    var month1 = new Month("January 2015");
+    month1.monthState.monthId = 'month0';   
+    var month2 = new Month("February 2015");
+    year.monthObjects = [month1, month2];
+    equal(fixture.find('.test').children().attr('class'), undefined);
+    year.generateEmptyYearDiv(fixture.find('.test'));
+    equal(fixture.find('.test').children().attr('class'), 'monthframe');
+    equal(fixture.find('.test').children().attr('id'), 'month0');
     
 });
