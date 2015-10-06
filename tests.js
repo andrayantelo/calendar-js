@@ -340,3 +340,28 @@ test("addAttrToMonthFrame test", function() {
     testMonth.addAttrToMonthFrame(".test");
     equal(fixture.find('.test').attr('id'), 'month0');
 });
+
+var testYear 
+
+module( "yearObj tests", {
+  beforeEach: function() {
+    // prepare something for all following tests
+    localStorage.clear()
+    testYear = new Year();
+    return testYear;
+    
+  },
+  afterEach: function() {
+    // clean up after each test
+    localStorage.clear()
+  }
+});
+
+test("yearObj test", function() {
+    deepEqual(testYear.yearState, emptyYearState());
+    deepEqual(testYear.monthObjects, []);
+});
+
+test("generateEmptyYearDiv test", function() {
+    
+});

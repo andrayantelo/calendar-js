@@ -527,6 +527,30 @@ var Year = function() {
     self.yearState = emptyYearState();
     self.monthObjects = [];
     
+    self.getMonthStatesOfGivenYear = function(desiredYear) {
+        var monthStatesOfYear = [];
+        var monthNames = {
+            0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
+            6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
+            11:"December"};
+        if (!desiredYear) {
+            console.log("!yearGiven ran");
+            var today = new Date();
+            desiredYear = today.getFullYear();
+            self.yearState.yearGiven = desiredYear;
+        }
+        for (prop in monthNames) {
+            if (!monthNames.hasOwnProperty(prop)) {
+            //The current property is not a direct property of monthNames
+                continue;
+            }
+            var monthprop = new Month(monthNames[prop] + ' ' + desiredYear);
+            monthprop.initCurrentMonthState();
+            monthStatesOfYear.push(monthprop.monthState);
+        }
+        
+        return monthStatesOfYear;
+    };
     
     
     self.generateEmptyYearDiv = function(div) {
@@ -539,7 +563,7 @@ var Year = function() {
         
         var $div = $(div);
         for (i=0; i<=11; i++) {
-            console.log(i.toString().length);
+            //console.log(i.toString().length);
             $div.append('<div class="monthframe" id="month' + i + '" ></div>');
         }
         var $monthframe = $('.monthframe');
@@ -564,26 +588,6 @@ var Year = function() {
         
     };
     
-    
-    self.getMonthStatesOfGivenYear = function(desiredYear) {
-        var monthStatesOfYear = [];
-        var monthNames = {
-            0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
-            6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
-            11:"December"};
-        if (!desiredYear) {
-            console.log("!yearGiven ran");
-            var today = new Date();
-            desiredYear = today.getFullYear();
-            self.yearState.yearGiven = desiredYear;
-        }
-        for (i=0; i<=11; i++) {
-            var monthi = new Month(monthNames[i] + ' ' + desiredYear);
-            monthi.initCurrentMonthState();
-            monthStatesOfYear.push(monthi.monthState);
-        }
-        return monthStatesOfYear;
-    };
     
     self.retrieveYearCheckmarks = function() {
         // Collects the checked days of the year.
