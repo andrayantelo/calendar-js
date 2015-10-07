@@ -357,24 +357,29 @@ var Month = function (date) {
         self.date = new Date(date);
     }
     
-    self.attachClickHandler = function() {
+    self.attachClickHandler = function(div) {
         // Attaches a function to the divs with class "cell" to be triggered
         // when "cell" is clicked. The function toggles the hidden class
         // between the children (daynumber and fa fa-check) of "cell"
+        
+        div = div || '.calendar';
+        var $div = $(div);
         var $monthId = $('#' + self.monthState.monthId);
-        $monthId.find('.cell').click(function (event) {
+        $div.find($monthId).find('.cell').click(function (event) {
             console.log(event);  // prints so you can look at the event object in the console
             $( this ).children().toggleClass("hidden");
             
         });
     };
 
-    self.clearMonthDiv = function() {
+    self.clearMonthDiv = function(div) {
         // Clears the days of the month and leaves an empty month template.
         
+        div = div || '.calendar';
+        var $div = $(div);
         var $monthId = $('#'+ self.monthState.monthId);
-        $monthId.find('.header').find('.month-year').empty();
-        $monthId.find('.month').find('td').each(function(index) {
+        $div.find($monthId).find('.header').find('.month-year').empty();
+        $div.find($monthId).find('.month').find('td').each(function(index) {
             $(this).empty();
             $(this).append('<div class="nill"></div>');
         })
@@ -387,7 +392,8 @@ var Month = function (date) {
         //   divClass: String
         //     the class of the div where you want to place your month.
         
-        var $div = $(div)
+        div = div || '.calendar';
+        var $div = $(div);
         $div.append('<div class="monthframe"></div>');
         $('.monthframe').append($('#template').html());
     };
@@ -416,13 +422,17 @@ var Month = function (date) {
         
     };
     
-    self.generateCheckmarks = function(monthId) {
+    self.generateCheckmarks = function(div, monthId) {
         // Toggles the hidden class between the children of the div class="cell" 
         // of the cells whose indices are in the monthState.checkedDays
         // object.
-        var id = monthId || self.monthState.monthId;
-        var $monthId = $('#'+ id);
-        $monthId.find('.month').find('td').each( function(index) {
+        
+        div = div || '.calendar';
+        $div = $(div);
+        monthId = monthId || self.monthState.monthId;
+        var id = monthId;
+        var monthId = '#'+ id;
+        $div.find(monthId).find('.month').find('td').each( function(index) {
             
             if (self.monthState.checkedDays[index]) {
                 $(this).find('.cell').children().toggleClass("hidden");
@@ -434,7 +444,7 @@ var Month = function (date) {
         // Stores index: daynumber pairs in monthState.checkedDays. These
         // pertain to the days which have the daynumber div hidden.
         
-        var $div = $(div);
+        var $div = $(div) || $('.calendar');
         var id = monthId || self.monthState.monthId;
         var $monthId = $('#'+ id);
         //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
@@ -460,10 +470,10 @@ var Month = function (date) {
             self.initCurrentMonthState();
         }
         
-        self.generateEmptyMonthDiv('.calendar');
+        self.generateEmptyMonthDiv();
         self.addAttrToMonthFrame('.monthframe');
         
-        self.retrieveCheckedDays('.calendar');
+        self.retrieveCheckedDays();
         self.generateMonthDiv();
         self.generateCheckmarks();
         self.attachClickHandler();
@@ -595,15 +605,15 @@ var Year = function() {
         // Collects the checked days of the year.
         
         self.monthObjects.forEach( function(month) {
-            month.retrieveCheckedDays('.calendar');
+            month.retrieveCheckedDays();
         })
     };
             
-    self.fillYearDiv = function() {
+    self.fillYearDiv = function(div) {
         // Fills the empty year div with correct month information.
         
         self.monthObjects.forEach( function(month) {
-            month.retrieveCheckedDays('.calendar');
+            month.retrieveCheckedDays(div);
             month.generateMonthDiv();
             month.generateCheckmarks();
             month.attachClickHandler();

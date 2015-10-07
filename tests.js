@@ -245,11 +245,11 @@ test("attachClickHandler test", function() {
     var fixture = createUFixture(); 
     fixture.append('<div id="month0"><div class="cell"><div class="one"></div>\
     <div class="two" class="hidden"></div></div></div>');
-    testMonth.attachClickHandler();
+    testMonth.attachClickHandler('#qunit-fixture');
     $('.cell').click();
-    equal(fixture.find('.one').attr('class'), 'one hidden');
+    equal($('#qunit-fixture').find('.one').attr('class'), 'one hidden');
     $('.cell').click();
-    equal(fixture.find('.one').attr('class'), 'one');
+    equal($('#qunit-fixture').find('.one').attr('class'), 'one');
 });
 
 test("clearMonthDiv test", function() {
@@ -264,9 +264,9 @@ test("clearMonthDiv test", function() {
         <td class="aDay"><div class="cell"><div class="daynumber">2</div>\
         <i class="fa fa-check hidden"></i></div></tr></tbody></table>');
     equal($('#month0').find('.header').find('.month-year').text(), 2015);
-    testMonth.clearMonthDiv();
-    equal($('#month0').find('.header').find('.month-year').text(), '');
-    equal($('#month0').find('.aDay').children().attr('class'), 'nill');
+    testMonth.clearMonthDiv('#qunit-fixture');
+    equal($('#qunit-fixture').find('#month0').find('.header').find('.month-year').text(), '');
+    equal($('#qunit-fixture').find('#month0').find('.aDay').children().attr('class'), 'nill');
     
 });
 
@@ -290,16 +290,17 @@ test("generateMonthDiv test", function() {
 
 test("generateCheckMarks test", function() {
     testMonth.monthState.checkedDays = {0:"1", 1:"2" };
+    testMonth.monthState.monthId = 'month0';
     var fixture = createUFixture(); 
-    fixture.append('<div id="qunit-fixture"><table class="month"><td class="aDay"><div class="cell"><div class="daynumber" daynumber="1">1</div>\
+    fixture.append('<div id="qunit-fixture"><div id="month0"<table class="month"><td class="aDay"><div class="cell"><div class="daynumber" daynumber="1">1</div>\
     <i class="fa fa-check hidden"></i></div></td><td class="aDay"><div class="cell"><div class="daynumber" daynumber="2">2</div>\
-    <i class ="fa fa-check hidden"></i></div></td></table></div>');
-    testMonth.generateCheckmarks('qunit-fixture');
-    equal(fixture.find('.cell').find('.daynumber').attr('class'), 'daynumber hidden');
+    <i class ="fa fa-check hidden"></i></div></td></table></div></div>');
+    testMonth.generateCheckmarks('#qunit-fixture');
+    equal($('#qunit-fixture').find('.cell').find('.daynumber').attr('class'), 'daynumber hidden');
     fixture.find('.cell').children().toggleClass('hidden');
     testMonth.monthState.checkedDays = {};
-    testMonth.generateCheckmarks('qunit-fixture');
-    equal(fixture.find('.cell').find('.daynumber').attr('class'), 'daynumber');
+    testMonth.generateCheckmarks('#qunit-fixture');
+    equal($('#qunit-fixture').find('.cell').find('.daynumber').attr('class'), 'daynumber');
 
 });
 
@@ -412,3 +413,5 @@ test("retrieveYearCheckmarks test", function() {
     deepEqual(year.monthObjects[0].monthState.checkedDays, {0:"1"});
     
 });
+
+
