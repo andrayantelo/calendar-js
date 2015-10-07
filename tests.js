@@ -304,12 +304,13 @@ test("generateCheckMarks test", function() {
 });
 
 test("retrieveCheckedDays test", function() {
-    testMonth.monthState.dayIndex = {1:0, 2:1}
+    testMonth.monthState.dayIndex = {1:0, 2:1};
+    testMonth.monthState.checkedDays = {};
     var fixture = createUFixture(); 
-    fixture.append('<div id="qunit-fixture"><table class="month"><td class="aDay"><div class="cell"><div class="daynumber hidden" daynumber="1">1</div>\
+    fixture.append('<div id="month0"><table class="month"><td class="aDay"><div class="cell"><div class="daynumber hidden" daynumber="1">1</div>\
     <i class="fa fa-check"></i></div></td><td class="aDay"><div class="cell"><div class="daynumber" daynumber="2">2</div>\
     <i class ="fa fa-check hidden"></i></div></td></table></div>');
-    testMonth.retrieveCheckedDays('qunit-fixture');
+    testMonth.retrieveCheckedDays('#qunit-fixture');
     deepEqual(testMonth.monthState.checkedDays, {0:"1"})
     
 });
@@ -391,5 +392,23 @@ test("generateEmptyYearDiv test", function() {
     year.generateEmptyYearDiv(fixture.find('.test'));
     equal(fixture.find('.test').children().attr('class'), 'monthframe');
     equal(fixture.find('.test').children().attr('id'), 'month0');
+    
+});
+
+test("retrieveYearCheckmarks test", function() {
+    var monthStates = [{monthName: "January", monthYear:2015, checkedDays: {},
+        dayIndex:{1:0, 2:1}, monthId: 'month0'},{monthName: "February",
+        monthYear:2015, checkedDays: {}, dayIndex:{1:4, 2:5}, monthId: 'month1'}];
+    year.monthObjects = year.getMonthObjects(monthStates);
+    deepEqual(year.monthObjects[0].monthState.checkedDays, {});
+    var fixture = createUFixture(); 
+    fixture.append('<div id="month0"><table class="month"><td class="aDay"><div class="cell"><div class="daynumber hidden" daynumber="1">1</div>\
+    <i class="fa fa-check"></i></div></td><td class="aDay"><div class="cell"><div class="daynumber" daynumber="2">2</div>\
+    <i class ="fa fa-check hidden"></i></div></td></table></div>\
+    <div id="month1"><table class="month"><td class="aDay"><div class="cell"><div class="daynumber hidden" daynumber="1">1</div>\
+    <i class="fa fa-check"></i></div></td><td class="aDay"><div class="cell"><div class="daynumber" daynumber="2">2</div>\
+    <i class ="fa fa-check hidden"></i></div></td></table></div>');
+    year.retrieveYearCheckmarks('#qunit-fixture');
+    deepEqual(year.monthObjects[0].monthState.checkedDays, {0:"1"});
     
 });

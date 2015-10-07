@@ -430,14 +430,15 @@ var Month = function (date) {
          })
     };
     
-    self.retrieveCheckedDays = function(monthId) {
+    self.retrieveCheckedDays = function(div, monthId) {
         // Stores index: daynumber pairs in monthState.checkedDays. These
         // pertain to the days which have the daynumber div hidden.
         
+        var $div = $(div);
         var id = monthId || self.monthState.monthId;
         var $monthId = $('#'+ id);
         //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
-        if ($monthId.find('.month').find('.daynumber.hidden')) {
+        if ($div.find($monthId).find('.month').find('.daynumber.hidden')) {
            $monthId.find('.month').find('.daynumber.hidden').each(function (index) {
                 var daynumber = $(this).attr('daynumber');
                 //the key is the index of the day for now
@@ -462,7 +463,7 @@ var Month = function (date) {
         self.generateEmptyMonthDiv('.calendar');
         self.addAttrToMonthFrame('.monthframe');
         
-        self.retrieveCheckedDays();
+        self.retrieveCheckedDays('.calendar');
         self.generateMonthDiv();
         self.generateCheckmarks();
         self.attachClickHandler();
@@ -594,7 +595,7 @@ var Year = function() {
         // Collects the checked days of the year.
         
         self.monthObjects.forEach( function(month) {
-            month.retrieveCheckedDays();
+            month.retrieveCheckedDays('.calendar');
         })
     };
             
@@ -602,7 +603,7 @@ var Year = function() {
         // Fills the empty year div with correct month information.
         
         self.monthObjects.forEach( function(month) {
-            month.retrieveCheckedDays();
+            month.retrieveCheckedDays('.calendar');
             month.generateMonthDiv();
             month.generateCheckmarks();
             month.attachClickHandler();
