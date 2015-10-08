@@ -592,7 +592,7 @@ var Year = function() {
         var $div = $(div);
         
         self.monthObjects.forEach (function(monthObj) {     
-            $div.append('<div class="monthframe" id="' + monthObj.monthState.monthId + '" ></div>');
+            $div.append('<div class="monthframe" id="' + monthObj.monthState.monthIndex + '" ></div>');
         })
             
         

@@ -375,52 +375,116 @@ test("yearObj test", function() {
 });
 
 test("getMonthStatesOfGivenYear test", function() {
-    year.yearState.monthStates = year.getMonthStatesOfGivenYear(2015);
-    equal(year.yearState.monthStates.length, 12);
-    ok(year.yearState.monthStates instanceof Array); 
-    equal(year.yearState.monthStates[0].monthName, "January");
-    equal(year.yearState.monthStates[11].monthName, "December");
+    testYear.yearState.monthStates = testYear.getMonthStatesOfGivenYear(2015);
+    equal(testYear.yearState.monthStates.length, 12);
+    ok(testYear.yearState.monthStates instanceof Array); 
+    equal(testYear.yearState.monthStates[0].monthName, "January");
+    equal(testYear.yearState.monthStates[11].monthName, "December");
 });
 
 test("getMonthObjects test", function() {
     var monthStates = [{monthName: "January", monthYear:2015}, {monthName: "February",
         monthYear:2015}, {monthName: "March", monthYear: 2015}];
-    year.monthObjects = year.getMonthObjects(monthStates);
-    equal(year.monthObjects.length, 3);
-    ok(year.monthObjects instanceof Array);
-    ok(year.monthObjects[0] instanceof Month);
-    equal(year.monthObjects[0].monthState.monthName, "January");
+    testYear.monthObjects = testYear.getMonthObjects(monthStates);
+    equal(testYear.monthObjects.length, 3);
+    ok(testYear.monthObjects instanceof Array);
+    ok(testYear.monthObjects[0] instanceof Month);
+    equal(testYear.monthObjects[0].monthState.monthName, "January");
 });
 
 test("generateEmptyYearDiv test", function() {
     var fixture = createUFixture(); 
     fixture.append('<div id="template"> <p>Template text.</p></div><div class="test"></div>');
     var month1 = new Month("January 2015");
-    month1.monthState.monthId = 'month0';   
-    var month2 = new Month("February 2015");
-    year.monthObjects = [month1, month2];
+    month1.monthState.monthIndex = 0;   
+    var month2 = new Month("February 2015")
+    month2.monthState.monthIndex = 1;
+    testYear.monthObjects = [month1, month2];
     equal(fixture.find('.test').children().attr('class'), undefined);
-    year.generateEmptyYearDiv(fixture.find('.test'));
+    testYear.generateEmptyYearDiv(fixture.find('.test'));
     equal(fixture.find('.test').children().attr('class'), 'monthframe');
-    equal(fixture.find('.test').children().attr('id'), 'month0');
+    equal(fixture.find('.test').children().attr('id'), '0');
     
 });
 
 test("retrieveYearCheckmarks test", function() {
     var monthStates = [{monthName: "January", monthYear:2015, checkedDays: {},
         dayIndex:{1:0, 2:1}, monthIndex: 0},{monthName: "February",
-        monthYear:2015, checkedDays: {}, dayIndex:{1:4, 2:5}, monthIndex: 1}];
-    year.monthObjects = year.getMonthObjects(monthStates);
-    deepEqual(year.monthObjects[0].monthState.checkedDays, {});
+        monthYear:2015, checkedDays: {}, dayIndex:{1:0, 2:1}, monthIndex: 1}];
+    testYear.monthObjects = testYear.getMonthObjects(monthStates);
+    equal(testYear.monthObjects.length, 2);
+    deepEqual(testYear.monthObjects[0].monthState.checkedDays, {});
+    deepEqual(testYear.monthObjects[1].monthState.checkedDays, {});
     var fixture = createUFixture(); 
-    fixture.append('<div id="0"><table class="month"><td class="aDay"><div class="cell"><div class="daynumber hidden" daynumber="1">1</div>\
-    <i class="fa fa-check"></i></div></td><td class="aDay"><div class="cell"><div class="daynumber" daynumber="2">2</div>\
-    <i class ="fa fa-check hidden"></i></div></td></table></div>\
-    <div id="1"><table class="month"><td class="aDay"><div class="cell"><div class="daynumber hidden" daynumber="1">1</div>\
-    <i class="fa fa-check"></i></div></td><td class="aDay"><div class="cell"><div class="daynumber" daynumber="2">2</div>\
-    <i class ="fa fa-check hidden"></i></div></td></table></div>');
-    year.retrieveYearCheckmarks('#qunit-fixture');
-    deepEqual(year.monthObjects[0].monthState.checkedDays, {0:"1"});
+    fixture.append('\
+    <div id="0">\
+    <table class="month">\
+    <tr>\
+    <td class="aDay">\
+    <div class="cell"><div class="daynumber hidden" daynumber="1">1</div>\
+    <i class="fa fa-check"></i></div></td>\
+    <td class="aDay"><div class="cell"><div class="daynumber" daynumber="2">2</div>\
+    <i class ="fa fa-check hidden"></i></div>\
+    </td>\
+    </tr>\
+    <\table>\
+    </div>\
+    <div id="1">\
+    <table class="month">\
+    <tr>\
+    <td class="aDay">\
+    <div class="cell"><div class="daynumber hidden" daynumber="1">1</div>\
+    <i class="fa fa-check"></i></div></td>\
+    <td class="aDay"><div class="cell"><div class="daynumber" daynumber="2">2</div>\
+    <i class ="fa fa-check hidden"></i></div>\
+    </td>\
+    </tr>\
+    </table>\
+    </div>\
+    ');
+    testYear.retrieveYearCheckmarks('#qunit-fixture');
+    deepEqual(testYear.monthObjects[0].monthState.checkedDays, {0:"1"});
+    deepEqual(testYear.monthObjects[1].monthState.checkedDays, {0:"1"});
+    
+});
+
+
+test("fillYearDiv test", function() {
+    expect(0);
+    var monthStates = [{monthName: "January", monthYear:2015, checkedDays: {},
+        dayIndex:{1:0, 2:1}, monthIndex: 0, firstIndex: 0, numberOfDays: 2},
+        {monthName: "February", monthYear:2015, checkedDays: {}, dayIndex:{1:0, 2:1},
+        monthIndex: 1, firstIndex: 0, numberOfDays: 2}];
+    testYear.monthObjects = testYear.getMonthObjects(monthStates);
+    var fixture = createUFixture(); 
+    //January has day 1 checked
+    //February has day 1 checked
+    fixture.append('\
+    <div class = ".monthframe" id="0">\
+    <table class="month">\
+    <tr>\
+    <td class="aDay">\
+    </td>\
+    <td class="aDay"></div>\
+    </td>\
+    </tr>\
+    <\table>\
+    </div>\
+    <div class=".monthframe" id="1">\
+    <table class="month">\
+    <tr>\
+    <td class="aDay">\
+    </td>\
+    <td class="aDay">\
+    </td>\
+    </tr>\
+    </table>\
+    </div>\
+    ');
+    testYear.yearState.monthStates = monthStates;
+    testYear.fillYearDiv('#qunit-fixture');
+    console.log(testYear.monthObjects);
+    console.log(fixture.find('#0').html());
     
 });
 
