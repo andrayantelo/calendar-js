@@ -364,7 +364,7 @@ var Month = function (date) {
         
         div = div || '.calendar';
         var $div = $(div);
-        var $monthId = $('#' + self.monthState.monthId);
+        var $monthId = $('#' + self.monthState.monthIndex);
         $div.find($monthId).find('.cell').click(function (event) {
             console.log(event);  // prints so you can look at the event object in the console
             $( this ).children().toggleClass("hidden");
@@ -377,7 +377,7 @@ var Month = function (date) {
         
         div = div || '.calendar';
         var $div = $(div);
-        var $monthId = $('#'+ self.monthState.monthId);
+        var $monthId = $('#'+ self.monthState.monthIndex);
         $div.find($monthId).find('.header').find('.month-year').empty();
         $div.find($monthId).find('.month').find('td').each(function(index) {
             $(this).empty();
@@ -402,7 +402,7 @@ var Month = function (date) {
         // Fills in the days of the month, month name, and
         // year in an empty month template
         
-        var $monthId = $('#'+ self.monthState.monthId);
+        var $monthId = $('#'+ self.monthState.monthIndex);
         self.clearMonthDiv();
         $monthId.find(".month-year").empty();
         $monthId.find(".month-year").append(self.monthState.monthName + " " + self.monthState.monthYear);
@@ -422,16 +422,15 @@ var Month = function (date) {
         
     };
     
-    self.generateCheckmarks = function(div, monthId) {
+    self.generateCheckmarks = function(div, monthIndex) {
         // Toggles the hidden class between the children of the div class="cell" 
         // of the cells whose indices are in the monthState.checkedDays
         // object.
         
         div = div || '.calendar';
         $div = $(div);
-        monthId = monthId || self.monthState.monthId;
-        var id = monthId;
-        var monthId = '#'+ id;
+        monthIndex = monthIndex || self.monthState.monthIndex;
+        var monthId = '#'+ monthIndex;
         $div.find(monthId).find('.month').find('td').each( function(index) {
             
             if (self.monthState.checkedDays[index]) {
@@ -444,8 +443,9 @@ var Month = function (date) {
         // Stores index: daynumber pairs in monthState.checkedDays. These
         // pertain to the days which have the daynumber div hidden.
         
-        var $div = $(div) || $('.calendar');
-        var id = monthId || self.monthState.monthId;
+        div = div || '.calendar';
+        var $div = $(div);
+        var id = monthId || self.monthState.monthIndex;
         var $monthId = $('#'+ id);
         //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
         if ($div.find($monthId).find('.month').find('.daynumber.hidden')) {
@@ -522,7 +522,7 @@ var Month = function (date) {
         // Adds a unique ID to the month div with class .monthframe
         
         $div = $(div);
-        $div.attr('id', 'month'+ self.monthState.monthIndex);
+        $div.attr('id', self.monthState.monthIndex);
         self.monthState.monthId = 'month'+ self.monthState.monthIndex;
         
     };

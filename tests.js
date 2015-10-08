@@ -232,6 +232,7 @@ module( "MonthObj tests", {
     localStorage.clear()
     testMonth = new Month();
     testMonth.monthState.monthId = "month0";
+    testMonth.monthIndex = 0;
     return testMonth;
     
   },
@@ -243,8 +244,8 @@ module( "MonthObj tests", {
 
 test("attachClickHandler test", function() {
     var fixture = createUFixture(); 
-    fixture.append('<div id="month0"><div class="cell"><div class="one"></div>\
-    <div class="two" class="hidden"></div></div></div>');
+    fixture.append('<div id="qunit-fixture"><div id="0"><div class="cell"><div class="one"></div>\
+    <div class="two" class="hidden"></div></div></div></div>');
     testMonth.attachClickHandler('#qunit-fixture');
     $('.cell').click();
     equal($('#qunit-fixture').find('.one').attr('class'), 'one hidden');
@@ -254,7 +255,7 @@ test("attachClickHandler test", function() {
 
 test("clearMonthDiv test", function() {
     var fixture = createUFixture(); 
-    fixture.append('<div id="month0" >\
+    fixture.append('<div id="0" >\
         <div class="header">\
             <span class="month-year"> 2015 </span>\
         </div>\
@@ -263,36 +264,37 @@ test("clearMonthDiv test", function() {
         <div class="daynumber">1</div><i class="fa fa-check hidden"></i></div></td> \
         <td class="aDay"><div class="cell"><div class="daynumber">2</div>\
         <i class="fa fa-check hidden"></i></div></tr></tbody></table>');
-    equal($('#month0').find('.header').find('.month-year').text(), 2015);
+    equal($('#0').find('.header').find('.month-year').text(), 2015);
     testMonth.clearMonthDiv('#qunit-fixture');
-    equal($('#qunit-fixture').find('#month0').find('.header').find('.month-year').text(), '');
-    equal($('#qunit-fixture').find('#month0').find('.aDay').children().attr('class'), 'nill');
+    equal($('#qunit-fixture').find('#0').find('.header').find('.month-year').text(), '');
+    equal($('#qunit-fixture').find('#0').find('.aDay').children().attr('class'), 'nill');
     
 });
 
 
 test("generateEmptyMonthDiv test", function() {
     var fixture = createUFixture(); 
-    fixture.append('<div id="month0"></div>');
-    equal($('#month0').text(), '');
-    testMonth.generateEmptyMonthDiv('#month0');
-    equal($('#month0').children().attr('class'), 'monthframe');
+    fixture.append('<div id="0"></div>');
+    equal($('#0').text(), '');
+    testMonth.generateEmptyMonthDiv('#0');
+    equal($('#0').children().attr('class'), 'monthframe');
 });
 
 test("generateMonthDiv test", function() {
     var fixture = createUFixture(); 
-    fixture.append('<div id="month0"></div>');
-    testMonth.generateEmptyMonthDiv('#month0');
+    fixture.append('<div id="0"></div>');
+    testMonth.generateEmptyMonthDiv('#0');
     testMonth.generateMonthDiv();
-    equal($('#month0').find('.month-year').text(), testMonth.monthState.monthName + " " + testMonth.monthState.monthYear);
+    equal($('#0').find('.month-year').text(), testMonth.monthState.monthName + " " + testMonth.monthState.monthYear);
     equal($('.monthframe').children().attr('class'), 'header')
 });
 
 test("generateCheckMarks test", function() {
     testMonth.monthState.checkedDays = {0:"1", 1:"2" };
-    testMonth.monthState.monthId = 'month0';
+    testMonth.monthState.monthIndex = 0;
+    var monthId = '#' + testMonth.monthState.monthIndex;
     var fixture = createUFixture(); 
-    fixture.append('<div id="qunit-fixture"><div id="month0"<table class="month"><td class="aDay"><div class="cell"><div class="daynumber" daynumber="1">1</div>\
+    fixture.append('<div id="qunit-fixture"><div id="0"<table class="month"><td class="aDay"><div class="cell"><div class="daynumber" daynumber="1">1</div>\
     <i class="fa fa-check hidden"></i></div></td><td class="aDay"><div class="cell"><div class="daynumber" daynumber="2">2</div>\
     <i class ="fa fa-check hidden"></i></div></td></table></div></div>');
     testMonth.generateCheckmarks('#qunit-fixture');
@@ -308,7 +310,7 @@ test("retrieveCheckedDays test", function() {
     testMonth.monthState.dayIndex = {1:0, 2:1};
     testMonth.monthState.checkedDays = {};
     var fixture = createUFixture(); 
-    fixture.append('<div id="month0"><table class="month"><td class="aDay"><div class="cell"><div class="daynumber hidden" daynumber="1">1</div>\
+    fixture.append('<div id="0"><table class="month"><td class="aDay"><div class="cell"><div class="daynumber hidden" daynumber="1">1</div>\
     <i class="fa fa-check"></i></div></td><td class="aDay"><div class="cell"><div class="daynumber" daynumber="2">2</div>\
     <i class ="fa fa-check hidden"></i></div></td></table></div>');
     testMonth.retrieveCheckedDays('#qunit-fixture');
@@ -340,7 +342,7 @@ test("addAttrToMonthFrame test", function() {
     fixture.append('<div class="test"></div>');
     testMonth.monthState.monthIndex = 0;
     testMonth.addAttrToMonthFrame(".test");
-    equal(fixture.find('.test').attr('id'), 'month0');
+    equal(fixture.find('.test').attr('id'), '0');
 });
 
 var testYear 
@@ -398,15 +400,15 @@ test("generateEmptyYearDiv test", function() {
 
 test("retrieveYearCheckmarks test", function() {
     var monthStates = [{monthName: "January", monthYear:2015, checkedDays: {},
-        dayIndex:{1:0, 2:1}, monthId: 'month0'},{monthName: "February",
-        monthYear:2015, checkedDays: {}, dayIndex:{1:4, 2:5}, monthId: 'month1'}];
+        dayIndex:{1:0, 2:1}, monthIndex: 0},{monthName: "February",
+        monthYear:2015, checkedDays: {}, dayIndex:{1:4, 2:5}, monthIndex: 1}];
     year.monthObjects = year.getMonthObjects(monthStates);
     deepEqual(year.monthObjects[0].monthState.checkedDays, {});
     var fixture = createUFixture(); 
-    fixture.append('<div id="month0"><table class="month"><td class="aDay"><div class="cell"><div class="daynumber hidden" daynumber="1">1</div>\
+    fixture.append('<div id="0"><table class="month"><td class="aDay"><div class="cell"><div class="daynumber hidden" daynumber="1">1</div>\
     <i class="fa fa-check"></i></div></td><td class="aDay"><div class="cell"><div class="daynumber" daynumber="2">2</div>\
     <i class ="fa fa-check hidden"></i></div></td></table></div>\
-    <div id="month1"><table class="month"><td class="aDay"><div class="cell"><div class="daynumber hidden" daynumber="1">1</div>\
+    <div id="1"><table class="month"><td class="aDay"><div class="cell"><div class="daynumber hidden" daynumber="1">1</div>\
     <i class="fa fa-check"></i></div></td><td class="aDay"><div class="cell"><div class="daynumber" daynumber="2">2</div>\
     <i class ="fa fa-check hidden"></i></div></td></table></div>');
     year.retrieveYearCheckmarks('#qunit-fixture');
