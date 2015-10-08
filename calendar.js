@@ -439,14 +439,14 @@ var Month = function (date) {
          })
     };
     
-    self.retrieveCheckedDays = function(div, monthId) {
+    self.retrieveCheckedDays = function(div, monthIndex) {
         // Stores index: daynumber pairs in monthState.checkedDays. These
         // pertain to the days which have the daynumber div hidden.
         
         div = div || '.calendar';
         var $div = $(div);
-        var id = monthId || self.monthState.monthIndex;
-        var $monthId = $('#'+ id);
+        monthIndex = monthIndex || self.monthState.monthIndex;
+        var $monthId = $('#'+ monthIndex);
         //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
         if ($div.find($monthId).find('.month').find('.daynumber.hidden')) {
            $monthId.find('.month').find('.daynumber.hidden').each(function (index) {
