@@ -16,14 +16,14 @@ $(document).ready(function() {
         alert("Progress saved");
     });
     
-    $('#clearButton').click(function() {
-        clearPage();
+    //$('#clearButton').click(function() {
+      //  clearPage();
         
-    });
+    //});
     
-    $('#hideButton').click(function() {
-        hideTemplate();
-    });
+    //$('#hideButton').click(function() {
+     //   hideTemplate();
+    //});
     
     year.initYear(1986);
 });
