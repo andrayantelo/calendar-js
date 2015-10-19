@@ -416,6 +416,7 @@ var Month = function (date) {
                  var toAdd = '<div class="cell"><div class="daynumber"' + ' daynumber="' + dayOfMonth.toString() + '"></div><i class="fa fa-check hidden"></i></div>'
                  //var toAdd = toAdd.replace(/\s+/g, ''); <-----why didn't this work?
                  $(this).append(toAdd);
+                 $(this).addClass('actualDay');
                  $(this).find('.cell').children('.daynumber').append(dayOfMonth);
             }
         })
