@@ -6,7 +6,7 @@ var $aDay = $('.aDay'); //class for day cells
 var $monthframe = $('.monthframe');
 var temporaryStorageKey = "temporaryStorageKey"; //temporary storage key for month object
 var yearKey = "yearKey"; //temporaryStorageKey for year object
-
+var $listTitle = $('#listTitle');
 
 $(document).ready(function() {
     
@@ -23,6 +23,17 @@ $(document).ready(function() {
     
     $('#hideButton').click(function() {
         hideTemplate();
+    });
+    
+    $('#listTitle').focus();
+    
+    $('#listTitle').bind("keydown", function(e) {
+        if (e.which == 13)
+        {
+            e.preventDefault();
+            console.log("enter was pressed");
+            $('#listTitle').blur();
+        }
     });
     
     year.initYear(1986);
@@ -340,7 +351,9 @@ var emptyYearState = function() {
         // year
         yearGiven: '',
         // array with 12 month objects
-        monthStates: []
+        monthStates: [],
+        //title of year
+        yearName: ''
     }
 };
 
@@ -664,6 +677,10 @@ var Year = function() {
         return emptyMonthStateArray;
     };
     
+    self.clearEmptyWeeks = function() {
+        // Gets rid of weeks that are only filled with nill days
+    };
+    
     self.initYearState = function(desiredYear) {
         // initializes year object's yearState, 
         
@@ -674,6 +691,8 @@ var Year = function() {
         self.yearState.yearGiven = desiredYear;
         self.yearState.yearType = determineYearType(self.yearState.yearGiven);
         self.yearState.monthStates = self.getMonthStatesOfGivenYear(desiredYear);
+        var yearName = document.getElementById('listTitle').value;
+        self.yearState.yearName = yearName;
         
     }
     

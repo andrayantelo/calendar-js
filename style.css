@@ -120,7 +120,7 @@ html {
     background: #f3f3f3;
 }
 
-.cell {
+.cell .actualDay {
     background: white;
 }
 
@@ -128,4 +128,7 @@ html {
     background: white;
     }
 
+#listTitle {
+    margin: 5px;
+}
 
