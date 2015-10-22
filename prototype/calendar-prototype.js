@@ -6,26 +6,42 @@ var $aDay = $('.aDay'); //class for day cells
 var $monthframe = $('.monthframe');
 var temporaryStorageKey = "temporaryStorageKey"; //temporary storage key for month object
 var yearKey = "yearKey"; //temporaryStorageKey for year object
-
+var $listTitle = $('#listTitle');
 
 $(document).ready(function() {
     
+    //$('#startDate').datepicker();
+
+    
     $('#saveButton').click(function(){
         year.retrieveYearCheckmarks();
+        year.saveTitle();
         year.storeYear();
         alert("Progress saved");
     });
     
-    //$('#clearButton').click(function() {
-      //  clearPage();
+    $('#clearButton').click(function() {
+        clearPage();
         
-    //});
+    });
     
-    //$('#hideButton').click(function() {
-     //   hideTemplate();
-    //});
+    $('#hideButton').click(function() {
+        hideTemplate();
+    });
     
-    year.initYear(2015);
+    
+    $('#listTitle').bind("keydown", function(e) {
+        if (e.which == 13)
+        {
+            e.preventDefault();
+            console.log("enter was pressed");
+            $('#listTitle').blur();
+        }
+    });
+    
+    year.initYear(1986);
+    
+    $('#listTitle').val(year.yearState.yearName)
 });
 
 //UTILITY/HELPER FUNCTIONS
@@ -340,7 +356,9 @@ var emptyYearState = function() {
         // year
         yearGiven: '',
         // array with 12 month objects
-        monthStates: []
+        monthStates: [],
+        //title of year
+        yearName: ''
     }
 };
 
@@ -664,6 +682,10 @@ var Year = function() {
         return emptyMonthStateArray;
     };
     
+    self.clearEmptyWeeks = function() {
+        // Gets rid of weeks that are only filled with nill days
+    };
+    
     self.initYearState = function(desiredYear) {
         // initializes year object's yearState, 
         
@@ -675,6 +697,11 @@ var Year = function() {
         self.yearState.yearType = determineYearType(self.yearState.yearGiven);
         self.yearState.monthStates = self.getMonthStatesOfGivenYear(desiredYear);
         
+    }
+    
+    self.saveTitle = function() {
+        var yearName = document.getElementById('listTitle').value;
+        self.yearState.yearName = yearName;
     }
     
     
