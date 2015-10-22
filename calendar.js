@@ -39,7 +39,7 @@ $(document).ready(function() {
         }
     });
     
-    year.initYear(1986);
+    year.initYear(2015);
     
     $('#listTitle').val(year.yearState.yearName)
 });
@@ -345,7 +345,9 @@ var emptyMonthState = function() {
         // index of month
         monthIndex: 0,
         // monthID
-        monthId: ""
+        monthId: "",
+        //start day
+        startDay: 1
     }
 };
 
@@ -428,7 +430,7 @@ var Month = function (date) {
         $monthId.find($('.week')).find('td').each( function(index) {
         
             var dayOfMonth = index - (self.monthState.firstIndex - 1);
-            if (dayOfMonth >= 1 && dayOfMonth <= self.monthState.numberOfDays) {
+            if (dayOfMonth >= self.monthState.startDay && dayOfMonth <= self.monthState.numberOfDays) { //MODIFIED LINE
                  self.monthState.dayIndex[dayOfMonth] = index;
                  $(this).empty();   
                  var toAdd = '<div class="cell"><div class="daynumber"' + ' daynumber="' + dayOfMonth.toString() + '"></div><i class="fa fa-check hidden"></i></div>'
@@ -530,7 +532,8 @@ var Month = function (date) {
         self.monthState.monthYear = getYear(self.date);
         self.monthState.numberOfDays = getNumberOfDays(self.monthState.monthName
                                                      + ' ' + self.monthState.monthYear);
-        self.monthState.firstIndex = getDayOfWeek(self.date);
+        self.monthState.startDay = self.date.getDate(); //NEW LINE
+        self.monthState.firstIndex = getDayOfWeek(self.date); //NEW LINE
         
         self.monthState.monthId = 'month' + self.monthState.monthIndex;
         return self.monthState;
