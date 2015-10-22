@@ -39,7 +39,7 @@ $(document).ready(function() {
         }
     });
     
-    year.initYear(1986);
+    year.initYear();
     
     $('#listTitle').val(year.yearState.yearName)
 });
