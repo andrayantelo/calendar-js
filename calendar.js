@@ -12,6 +12,7 @@ $(document).ready(function() {
     
     $('#saveButton').click(function(){
         year.retrieveYearCheckmarks();
+        year.saveTitle();
         year.storeYear();
         alert("Progress saved");
     });
@@ -25,19 +26,18 @@ $(document).ready(function() {
         hideTemplate();
     });
     
-    $('#listTitle').focus();
-    
     $('#listTitle').bind("keydown", function(e) {
         if (e.which == 13)
         {
             e.preventDefault();
             console.log("enter was pressed");
             $('#listTitle').blur();
-            $(this).css('border', 'none');
         }
     });
     
     year.initYear(1986);
+    
+    $('#listTitle').val(year.yearState.yearName)
 });
 
 //UTILITY/HELPER FUNCTIONS
@@ -692,9 +692,12 @@ var Year = function() {
         self.yearState.yearGiven = desiredYear;
         self.yearState.yearType = determineYearType(self.yearState.yearGiven);
         self.yearState.monthStates = self.getMonthStatesOfGivenYear(desiredYear);
+        
+    }
+    
+    self.saveTitle = function() {
         var yearName = document.getElementById('listTitle').value;
         self.yearState.yearName = yearName;
-        
     }
     
     

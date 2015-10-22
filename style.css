@@ -136,8 +136,10 @@ html {
     background: white;
     }
 
+
 #listTitle {
     margin: 5px;
     text-align: center;
+    border: none;
 }
 
