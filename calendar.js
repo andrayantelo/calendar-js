@@ -33,6 +33,7 @@ $(document).ready(function() {
             e.preventDefault();
             console.log("enter was pressed");
             $('#listTitle').blur();
+            $(this).css('border', 'none');
         }
     });
     
