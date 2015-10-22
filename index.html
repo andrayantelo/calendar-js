@@ -29,12 +29,9 @@
   <div class="mainContainer">
       
     <div class="h1container">
-      <h1 class="mainheader">Year One</h1>
-    </div>
-    
-    <div id="titleContainer">
-    <input type="text" id="listTitle" placeholder="Type Year Name">
-    
+      <h1 class="mainheader">
+          <input type="text" id="listTitle" placeholder="Type Year Name">
+      </h1>
     </div>
     
     <div class = "buttonContainer"> 
@@ -45,7 +42,9 @@
 </div>
  
 <!-- Empty Month Template -->
-<div id="template" >
+<div id="template" class="hidden" >
+   
+    
         <div class="header">
             <span class="month-year"> </span>
         </div>
@@ -61,6 +60,7 @@
                 <td>S</td>
             </table>
         </div>
+    
         
         <div class="monthContainer">    
             <table class="month">
