@@ -10,6 +10,9 @@ var $listTitle = $('#listTitle');
 
 $(document).ready(function() {
     
+    //$('#startDate').datepicker();
+
+    
     $('#saveButton').click(function(){
         year.retrieveYearCheckmarks();
         year.saveTitle();
@@ -25,6 +28,7 @@ $(document).ready(function() {
     $('#hideButton').click(function() {
         hideTemplate();
     });
+    
     
     $('#listTitle').bind("keydown", function(e) {
         if (e.which == 13)
