@@ -29,6 +29,10 @@ $(document).ready(function() {
         hideTemplate();
     });
     
+    $('#startDateButton').click(function() {
+        year.setStartDate();
+    });
+    
     
     $('#listTitle').bind("keydown", function(e) {
         if (e.which == 13)
@@ -553,12 +557,13 @@ var Month = function (date) {
 };
 
 
-var Year = function() {
+var Year = function(startDate) {
     // Represents a single calendar year
     
     var self = this;
     self.yearState = emptyYearState();
     self.monthObjects = [];
+    self.startDate = new Date(startDate);
     
     self.getMonthStatesOfGivenYear = function(desiredYear) {
         var monthStatesOfYear = [];
@@ -707,6 +712,11 @@ var Year = function() {
         self.yearState.yearName = yearName;
     }
     
+    self.setStartDate = function() {
+        var startDate = document.getElementById('startDate').value;
+        self.startDate = new Date(startDate);
+    }
+    
     
     self.initYear = function(desiredYear) {
         clearPage();
@@ -733,4 +743,4 @@ var Year = function() {
     
 };
 var month = new Month();
-var year = new Year();
+var year = new Year('October 12, 2015');
