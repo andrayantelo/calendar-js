@@ -31,6 +31,7 @@ $(document).ready(function() {
     
     $('#startDateButton').click(function() {
         year.setStartDate();
+        year.initYear();
     });
     
     
@@ -43,7 +44,7 @@ $(document).ready(function() {
         }
     });
     
-    year.initYear(2015);
+    //year.initYear(2015);
     
     $('#listTitle').val(year.yearState.yearName)
 });
@@ -565,26 +566,37 @@ var Year = function(startDate) {
     self.monthObjects = [];
     self.startDate = new Date(startDate);
     
-    self.getMonthStatesOfGivenYear = function(desiredYear) {
+    self.getMonthStatesOfGivenYear = function() {
         var monthStatesOfYear = [];
         var monthNames = {
             0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
             6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
             11:"December"};
-        if (!desiredYear) {
+        if (!self.startDate.getFullYear()) {
             console.log("!yearGiven ran");
             var today = new Date();
             desiredYear = today.getFullYear();
             self.yearState.yearGiven = desiredYear;
         }
+        else {
+            var desiredYear = self.startDate.getFullYear();
+        }
+        
         for (prop in monthNames) {
             if (!monthNames.hasOwnProperty(prop)) {
             //The current property is not a direct property of monthNames
                 continue;
             }
-            var monthprop = new Month(monthNames[prop] + ' ' + desiredYear);
-            monthprop.initCurrentMonthState();
-            monthStatesOfYear.push(monthprop.monthState);
+            if (prop >= self.startDate.getMonth()) {
+                var monthprop = new Month(monthNames[prop] + ' ' + desiredYear);
+                monthprop.initCurrentMonthState();
+                if (prop == self.startDate.getMonth()) {
+                    monthprop.monthState.startDay = self.startDate.getUTCDate();
+                    console.log(monthprop.monthState);
+                }
+                monthStatesOfYear.push(monthprop.monthState);
+                
+            }
         }
         
         return monthStatesOfYear;
@@ -692,6 +704,7 @@ var Year = function(startDate) {
     
     self.clearEmptyWeeks = function() {
         // Gets rid of weeks that are only filled with nill days
+        
     };
     
     self.initYearState = function(desiredYear) {
@@ -714,7 +727,8 @@ var Year = function(startDate) {
     
     self.setStartDate = function() {
         var startDate = document.getElementById('startDate').value;
-        self.startDate = new Date(startDate);
+        self.startDate = new Date(Date.parse(startDate + 'UTC'));
+        
     }
     
     
