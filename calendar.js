@@ -14,7 +14,7 @@ $(document).ready(function() {
 
     
     $('#saveButton').click(function(){
-        year.retrieveYearCheckmarks();
+        year.retrieveYearCheckmarks('.calendar');
         year.saveTitle();
         year.storeYear();
         alert("Progress saved");
@@ -44,7 +44,7 @@ $(document).ready(function() {
         }
     });
     
-    //year.initYear(2015);
+    year.initYear();
     
     $('#listTitle').val(year.yearState.yearName)
 });
@@ -465,6 +465,12 @@ var Month = function (date) {
          })
     };
     
+    self.clearCheckedDays = function() {
+        //clears the checkedDays object
+        self.monthState.checkedDays = {};
+    }
+    
+    
     self.retrieveCheckedDays = function(div, monthIndex) {
         // Stores index: daynumber pairs in monthState.checkedDays. These
         // pertain to the days which have the daynumber div hidden.
@@ -474,13 +480,13 @@ var Month = function (date) {
         monthIndex = monthIndex || self.monthState.monthIndex;
         var $monthId = $('#'+ monthIndex);
         //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
-        if ($div.find($monthId).find('.month').find('.daynumber.hidden')) {
-           $monthId.find('.month').find('.daynumber.hidden').each(function (index) {
-                var daynumber = $(this).attr('daynumber');
-                //the key is the index of the day for now
-                self.monthState.checkedDays[self.monthState.dayIndex[daynumber]] = daynumber;
-            });
-        }
+        //if ($div.find($monthId).find('.month').find('.daynumber.hidden')) {
+        $monthId.find('.month').find('.daynumber.hidden').each(function (index) {
+            var daynumber = $(this).attr('daynumber');
+            //the key is the index of the day for now
+            self.monthState.checkedDays[self.monthState.dayIndex[daynumber]] = daynumber;
+        });
+        //}
     };
     
     
@@ -498,8 +504,8 @@ var Month = function (date) {
         
         self.generateEmptyMonthDiv();
         self.addAttrToMonthFrame('.monthframe');
-        
-        self.retrieveCheckedDays();
+        //self.clearCheckedDays();
+        //self.retrieveCheckedDays();
         self.generateMonthDiv();
         self.generateCheckmarks();
         self.attachClickHandler();
@@ -640,11 +646,12 @@ var Year = function(startDate) {
     };
     
     
-    self.retrieveYearCheckmarks = function() {
+    self.retrieveYearCheckmarks = function(div) {
         // Collects the checked days of the year.
         
         self.monthObjects.forEach( function(month) {
-            month.retrieveCheckedDays();
+            month.clearCheckedDays();
+            month.retrieveCheckedDays(div, month.monthState.monthIndex);
         })
     };
             
@@ -750,7 +757,7 @@ var Year = function(startDate) {
         
         self.monthObjects = self.getMonthObjects(self.yearState.monthStates);
         self.generateEmptyYearDiv('.calendar');
-        self.fillYearDiv();
+        self.fillYearDiv('.calendar');
     };
     
 
