@@ -570,7 +570,7 @@ var Year = function(startDate) {
     var self = this;
     self.yearState = emptyYearState();
     self.monthObjects = [];
-    self.startDate = new Date(startDate);
+    self.startDate = new Date(startDate) || new Date();
     
     self.getMonthStatesOfGivenYear = function() {
         var monthStatesOfYear = [];
@@ -764,4 +764,4 @@ var Year = function(startDate) {
     
 };
 var month = new Month();
-var year = new Year('October 12, 2015');
+var year = new Year();

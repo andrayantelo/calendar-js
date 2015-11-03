@@ -5,9 +5,10 @@ html {
 
 .calendar{
     margin: 50px auto;
-    font: 0.95em/1.5 "Helvetica Neue", Helvatica, Arial, san-serif;
+    /*font: 0.95em/1.5 "Helvetica Neue", Helvatica, Arial, san-serif;*/
     display: table;
     position: relative;
+    font-family: "Sans-serif", Tahoma, Arial Narrow;
     
     
    }

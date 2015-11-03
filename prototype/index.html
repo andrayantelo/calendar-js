@@ -18,7 +18,7 @@
     <script src="//code.jquery.com/qunit/qunit-1.18.0.js"></script>
     <!--<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>-->
     
-    <script type = "text/javascript" src="variables.js"></script>
+    
     <script type = "text/javascript" src="calendar-prototype.js"></script>
     <!--my test file
     <script type = "text/javascript" src="tests.js"></script>
@@ -34,11 +34,13 @@
       
     <div class="h1container">
       <h1 class="mainheader">
+          
           <input type="text" id="listTitle" class="active" placeholder="Type Year Name">
       </h1>
     </div>
     
     <div class="startDateContainer">
+        <p id="startDatePrompt">When should we start?</p>
         <p id="startDateText">Start Date</p>
         <input type="date" id="startDate" name="startDate"/>
         <input id="startDateButton" class="button" type="button" value="Set"/>
