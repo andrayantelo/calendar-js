@@ -8,7 +8,7 @@ html {
     /*font: 0.95em/1.5 "Helvetica Neue", Helvatica, Arial, san-serif;*/
     display: table;
     position: relative;
-    font-family: "Sans-serif", Tahoma, Arial Narrow;
+    font: 0.95em/1.5 "Sans-serif", Tahoma, Arial Narrow, san-serif;
     
     
    }
@@ -81,7 +81,7 @@ html {
     margin-bottom: 25px;
     margin-top: 25px;
     position: relative;
-    width: 80%
+    width: 50%
 }
 
 .month {
@@ -159,6 +159,4 @@ html {
 .buttonContainer {
     clear: both;
 }
-
-
 
