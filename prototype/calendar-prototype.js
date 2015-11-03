@@ -11,6 +11,23 @@ var $listTitle = $('#listTitle');
 $(document).ready(function() {
     
     //$('#startDate').datepicker();
+    thisDay = new Date();
+    if (thisDay.getDate().toString().length == 1) {
+        var today = "0" + thisDay.getDate().toString();
+    }
+    var defaultMonth = thisDay.getMonth() + 1;
+    var defaultDate = thisDay.getFullYear() + "-" + defaultMonth + "-" + today
+    console.log(defaultDate);
+    $('#startDate').val(defaultDate);
+    
+    $("input[placeholder]").each(function () {
+        //console.log($(this).attr('placeholder').length + 5);
+        $(this).attr('size', $(this).attr('placeholder').length + 5);
+    });
+    
+    $('input[text]').each(function() {
+        $(this).attr('size', $(this).val().length);
+    });
 
     
     $('#saveButton').click(function(){
@@ -570,7 +587,7 @@ var Year = function(startDate) {
     var self = this;
     self.yearState = emptyYearState();
     self.monthObjects = [];
-    self.startDate = new Date(startDate) || new Date();
+    self.startDate = new Date(startDate);
     
     self.getMonthStatesOfGivenYear = function() {
         var monthStatesOfYear = [];

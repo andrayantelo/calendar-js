@@ -139,9 +139,11 @@ html {
 
 
 #listTitle {
-    margin: 5px;
+    margin: 10px;
     text-align: center;
     border: none;
+    font-size: 20px;
+    font-weight: bold;
 }
 
 #startDateText {
@@ -157,5 +159,6 @@ html {
 .buttonContainer {
     clear: both;
 }
+
 
 
