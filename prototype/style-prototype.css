@@ -143,8 +143,18 @@ html {
     border: none;
 }
 
+#startDateText {
+    display: inline-block;
+}
+
 #startDate {
     margin-bottom: 10px;
-    
+    display: inline-block;
 }
+
+
+.buttonContainer {
+    clear: both;
+}
+
 
