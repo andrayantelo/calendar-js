@@ -14,7 +14,7 @@ $(document).ready(function() {
 
     
     $('#saveButton').click(function(){
-        year.retrieveYearCheckmarks();
+        year.retrieveYearCheckmarks('.calendar');
         year.saveTitle();
         year.storeYear();
         alert("Progress saved");
@@ -27,6 +27,11 @@ $(document).ready(function() {
     
     $('#hideButton').click(function() {
         hideTemplate();
+    });
+    
+    $('#startDateButton').click(function() {
+        year.setStartDate();
+        year.initYear();
     });
     
     
@@ -345,7 +350,9 @@ var emptyMonthState = function() {
         // index of month
         monthIndex: 0,
         // monthID
-        monthId: ""
+        monthId: "",
+        //start day
+        startDay: 1
     }
 };
 
@@ -428,7 +435,7 @@ var Month = function (date) {
         $monthId.find($('.week')).find('td').each( function(index) {
         
             var dayOfMonth = index - (self.monthState.firstIndex - 1);
-            if (dayOfMonth >= 1 && dayOfMonth <= self.monthState.numberOfDays) {
+            if (dayOfMonth >= self.monthState.startDay && dayOfMonth <= self.monthState.numberOfDays) { //MODIFIED LINE
                  self.monthState.dayIndex[dayOfMonth] = index;
                  $(this).empty();   
                  var toAdd = '<div class="cell"><div class="daynumber"' + ' daynumber="' + dayOfMonth.toString() + '"></div><i class="fa fa-check hidden"></i></div>'
@@ -458,6 +465,12 @@ var Month = function (date) {
          })
     };
     
+    self.clearCheckedDays = function() {
+        //clears the checkedDays object
+        self.monthState.checkedDays = {};
+    }
+    
+    
     self.retrieveCheckedDays = function(div, monthIndex) {
         // Stores index: daynumber pairs in monthState.checkedDays. These
         // pertain to the days which have the daynumber div hidden.
@@ -467,13 +480,13 @@ var Month = function (date) {
         monthIndex = monthIndex || self.monthState.monthIndex;
         var $monthId = $('#'+ monthIndex);
         //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
-        if ($div.find($monthId).find('.month').find('.daynumber.hidden')) {
-           $monthId.find('.month').find('.daynumber.hidden').each(function (index) {
-                var daynumber = $(this).attr('daynumber');
-                //the key is the index of the day for now
-                self.monthState.checkedDays[self.monthState.dayIndex[daynumber]] = daynumber;
-            });
-        }
+        //if ($div.find($monthId).find('.month').find('.daynumber.hidden')) {
+        $monthId.find('.month').find('.daynumber.hidden').each(function (index) {
+            var daynumber = $(this).attr('daynumber');
+            //the key is the index of the day for now
+            self.monthState.checkedDays[self.monthState.dayIndex[daynumber]] = daynumber;
+        });
+        //}
     };
     
     
@@ -491,8 +504,8 @@ var Month = function (date) {
         
         self.generateEmptyMonthDiv();
         self.addAttrToMonthFrame('.monthframe');
-        
-        self.retrieveCheckedDays();
+        //self.clearCheckedDays();
+        //self.retrieveCheckedDays();
         self.generateMonthDiv();
         self.generateCheckmarks();
         self.attachClickHandler();
@@ -530,7 +543,8 @@ var Month = function (date) {
         self.monthState.monthYear = getYear(self.date);
         self.monthState.numberOfDays = getNumberOfDays(self.monthState.monthName
                                                      + ' ' + self.monthState.monthYear);
-        self.monthState.firstIndex = getDayOfWeek(self.date);
+        self.monthState.startDay = self.date.getDate(); //NEW LINE
+        self.monthState.firstIndex = getDayOfWeek(self.date); //NEW LINE
         
         self.monthState.monthId = 'month' + self.monthState.monthIndex;
         return self.monthState;
@@ -550,33 +564,45 @@ var Month = function (date) {
 };
 
 
-var Year = function() {
+var Year = function(startDate) {
     // Represents a single calendar year
     
     var self = this;
     self.yearState = emptyYearState();
     self.monthObjects = [];
+    self.startDate = new Date(startDate);
     
-    self.getMonthStatesOfGivenYear = function(desiredYear) {
+    self.getMonthStatesOfGivenYear = function() {
         var monthStatesOfYear = [];
         var monthNames = {
             0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
             6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
             11:"December"};
-        if (!desiredYear) {
+        if (!self.startDate.getFullYear()) {
             console.log("!yearGiven ran");
             var today = new Date();
             desiredYear = today.getFullYear();
             self.yearState.yearGiven = desiredYear;
         }
+        else {
+            var desiredYear = self.startDate.getFullYear();
+        }
+        
         for (prop in monthNames) {
             if (!monthNames.hasOwnProperty(prop)) {
             //The current property is not a direct property of monthNames
                 continue;
             }
-            var monthprop = new Month(monthNames[prop] + ' ' + desiredYear);
-            monthprop.initCurrentMonthState();
-            monthStatesOfYear.push(monthprop.monthState);
+            if (prop >= self.startDate.getMonth()) {
+                var monthprop = new Month(monthNames[prop] + ' ' + desiredYear);
+                monthprop.initCurrentMonthState();
+                if (prop == self.startDate.getMonth()) {
+                    monthprop.monthState.startDay = self.startDate.getUTCDate();
+                    console.log(monthprop.monthState);
+                }
+                monthStatesOfYear.push(monthprop.monthState);
+                
+            }
         }
         
         return monthStatesOfYear;
@@ -620,11 +646,12 @@ var Year = function() {
     };
     
     
-    self.retrieveYearCheckmarks = function() {
+    self.retrieveYearCheckmarks = function(div) {
         // Collects the checked days of the year.
         
         self.monthObjects.forEach( function(month) {
-            month.retrieveCheckedDays();
+            month.clearCheckedDays();
+            month.retrieveCheckedDays(div, month.monthState.monthIndex);
         })
     };
             
@@ -684,6 +711,7 @@ var Year = function() {
     
     self.clearEmptyWeeks = function() {
         // Gets rid of weeks that are only filled with nill days
+        
     };
     
     self.initYearState = function(desiredYear) {
@@ -702,6 +730,12 @@ var Year = function() {
     self.saveTitle = function() {
         var yearName = document.getElementById('listTitle').value;
         self.yearState.yearName = yearName;
+    }
+    
+    self.setStartDate = function() {
+        var startDate = document.getElementById('startDate').value;
+        self.startDate = new Date(Date.parse(startDate + 'UTC'));
+        
     }
     
     
@@ -723,11 +757,11 @@ var Year = function() {
         
         self.monthObjects = self.getMonthObjects(self.yearState.monthStates);
         self.generateEmptyYearDiv('.calendar');
-        self.fillYearDiv();
+        self.fillYearDiv('.calendar');
     };
     
 
     
 };
 var month = new Month();
-var year = new Year();
+var year = new Year('October 12, 2015');
