@@ -11,11 +11,15 @@ var $listTitle = $('#listTitle');
 $(document).ready(function() {
     
     //$('#startDate').datepicker();
+    var monthIndeces = {
+            0:1, 1:2, 2:3, 3:4, 4:5, 5:6,
+            6:7, 7:8, 8:9, 9:10, 10:11,
+            11:12};
     thisDay = new Date();
     if (thisDay.getDate().toString().length == 1) {
         var today = "0" + thisDay.getDate().toString();
     }
-    var defaultMonth = thisDay.getMonth() + 1;
+    var defaultMonth = monthIndeces[thisDay.getMonth()];
     var defaultDate = thisDay.getFullYear() + "-" + defaultMonth + "-" + today
     console.log(defaultDate);
     $('#startDate').val(defaultDate);
@@ -47,7 +51,8 @@ $(document).ready(function() {
     });
     
     $('#startDateButton').click(function() {
-        year.setStartDate();
+        startDate = setStartDate();
+        var year = new Year(startDate);
         year.initYear();
     });
     
@@ -61,9 +66,9 @@ $(document).ready(function() {
         }
     });
     
-    year.initYear();
+    //year.initYear();
     
-    $('#listTitle').val(year.yearState.yearName)
+    //$('#listTitle').val(year.yearState.yearName)
 });
 
 //UTILITY/HELPER FUNCTIONS
@@ -385,6 +390,13 @@ var emptyYearState = function() {
         yearName: ''
     }
 };
+
+setStartDate = function() {
+    var startDate = moment(document.getElementById('startDate').value);
+    startDate = new Date(startDate);
+    
+    return startDate
+}
 
 
 var Month = function (date) {
@@ -749,11 +761,7 @@ var Year = function(startDate) {
         self.yearState.yearName = yearName;
     }
     
-    self.setStartDate = function() {
-        var startDate = document.getElementById('startDate').value;
-        self.startDate = new Date(Date.parse(startDate + 'UTC'));
-        
-    }
+    
     
     
     self.initYear = function(desiredYear) {
@@ -781,4 +789,4 @@ var Year = function(startDate) {
     
 };
 var month = new Month();
-var year = new Year();
+
