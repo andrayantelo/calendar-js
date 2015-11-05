@@ -336,6 +336,8 @@ var emptyYearState = function() {
 };
 
 var setStartDate = function() {
+    // parse the startDate string, which is given by te user according to
+    // their local time zone, into a Date object
     var startDate = moment(document.getElementById('startDate').value);
     
     return startDate

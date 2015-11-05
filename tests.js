@@ -10,16 +10,13 @@ function createUFixture() {
 
 test("setStartDate test", function() {
     var fixture = createUFixture();
-    fixture.append("<input type='date' id='startDate' value='2015-11-04'/>");
+    fixture.append("<input type='date' id='startDate'/>");
+    fixture.find('#startDate').val('2015-11-04');
     equal(fixture.find('input[type=date]').val(), '2015-11-04');
     startDate = setStartDate();
-    //equal(startDate, '2015-11-04');
+    deepEqual(startDate, moment('2015-11-04'));
 });
 
-test("moment test", function() {
-    dateCDT = "2015-11-30";
-    
-});
 
 test("checkFirstOf test", function() {
     var fixture = createUFixture(); 
@@ -168,14 +165,6 @@ test("getDayOfWeek test", function() {
     
 });
 
-test("determineYearType test", function() {
-    var rightNow = new Date("September 22 2015");
-    equal(determineYearType(rightNow), "common");
-    var then = new Date("October 1904");
-    equal(determineYearType(then), "leap");
-    var today = new Date();
-    equal(determineYearType(today), determineYearType(today.getFullYear()));
-});
 
 test("generateMonthObj test", function() {
     var mState = {"test":1, "monthName":"September"};
@@ -230,7 +219,6 @@ test("monthObject test", function() {
 test("emptyYearState test", function() {
     yState = emptyYearState();
     deepEqual(yState, emptyYearState());
-    equal(yState.yearType, "common");
     equal(yState.yearGiven, '');
     yState.yearGiven = 2015;
     notEqual(yState.yearGiven, '');
