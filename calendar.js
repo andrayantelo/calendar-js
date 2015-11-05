@@ -11,17 +11,17 @@ var $listTitle = $('#listTitle');
 $(document).ready(function() {
     
     //$('#startDate').datepicker();
-    var monthIndeces = {
-            0:1, 1:2, 2:3, 3:4, 4:5, 5:6,
-            6:7, 7:8, 8:9, 9:10, 10:11,
-            11:12};
-    thisDay = new Date();
-    if (thisDay.getDate().toString().length == 1) {
-        var today = "0" + thisDay.getDate().toString();
-    }
-    var defaultMonth = monthIndeces[thisDay.getMonth()];
-    var defaultDate = thisDay.getFullYear() + "-" + defaultMonth + "-" + today
-    console.log(defaultDate);
+    
+    
+    var thisDay = new Date();
+    var month = (thisDay.getMonth() + 1).toString(); 
+    if (month.length == 1) { month = '0' + month };
+    var today = thisDay.getDate().toString();
+    if (today.length == 1) {
+        var today = "0" + today;
+    };
+    var defaultDate = thisDay.getFullYear() + "-" + month + "-" + today;
+    console.log(moment(defaultDate));
     $('#startDate').val(defaultDate);
     
     $("input[placeholder]").each(function () {
@@ -132,8 +132,9 @@ var loadFromLocalStorage = function(storageItemKey) {
     }         
 };
 
-var getMonthsOfGivenYear = function(currentYear) {
-    // An array of month objects for currentYear is generated and returned
+var getMonthsOfGivenYear = function(givenYear) {
+    // An array of month objects for givenYear is generated and returned
+    //if givenYear not provided, then current year is used.
     
     // Parameters:
     // currentYear: int
@@ -143,13 +144,12 @@ var getMonthsOfGivenYear = function(currentYear) {
             0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
             6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
             11:"December"};
-        if (currentYear === undefined) {
-            console.log("!currentYear ran");
+        if (givenYear === undefined) {
             var today = new Date();
-            currentYear = today.getFullYear();
+            givenYear = today.getFullYear();
         }
         for (i=0; i<=11; i++) {
-            var monthi = new Month(monthNames[i] + ' ' + currentYear);
+            var monthi = new Month(monthNames[i] + ' ' + givenYear);
             monthi.initCurrentMonthState();
             monthsOfYear.push(monthi);
         }
@@ -202,33 +202,15 @@ var getNumberOfDays = function(date) {
     //      "month year" format.
     //      or "year month" format. Example "2013 10" (10 is October)
     
-    var numberOfDays = { 
-        0:31, 2:31, 3:30, 4:31, 5:30, 6:31,
-        7:31, 8:30, 9:31, 10:30, 11:31}
-    
     if (date === undefined) {
         date = new Date();
     }
     else {
         date = new Date(date);
     }
-    var monthIndex = getMonthIndex(date);
-    if ( monthIndex === 1) {
-        var monthYearType = determineYearType(date);
-        if (monthYearType === "common") {
-            numberOfDays[1] = 28;
-            return numberOfDays[monthIndex];
-                
-            }
-        else if (monthYearType === "leap") {
-            numberOfDays[1] = 29;
-            return numberOfDays[monthIndex];
-        }
-                
-    }
-    else {
-        return  numberOfDays[monthIndex];
-        }
+    
+    date = moment(date);
+    return numberOfDays = date.daysInMonth();
 };
 
 var getYear = function(date) {
@@ -284,32 +266,6 @@ var getDayOfWeek = function(date) {
     var index = date.getDay();
     return index;
 };
-
-
-var determineYearType = function(date) {
-        // Determines whether the year is a common year or a leap year.
-        if (date === undefined) {
-            date = new Date();
-        }
-        else {
-            date = new Date(date);
-        }
-        currentYear = date.getFullYear();
-        
-        if(currentYear%4!==0) {
-            return "common";
-        }
-        else if (currentYear%100!==0) {
-            return "leap";
-        }
-        else if (currentYear%400!==0) {
-            return "common";
-        }
-        else{
-            return "leap";
-        }
-        
-    };
     
 var generateMonthObj = function(mState) {
     // Returns a month object with the given state as it's monthState.
@@ -380,8 +336,6 @@ var emptyMonthState = function() {
 
 var emptyYearState = function() {
     return{
-        // year type
-        yearType: "common",
         // year
         yearGiven: '',
         // array with 12 month objects
@@ -391,9 +345,8 @@ var emptyYearState = function() {
     }
 };
 
-setStartDate = function() {
+var setStartDate = function() {
     var startDate = moment(document.getElementById('startDate').value);
-    startDate = new Date(startDate);
     
     return startDate
 }
@@ -751,7 +704,6 @@ var Year = function(startDate) {
             //the year you want a calendar generated for
         
         self.yearState.yearGiven = desiredYear;
-        self.yearState.yearType = determineYearType(self.yearState.yearGiven);
         self.yearState.monthStates = self.getMonthStatesOfGivenYear(desiredYear);
         
     }

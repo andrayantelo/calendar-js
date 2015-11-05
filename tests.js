@@ -8,6 +8,18 @@ function createUFixture() {
     
 //UTILITY/HELPER FUNCTION TESTS
 
+test("setStartDate test", function() {
+    var fixture = createUFixture();
+    fixture.append("<input type='date' id='startDate' value='2015-11-04'/>");
+    equal(fixture.find('input[type=date]').val(), '2015-11-04');
+    startDate = setStartDate();
+    //equal(startDate, '2015-11-04');
+});
+
+test("moment test", function() {
+    dateCDT = "2015-11-30";
+    
+});
 
 test("checkFirstOf test", function() {
     var fixture = createUFixture(); 
