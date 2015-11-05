@@ -10,18 +10,8 @@ var $listTitle = $('#listTitle');
 
 $(document).ready(function() {
     
-    //$('#startDate').datepicker();
-    
-    
-    var thisDay = new Date();
-    var month = (thisDay.getMonth() + 1).toString(); 
-    if (month.length == 1) { month = '0' + month };
-    var today = thisDay.getDate().toString();
-    if (today.length == 1) {
-        var today = "0" + today;
-    };
-    var defaultDate = thisDay.getFullYear() + "-" + month + "-" + today;
-    console.log(moment(defaultDate));
+    var defaultDay = moment();
+    var defaultDate = defaultDay.format("YYYY-MM-DD");
     $('#startDate').val(defaultDate);
     
     $("input[placeholder]").each(function () {
