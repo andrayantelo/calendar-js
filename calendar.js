@@ -42,7 +42,8 @@ $(document).ready(function() {
     
     $('#startDateButton').click(function() {
         startDate = setStartDate();
-        var year = new Year(startDate);
+        console.log(startDate.year());
+        year.startDate = new Date(startDate);
         year.initYear();
     });
     
@@ -56,10 +57,14 @@ $(document).ready(function() {
         }
     });
     
-    
-    startDate = setStartDate();
-    var year = new Year(startDate);
-    year.initYear();
+    $('.calendar').scroll(function(){
+        //newStartDate = year.
+        //var newYear = new Year("year.
+        
+    });
+    //startDate = setStartDate();
+    //var year = new Year(startDate);
+    //year.initYear();
     
     //$('#listTitle').val(year.yearState.yearName)
 });
@@ -345,6 +350,7 @@ var setStartDate = function() {
     
     return startDate
 }
+
 
 
 var Month = function (date) {
@@ -636,12 +642,21 @@ var Year = function(startDate) {
         // Fills the empty year div with correct month information.
         
         self.monthObjects.forEach( function(month) {
-            month.retrieveCheckedDays(div);
-            month.generateMonthDiv();
-            month.generateCheckmarks();
-            month.attachClickHandler();
-        })
+            self.addMonthDiv(month);
+        });
     
+    };
+    
+    self.addMonthDiv = function(monthObject, div) {
+        //add a month div
+        
+       // if self.monthObjects[monthObjects.length - 1].monthIndex == 11:
+       //     var month = new Month(
+        monthObject.retrieveCheckedDays(div);
+        monthObject.generateMonthDiv();
+        monthObject.generateCheckmarks();
+        monthObject.attachClickHandler();
+        
     };
     
     self.updateMonthStates = function() {
@@ -691,15 +706,15 @@ var Year = function(startDate) {
         
     };
     
-    self.initYearState = function(desiredYear) {
+    self.initYearState = function() {
         // initializes year object's yearState, 
         
         //Parameters:
         //desiredYear: int
             //the year you want a calendar generated for
         
-        self.yearState.yearGiven = desiredYear;
-        self.yearState.monthStates = self.getMonthStatesOfGivenYear(desiredYear);
+        self.yearState.yearGiven = self.startDate.getFullYear();
+        self.yearState.monthStates = self.getMonthStatesOfGivenYear(self.yearState.yearGiven);
         
     }
     
@@ -711,16 +726,16 @@ var Year = function(startDate) {
     
     
     
-    self.initYear = function(desiredYear) {
+    self.initYear = function() {
         clearPage();
         var yState = self.loadYear();
         if (yState == undefined) {
-            if (desiredYear === undefined) {
+            if (self.startDate === undefined) {
                 today = new Date();
-                yState = self.initYearState(desiredYear);
+                yState = self.initYearState();
             }
             else {
-                yState = self.initYearState(desiredYear);
+                yState = self.initYearState();
             }
         }
         else {
@@ -735,5 +750,11 @@ var Year = function(startDate) {
 
     
 };
-var month = new Month();
 
+
+var multipleYears = function() {
+};
+
+
+var month = new Month();
+var year = new Year();
