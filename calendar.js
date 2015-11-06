@@ -56,7 +56,10 @@ $(document).ready(function() {
         }
     });
     
-    //year.initYear();
+    
+    startDate = setStartDate();
+    var year = new Year(startDate);
+    year.initYear();
     
     //$('#listTitle').val(year.yearState.yearName)
 });
