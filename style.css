@@ -3,6 +3,10 @@ html {
     font-size:100%;
 }
 
+body{
+    height:100%;
+}
+
 .calendar{
     margin: 50px auto;
     /*font: 0.95em/1.5 "Helvetica Neue", Helvatica, Arial, san-serif;*/

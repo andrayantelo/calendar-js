@@ -57,9 +57,16 @@ $(document).ready(function() {
         }
     });
     
-    $('.calendar').scroll(function(){
-        //newStartDate = year.
-        //var newYear = new Year("year.
+    $(window).scroll(function(){
+        
+        if ($(document).height() <= ($(window).height() + $(window).scrollTop())) {
+            newYear = (multipleYears.years[multipleYears.years.length - 1].yearState.yearGiven + 1).toString();
+            console.log(newYear);
+            var newYear = new Year(newYear + "-01-01");
+            multipleYears.years.push(newYear);
+            newYear.initYear();
+                    }
+        //var newYear = new Year(newYea
         
     });
     //startDate = setStartDate();
@@ -727,7 +734,7 @@ var Year = function(startDate) {
     
     
     self.initYear = function() {
-        clearPage();
+       // clearPage();
         var yState = self.loadYear();
         if (yState == undefined) {
             if (self.startDate === undefined) {
@@ -752,9 +759,15 @@ var Year = function(startDate) {
 };
 
 
-var multipleYears = function() {
+var MultipleYears = function() {
+    
+    var self = this;
+    //list of years generated so far
+    self.years = [];
 };
 
 
 var month = new Month();
 var year = new Year();
+var multipleYears = new MultipleYears();
+multipleYears.years.push(year);
