@@ -42,9 +42,11 @@ $(document).ready(function() {
     
     $('#startDateButton').click(function() {
         startDate = setStartDate();
-        console.log(startDate.year());
+        clearPage();
         year.startDate = new Date(startDate);
         year.initYear();
+        nextYear.startDate = new Date('01-01-2016');
+        nextYear.initYear();
     });
     
     
@@ -57,14 +59,6 @@ $(document).ready(function() {
         }
     });
     
-    $('.calendar').scroll(function(){
-        //newStartDate = year.
-        //var newYear = new Year("year.
-        
-    });
-    //startDate = setStartDate();
-    //var year = new Year(startDate);
-    //year.initYear();
     
     //$('#listTitle').val(year.yearState.yearName)
 });
@@ -372,7 +366,7 @@ var Month = function (date) {
         
         div = div || '.calendar';
         var $div = $(div);
-        var $monthId = $('#' + self.monthState.monthIndex);
+        var $monthId = $('#' + self.monthState.monthIndex + '-' + self.monthState.monthYear);
         $div.find($monthId).find('.cell').click(function (event) {
             console.log(event);  // prints so you can look at the event object in the console
             $( this ).children().toggleClass("hidden");
@@ -385,7 +379,7 @@ var Month = function (date) {
         
         div = div || '.calendar';
         var $div = $(div);
-        var $monthId = $('#'+ self.monthState.monthIndex);
+        var $monthId = $('#'+ self.monthState.monthIndex + '-' + self.monthState.monthYear);
         $div.find($monthId).find('.header').find('.month-year').empty();
         $div.find($monthId).find('.month').find('td').each(function(index) {
             $(this).empty();
@@ -410,7 +404,7 @@ var Month = function (date) {
         // Fills in the days of the month, month name, and
         // year in an empty month template
         
-        var $monthId = $('#'+ self.monthState.monthIndex);
+        var $monthId = $('#'+ self.monthState.monthIndex + '-' + self.monthState.monthYear);
         self.clearMonthDiv();
         $monthId.find(".month-year").empty();
         $monthId.find(".month-year").append(self.monthState.monthName + " " + self.monthState.monthYear);
@@ -439,7 +433,7 @@ var Month = function (date) {
         div = div || '.calendar';
         $div = $(div);
         monthIndex = monthIndex || self.monthState.monthIndex;
-        var monthId = '#'+ monthIndex;
+        var monthId = '#'+ monthIndex + '-' + self.monthState.monthYear;
         $div.find(monthId).find('.month').find('td').each( function(index) {
             
             if (self.monthState.checkedDays[index]) {
@@ -461,7 +455,7 @@ var Month = function (date) {
         div = div || '.calendar';
         var $div = $(div);
         monthIndex = monthIndex || self.monthState.monthIndex;
-        var $monthId = $('#'+ monthIndex);
+        var $monthId = $('#'+ monthIndex + '-' + self.monthState.monthYear);
         //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
         //if ($div.find($monthId).find('.month').find('.daynumber.hidden')) {
         $monthId.find('.month').find('.daynumber.hidden').each(function (index) {
@@ -538,8 +532,8 @@ var Month = function (date) {
         // Adds a unique ID to the month div with class .monthframe
         
         $div = $(div);
-        $div.attr('id', self.monthState.monthIndex);
-        self.monthState.monthId = 'month'+ self.monthState.monthIndex;
+        $div.attr('id', self.monthState.monthIndex + '-' + self.monthState.monthYear);
+        self.monthState.monthId = 'month'+ self.monthState.monthIndex + '-' + self.monthState.monthYear;
         
     };
     
@@ -618,14 +612,13 @@ var Year = function(startDate) {
         // whether it is an ID or class. eg ".calendar" or "#month0"
         
         var $div = $(div);
-        
-        self.monthObjects.forEach (function(monthObj) {     
-            $div.append('<div class="monthframe" id="' + monthObj.monthState.monthIndex + '" ></div>');
+        id = self.yearState.yearGiven.toString();
+        $div.append('<div id=' + id + '></div>');
+        self.monthObjects.forEach (function(monthObj) { 
+            $('#' + id).append('<div class="monthframe" id="' + monthObj.monthState.monthIndex + '-' + monthObj.monthState.monthYear + '" ></div>');
         })
             
-        
-        var $monthframe = $('.monthframe');
-        $monthframe.append($('#template').html()); 
+        $('#' + id).find('.monthframe').append($('#template').html()); 
     };
     
     
@@ -642,22 +635,14 @@ var Year = function(startDate) {
         // Fills the empty year div with correct month information.
         
         self.monthObjects.forEach( function(month) {
-            self.addMonthDiv(month);
+            month.retrieveCheckedDays(div);
+            month.generateMonthDiv();
+            month.generateCheckmarks();
+            month.attachClickHandler();
         });
     
     };
     
-    self.addMonthDiv = function(monthObject, div) {
-        //add a month div
-        
-       // if self.monthObjects[monthObjects.length - 1].monthIndex == 11:
-       //     var month = new Month(
-        monthObject.retrieveCheckedDays(div);
-        monthObject.generateMonthDiv();
-        monthObject.generateCheckmarks();
-        monthObject.attachClickHandler();
-        
-    };
     
     self.updateMonthStates = function() {
         // Updates the yearState's monthStates array with current information.
@@ -727,7 +712,7 @@ var Year = function(startDate) {
     
     
     self.initYear = function() {
-        clearPage();
+        //clearPage();
         var yState = self.loadYear();
         if (yState == undefined) {
             if (self.startDate === undefined) {
@@ -752,9 +737,7 @@ var Year = function(startDate) {
 };
 
 
-var multipleYears = function() {
-};
-
 
 var month = new Month();
 var year = new Year();
+var nextYear = new Year();
