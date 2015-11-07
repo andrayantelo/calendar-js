@@ -326,26 +326,6 @@ var emptyMonthState = function() {
     }
 };
 
-var emptyYearState = function() {
-    return{
-        // year
-        yearGiven: '',
-        // array with 12 month objects
-        monthStates: [],
-        //title of year
-        yearName: ''
-    }
-};
-
-var setStartDate = function() {
-    // parse the startDate string, which is given by te user according to
-    // their local time zone, into a Date object
-    var startDate = moment(document.getElementById('startDate').value);
-    
-    return startDate
-}
-
-
 
 var Month = function (date) {
     //Represents a single month
@@ -538,6 +518,65 @@ var Month = function (date) {
     };
     
 
+};
+
+var emptyYearState = function() {
+    return{
+        // year
+        yearGiven: '',
+        // array with 12 month objects
+        monthStates: [],
+        //title of year
+        yearName: ''
+    }
+};
+
+var setStartDate = function() {
+    // parse the startDate string, which is given by te user according to
+    // their local time zone, into a Date object
+    var startDate = moment(document.getElementById('startDate').value);
+    
+    return startDate
+};
+
+var emptyMonthListState = function() {
+    return{
+        //defaults to first of the year
+        startDate: new Date'01-01-' + moment().year().toString(),
+        //list of month objects
+        monthObjects: [],
+        //list name under which it will be saved
+        listName: ''
+    }
+};
+
+var monthList = function(startDate) {
+    
+    var self = this;
+    self.monthListState = emptyMonthListState();
+    
+    self.initState = function(startDate) {
+        //initializes monthListState with current info
+    };
+
+    self.getMonthStates = function() {
+    };
+    
+    self.getMonthObjects = function() {
+        //takes the monthStates from previous method and makes month objects
+        // with them
+    };
+    
+    self.generateMonthDivs = function() {
+        //generates month Divs (empty div, fills it with correct information)
+        //for the month objects in the list
+    };
+    
+    self.storeMonthList = function() {
+    };
+    
+    self.loadMonthList = function() {
+    };
 };
 
 
