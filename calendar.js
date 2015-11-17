@@ -503,10 +503,12 @@ var setStartDate = function() {
 
 var emptyMonthListState = function() {
     return{
-        //defaults to first of the year
-        startDate: new Date(moment().year(), moment().month(), 01),
+        //defaults to current date
+        startDate: moment(),
         //list of month objects
         monthObjects: [],
+        //list of month objects monthStates
+        monthStates: [],
         //list name under which it will be saved
         listName: ''
     }
@@ -517,54 +519,44 @@ var MonthList = function(startDate) {
     
     var self = this;
     self.monthListState = emptyMonthListState();
-    self.startDate = moment(startDate) || moment(moment().year().toString() + '-' + moment().month().toString() + '-' + '01');
+    self.startDate = moment(startDate) || moment();
     
     self.initState = function(startDate) {
         //initializes monthListState with current info
         self.monthListState.startDate = self.startDate;
     };
 
-    self.getMonthStates = function() {
-        var monthStates = [];
-        var monthNames = {
-            0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
-            6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
-            11:"December"};
-        //if (!self.startDate.getFullYear()) {
-        //    desiredYear = moment().year();
-        //}
-        //else {
+    self.getMonthStatesAndObjects = function(numberOfMonths) {
         var desiredYear = self.startDate.year();
-        //}
         
-        for (i = 0; i<12; i++) {
-            if (!monthNames.hasOwnProperty(i)) {
-            //The current property is not a direct property of monthNames
-                continue;
-            }
-            if (i >= self.startDate.month() && desiredYear == self.startDate.year()) {
-                var month = new Month(monthNames[i] + ' ' + desiredYear);
-                month.initCurrentMonthState();
+        for (i = self.startDate.month(); i< self.startDate.month() + numberOfMonths + 1; i++) {
+            
+            if (i >= self.startDate.month() + 1 && desiredYear == self.startDate.year()) {
+                console.log("inside first conditional if statement");
                 if (i == self.startDate.month()) {
-                    month.monthState.startDay = self.startDate.date();
+                    var month = new Month(self.startDate.format("YYYY-MM-DD"));
                 }
-                monthStates.push(month.monthState);
-            }
-            if (desiredYear > self.startDate.year()) {
-                var month = new Month(monthNames[i] + ' ' + desiredYear);
+                else {
+                    var month = new Month(desiredYear.toString() + '-' + i.toString() + '-01');
+                }
                 month.initCurrentMonthState();
-                monthStates.push(month.monthState);
+                self.monthListState.monthStates.push(month.monthState);
+                self.monthListState.monthObjects.push(month);
             }
+            //if (desiredYear > self.startDate.year()) {
+            //    var month = new Month(monthNames[i] + ' ' + desiredYear);
+            //    month.initCurrentMonthState();
+            //    self.monthListState.monthStates.push(month.monthState);
+            //    self.monthListState.monthObjects.push(month);
+            //}
             if (i == 11) {
-                i = -1;
                 desiredYear += 1;
             }
             if (desiredYear == 2017) {
                 break;
             }
         }
-        
-        return monthStates;
+    
     };
     
     self.getMonthObjects = function() {
@@ -610,7 +602,7 @@ var Year = function(startDate) {
                     monthprop.initCurrentMonthState();
                 }
                 else {
-                    var monthprop = new Month(desiredYear + '-' + month.toString() + '-01');
+                    var monthprop = new Month(desiredYear.toString() + '-' + month.toString() + '-01');
                     monthprop.initCurrentMonthState();
                 }
             self.monthObjects.push(monthprop);
