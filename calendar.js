@@ -42,7 +42,7 @@ $(document).ready(function() {
     
     $('#startDateButton').click(function() {
         startDate = setStartDate();
-        clearPage();
+        //clearPage();
         year.startDate = moment(startDate);
         year.initYear();
         //nextYear.startDate = moment('2016-01-01');
@@ -494,8 +494,8 @@ var emptyYearState = function() {
 };
 
 var setStartDate = function() {
-    // parse the startDate string, which is given by te user according to
-    // their local time zone, into a Date object
+    // return the startDate string, which is given by the user according to
+    // their local time zone, given in "YYYY-MM-DD" format
     var startDate = document.getElementById('startDate').value;
     
     return startDate;
@@ -598,21 +598,22 @@ var Year = function(startDate) {
         self.startDate = moment();
     }
     
-    self.getMonthStatesOfGivenYear = function() {
+    self.getMonthStatesOfGivenYear = function(desiredYear) {
         var monthStatesOfYear = [];
-        var desiredYear = self.startDate.year().toString();
         
         for (month = 1; month < 13; month++) {
-            console.log(month);
-            if (month >= self.startDate.month()) {
+            
+            if (month >= self.startDate.month() + 1) {
                 
-                if (month == self.startDate.month()) {
+                if (month == self.startDate.month() + 1) {
                     var monthprop = new Month(self.startDate.format("YYYY-MM-DD"));
+                    monthprop.initCurrentMonthState();
                 }
                 else {
                     var monthprop = new Month(desiredYear + '-' + month.toString() + '-01');
+                    monthprop.initCurrentMonthState();
                 }
-            monthprop.initCurrentMonthState();
+            self.monthObjects.push(monthprop);
             monthStatesOfYear.push(monthprop.monthState);
                 
             }
@@ -747,7 +748,7 @@ var Year = function(startDate) {
     
     
     self.initYear = function() {
-        clearPage();
+        //clearPage();
         var yState = self.loadYear();
         if (yState == undefined) {
             if (self.startDate === undefined) {
@@ -762,7 +763,7 @@ var Year = function(startDate) {
             self.yearState = yState;
         }
         
-        self.monthObjects = self.getMonthObjects(self.yearState.monthStates);
+        
         self.generateEmptyYearDiv('.calendar');
         self.fillYearDiv('.calendar');
     };
