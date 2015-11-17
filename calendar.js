@@ -602,32 +602,23 @@ var Year = function(startDate) {
         var monthStatesOfYear = [];
         var desiredYear = self.startDate.year().toString();
         
-        
-        for (prop = 0; prop < 12; prop ++) {
-            if (prop >= self.startDate.month()) {
-                if (prop == self.startDate.month()) {
+        for (month = 1; month < 13; month++) {
+            console.log(month);
+            if (month >= self.startDate.month()) {
+                
+                if (month == self.startDate.month()) {
                     var monthprop = new Month(self.startDate.format("YYYY-MM-DD"));
-                    monthprop.monthState.startDay = self.startDate.date();
                 }
                 else {
-                    
+                    var monthprop = new Month(desiredYear + '-' + month.toString() + '-01');
                 }
-            }
-            else {
-                if (prop.toString.length == 1) {
-                    var propString = "0" + prop.toString();
-                }
-                else {
-                    propString = prop.toString();
-                }
-                var monthprop = new Month(desiredYear + '-' + propString + '-01');
-            }
             monthprop.initCurrentMonthState();
             monthStatesOfYear.push(monthprop.monthState);
                 
             }
-            return monthStatesOfYear;
-        };
+        }
+        return monthStatesOfYear;
+    };
     
     self.getMonthObjects = function(state) {
         // Returns an array of 12 month objects with monthStates that
