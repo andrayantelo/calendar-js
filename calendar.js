@@ -32,7 +32,8 @@ $(document).ready(function() {
     });
     
     $('#clearButton').click(function() {
-        clearPage();
+        year.clearYearState();
+        clearPage('2015');
         
     });
     
@@ -42,7 +43,6 @@ $(document).ready(function() {
     
     $('#startDateButton').click(function() {
         startDate = setStartDate();
-        //clearPage();
         year.startDate = moment(startDate);
         year.initYear();
         //nextYear.startDate = moment('2016-01-01');
@@ -80,8 +80,12 @@ var hideTemplate = function() {
     $('#template').toggleClass('hidden');
 };
 
-var clearPage = function() {
+var clearPage = function(yearToClear) {
     // Remove all divs from page except #template
+    //Parameters:
+    // yearToClear: string
+    
+    $('#' + yearToClear).remove();
     $('.monthframe').remove();
 };
 
@@ -528,21 +532,23 @@ var MonthList = function(startDate) {
 
     self.getMonthStatesAndObjects = function(numberOfMonths) {
         var desiredYear = self.startDate.year();
-        
-        for (i = self.startDate.month(); i< self.startDate.month() + numberOfMonths + 1; i++) {
-            
-            if (i >= self.startDate.month() + 1 && desiredYear == self.startDate.year()) {
+        console.log("end at " + self.startDate.month() + numberOfMonths + 1);
+        for (i = self.startDate.month() + 1; i< self.startDate.month() + numberOfMonths + 1; i++) {
+            monthIndex = i%12;
+            console.log(monthIndex);
+            if (monthIndex >= self.startDate.month() + 1 && desiredYear == self.startDate.year()) {
                 console.log("inside first conditional if statement");
-                if (i == self.startDate.month()) {
+                if (monthIndex == self.startDate.month()) {
                     var month = new Month(self.startDate.format("YYYY-MM-DD"));
                 }
-                else {
-                    var month = new Month(desiredYear.toString() + '-' + i.toString() + '-01');
-                }
-                month.initCurrentMonthState();
-                self.monthListState.monthStates.push(month.monthState);
-                self.monthListState.monthObjects.push(month);
             }
+            else {
+                var month = new Month(desiredYear.toString() + '-' + monthIndex.toString() + '-01');
+            }
+            month.initCurrentMonthState();
+            self.monthListState.monthStates.push(month.monthState);
+            self.monthListState.monthObjects.push(month);
+            
             //if (desiredYear > self.startDate.year()) {
             //    var month = new Month(monthNames[i] + ' ' + desiredYear);
             //    month.initCurrentMonthState();
@@ -556,6 +562,7 @@ var MonthList = function(startDate) {
                 break;
             }
         }
+        console.log(self.monthListState.monthStates.length);
     
     };
     
@@ -719,6 +726,12 @@ var Year = function(startDate) {
         
     };
     
+    self.clearYearState = function() {
+        //clears the year object's yearState
+        self.monthObjects = [];
+        self.yearState = emptyYearState();
+    }
+    
     self.initYearState = function() {
         // initializes year object's yearState, 
         
@@ -740,7 +753,6 @@ var Year = function(startDate) {
     
     
     self.initYear = function() {
-        //clearPage();
         var yState = self.loadYear();
         if (yState == undefined) {
             if (self.startDate === undefined) {
