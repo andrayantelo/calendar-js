@@ -303,7 +303,7 @@ var Month = function (date) {
         self.date = moment();
     }
     else{
-        self.date = moment(date);
+        self.date = moment(date, "YYYY-MM-DD");
     }
     
     self.attachClickHandler = function(div) {
@@ -532,38 +532,28 @@ var MonthList = function(startDate) {
 
     self.getMonthStatesAndObjects = function(numberOfMonths) {
         var desiredYear = self.startDate.year();
-        console.log("end at " + self.startDate.month() + numberOfMonths + 1);
-        for (i = self.startDate.month() + 1; i< self.startDate.month() + numberOfMonths + 1; i++) {
+        
+        for (i = self.startDate.month(); i< self.startDate.month() + numberOfMonths; i++) {
             monthIndex = i%12;
-            console.log(monthIndex);
-            if (monthIndex >= self.startDate.month() + 1 && desiredYear == self.startDate.year()) {
+            if (monthIndex == self.startDate.month() && desiredYear == self.startDate.year()) {
                 console.log("inside first conditional if statement");
-                if (monthIndex == self.startDate.month()) {
-                    var month = new Month(self.startDate.format("YYYY-MM-DD"));
-                }
+                var month = new Month(self.startDate.format("YYYY-MM-DD"));
             }
             else {
+                monthIndex += 1;
                 var month = new Month(desiredYear.toString() + '-' + monthIndex.toString() + '-01');
             }
             month.initCurrentMonthState();
-            self.monthListState.monthStates.push(month.monthState);
             self.monthListState.monthObjects.push(month);
-            
-            //if (desiredYear > self.startDate.year()) {
-            //    var month = new Month(monthNames[i] + ' ' + desiredYear);
-            //    month.initCurrentMonthState();
-            //    self.monthListState.monthStates.push(month.monthState);
-            //    self.monthListState.monthObjects.push(month);
-            //}
+            self.monthListState.monthStates.push(month.monthState);
             if (i == 11) {
                 desiredYear += 1;
             }
             if (desiredYear == 2017) {
+                console.log("breaking");
                 break;
             }
         }
-        console.log(self.monthListState.monthStates.length);
-    
     };
     
     self.getMonthObjects = function() {
