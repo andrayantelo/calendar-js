@@ -509,8 +509,8 @@ var emptyMonthListState = function() {
     return{
         //defaults to current date
         startDate: moment(),
-        //list of month objects
-        monthObjects: [],
+        //list of years
+        years: [],
         //list of month objects monthStates
         monthStates: [],
         //list name under which it will be saved
@@ -523,6 +523,7 @@ var MonthList = function(startDate) {
     
     var self = this;
     self.monthListState = emptyMonthListState();
+    self.monthObjects = [];
     self.startDate = moment(startDate) || moment();
     
     self.initState = function(startDate) {
@@ -530,8 +531,9 @@ var MonthList = function(startDate) {
         self.monthListState.startDate = self.startDate;
     };
 
-    self.getMonthStatesAndObjects = function(numberOfMonths) {
+    self.getMonthStates = function(numberOfMonths) {
         var desiredYear = self.startDate.year();
+        self.monthListState.years.push(desiredYear);
         
         for (i = self.startDate.month(); i< self.startDate.month() + numberOfMonths; i++) {
             monthIndex = i%12;
@@ -544,10 +546,10 @@ var MonthList = function(startDate) {
                 var month = new Month(desiredYear.toString() + '-' + monthIndex.toString() + '-01');
             }
             month.initCurrentMonthState();
-            self.monthListState.monthObjects.push(month);
             self.monthListState.monthStates.push(month.monthState);
             if (i == 11) {
                 desiredYear += 1;
+                self.monthListState.years.push(desiredYear);
             }
             if (desiredYear == 2017) {
                 console.log("breaking");
@@ -557,19 +559,64 @@ var MonthList = function(startDate) {
     };
     
     self.getMonthObjects = function() {
-        //takes the monthStates from previous method and makes month objects
-        // with them
+        // generate list of monthObjects from list of monthStates
+        //DO I WANT TO RETURN A LIST? OR JUST HAVE IT ADD TO THE MONTHOBJECTS ATTRIBUTE
+        self.monthListState.monthStates.forEach(function(monthState) {
+            var month = generateMonthObj(monthState);
+            self.monthObjects.push(month)
+        });
     };
     
-    self.generateMonthDivs = function() {
-        //generates month Divs (empty div, fills it with correct information)
+    self.generateEmptyMonthDivs = function(div) {
+        //generates empty month Divs 
         //for the month objects in the list
+        
+        var $div = $(div);
+        self.monthListState.years.forEach(function(year) {
+            var id = year.toString();
+            $div.append('<div id=' + id + '></div>');
+            self.monthListState.monthObjects.forEach (function(monthObj) { 
+                if (monthObj.monthState.monthYear == year) {
+                    $('#' + id).append('<div class="monthframe" id="' + monthObj.monthState.monthIndex + '-' + monthObj.monthState.monthYear + '" ></div>');
+                }
+            })
+            $('#' + id).find('.monthframe').append($('#template').html()); 
+        })
     };
     
-    self.storeMonthList = function() {
+    self.fillMonthDivs = function(div) {
+        // fill the empty month divs with correct information.
+        self.monthListState.monthObjects.forEach( function(month) {
+            month.retrieveCheckedDays(div);
+            month.generateMonthDiv();
+            month.generateCheckmarks();
+            month.attachClickHandler();
+        });
     };
     
-    self.loadMonthList = function() {
+    self.retrieveCheckMarks = function(div) {
+        self.monthListState.monthObjects.forEach( function(month) {
+            month.clearCheckedDays();
+            month.retrieveCheckedDays(div, month.monthState.monthIndex);
+        })
+    };
+    
+    self.saveTitle = function() {
+        var yearName = document.getElementById('listTitle').value;
+        self.monthListState.listName = yearName;
+    }
+    
+    self.storeMonthList = function(yearKey) {
+        //stores item into localStorage under key yearKey
+        
+        var storageItem = self.monthListState;
+        storeInLocalStorage(yearKey, storageItem);
+    };
+    
+    self.loadMonthList = function(yearKey) {
+        //loads item with key yearKey from localStorage
+        var loadedYear = loadFromLocalStorage(yearKey);
+        return loadedYear;
     };
 };
 
