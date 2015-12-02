@@ -7,6 +7,7 @@ var $monthframe = $('.monthframe');
 var temporaryStorageKey = "temporaryStorageKey"; //temporary storage key for month object
 var yearKey = "yearKey"; //temporaryStorageKey for year object
 var $listTitle = $('#listTitle');
+var temporaryStorageKey = "temp";
 
 $(document).ready(function() {
     
@@ -27,11 +28,12 @@ $(document).ready(function() {
     $('#saveButton').click(function(){
         monthList.retrieveCheckMarks('.calendar');
         monthList.saveTitle();
-        monthList.storeMonthList(monthList.monthListState.listName);
+        monthList.storeMonthList(temporaryStorageKey);
         alert("Progress saved");
     });
     
     $('#clearButton').click(function() {
+        console.log("clear button clicked");
         monthList.monthListState = emptyMonthListState();
         monthList.monthObjects = [];
         clearPage();
@@ -59,6 +61,20 @@ $(document).ready(function() {
     
     //WHEN PAGE LOADS, CURRENTLY WORKING WITH ONE CALENDAR
     //check if there is any calendar saved in localStorage
+    
+    //$('#clearButton').click();
+    console.log(monthList.monthObjects.length + ' these are the number of objects on load');
+    console.log(monthList.monthListState.monthStates.length + " these are the number of monthStates on load");
+    var load = monthList.loadMonthList(temporaryStorageKey);
+    console.log(!load + ' that item is not in localStorage');
+    if (load) {            // IS THIS WRITTEN IN A GOOD WAY?
+        monthList.monthListState = load;
+        console.log(monthList.monthObjects.length + ' these are the number of objects after loading saved state');
+        console.log(monthList.monthListState.monthStates.length + ' these are the number of monthStates after loading saved state');
+    //    console.log('saved start date type ' + typeof(monthList.monthListState.startDate));
+    //    console.log('formatted saved start date ' + monthList.startDate.format("YYYY-MM-DD"));
+    //    monthList.initMonthList(monthList.startDate.format("YYYY-MM-DD"));
+    }
     
     
     
@@ -588,6 +604,8 @@ var MonthList = function(startDate) {
            
            }
         self.monthListState.listName = calendarName;
+        document.getElementById('listTitle').value = calendarName;
+        
     }
     
     self.storeMonthList = function(yearKey) {
