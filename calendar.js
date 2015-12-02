@@ -46,6 +46,7 @@ $(document).ready(function() {
     
     $('#startDateButton').click(function() {
         startDate = setStartDate();
+        
         monthList.initMonthList(startDate);
     });
     
@@ -71,7 +72,7 @@ $(document).ready(function() {
         monthList.monthListState = load;
         console.log(monthList.monthObjects.length + ' these are the number of objects after loading saved state');
         console.log(monthList.monthListState.monthStates.length + ' these are the number of monthStates after loading saved state');
-    //    console.log('saved start date type ' + typeof(monthList.monthListState.startDate));
+        console.log('saved start date ' + monthList.monthListState.startDate);
     //    console.log('formatted saved start date ' + monthList.startDate.format("YYYY-MM-DD"));
     //    monthList.initMonthList(monthList.startDate.format("YYYY-MM-DD"));
     }
@@ -491,8 +492,8 @@ var setStartDate = function() {
 
 var emptyMonthListState = function() {
     return{
-        //defaults to current date
-        startDate: moment(),
+        //date string "YYYY-MM-DD"
+        startDate: "",
         //list of years
         years: [],
         //list of month objects monthStates
@@ -502,35 +503,41 @@ var emptyMonthListState = function() {
     }
 };
 
-var MonthList = function(startDate) {
+var MonthList = function() {
     //startDate format "YYYY-MM-DD" with month index starting at 1
     
     var self = this;
     self.monthListState = emptyMonthListState();
     self.monthObjects = [];
-    self.startDate = moment(startDate) || moment();
+    //self.startDateMoment = moment(startDate) || moment();
+    self.startDateMoment = moment();
     
     self.initState = function(startDate) {
         //initializes monthListState with current info
-        self.monthListState.startDate = self.startDate;
+        self.startDateMoment = moment(startDate);
+        self.monthListState.startDate = self.startDateMoment.format("YYYY-MM-DD");  //THIS MIGHT BE WHERE I NEED TO DO SOME UTC STUFF
+        self.monthListState.monthStates = monthList.getMonthStates(12);
+        self.monthObjects = monthList.getMonthObjects();
+        
     };
 
     self.getMonthStates = function(numberOfMonths) {
-        var desiredYear = self.startDate.year();
+        var desiredYear = self.startDateMoment.year();
+        var monthStates = [];
         self.monthListState.years.push(desiredYear);
         
-        for (i = self.startDate.month(); i< self.startDate.month() + numberOfMonths; i++) {
+        for (i = self.startDateMoment.month(); i< self.startDateMoment.month() + numberOfMonths; i++) {
             monthIndex = i%12;
-            if (monthIndex == self.startDate.month() && desiredYear == self.startDate.year()) {
+            if (monthIndex == self.startDateMoment.month() && desiredYear == self.startDateMoment.year()) {
                 console.log("inside first conditional if statement");
-                var month = new Month(self.startDate.format("YYYY-MM-DD"));
+                var month = new Month(self.startDateMoment.format("YYYY-MM-DD"));
             }
             else {
                 monthIndex += 1;
                 var month = new Month(desiredYear.toString() + '-' + monthIndex.toString() + '-01');
             }
             month.initCurrentMonthState();
-            self.monthListState.monthStates.push(month.monthState);
+            monthStates.push(month.monthState);
             if (i == 11) {
                 desiredYear += 1;
                 self.monthListState.years.push(desiredYear);
@@ -540,15 +547,19 @@ var MonthList = function(startDate) {
                 break;
             }
         }
+        return monthStates;
     };
     
     self.getMonthObjects = function() {
         // generate list of monthObjects from list of monthStates
         //DO I WANT TO RETURN A LIST? OR JUST HAVE IT ADD TO THE MONTHOBJECTS ATTRIBUTE
+        
+        var monthObjects = [];
         self.monthListState.monthStates.forEach(function(monthState) {
             var month = generateMonthObj(monthState);
-            self.monthObjects.push(month)
-        });
+            monthObjects.push(month)
+        })
+        return monthObjects;
     };
     
     self.generateEmptyMonthDivs = function(div) {
@@ -622,10 +633,7 @@ var MonthList = function(startDate) {
     };
     
     self.initMonthList = function(startDate) {
-        monthList.startDate = moment(startDate);
-        monthList.initState();
-        monthList.getMonthStates(12);
-        monthList.getMonthObjects();
+        monthList.initState(startDate);
         monthList.generateEmptyMonthDivs('.calendar');
         monthList.fillMonthDivs('.calendar');
     };
