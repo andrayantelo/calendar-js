@@ -25,6 +25,7 @@ $(document).ready(function() {
 
     
     $('#saveButton').click(function(){
+        monthList.retrieveCheckMarks('.calendar');
         monthList.saveTitle();
         monthList.storeMonthList(monthList.monthListState.listName);
         alert("Progress saved");
@@ -41,6 +42,7 @@ $(document).ready(function() {
     
     $('#startDateButton').click(function() {
         startDate = setStartDate();
+        monthList.initMonthList(startDate);
     });
     
     
@@ -52,6 +54,10 @@ $(document).ready(function() {
             $('#listTitle').blur();
         }
     });
+    
+    //WHEN PAGE LOADS, CURRENTLY WORKING WITH ONE CALENDAR
+    //check if there is any calendar saved in localStorage
+    
     
     
 });
@@ -594,6 +600,16 @@ var MonthList = function(startDate) {
         var loadedYear = loadFromLocalStorage(yearKey);
         return loadedYear;
     };
+    
+    self.initMonthList = function(startDate) {
+        monthList.startDate = moment(startDate);
+        monthList.initState();
+        monthList.getMonthStates(12);
+        monthList.getMonthObjects();
+        monthList.generateEmptyMonthDivs('.calendar');
+        monthList.fillMonthDivs('.calendar');
+    };
+    
 };
 
 var emptyCalendarsState = function() {
