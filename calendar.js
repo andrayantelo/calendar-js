@@ -25,15 +25,13 @@ $(document).ready(function() {
 
     
     $('#saveButton').click(function(){
-        year.retrieveYearCheckmarks('.calendar');
-        year.saveTitle();
-        year.storeYear();
+        
         alert("Progress saved");
     });
     
     $('#clearButton').click(function() {
-        year.clearYearState();
-        clearPage('2015');
+        //year.clearYearState();
+        clearPage();
         
     });
     
@@ -80,13 +78,16 @@ var hideTemplate = function() {
     $('#template').toggleClass('hidden');
 };
 
-var clearPage = function(yearToClear) {
+var clearPage = function() {
     // Remove all divs from page except #template
     //Parameters:
-    // yearToClear: string
+    // yearsToClear: array
+    var yearsToClear = [2015, 2016, 2017, 2018, 2019];
+    yearsToClear.forEach(function(year) {
+        $('#' + year).remove();
+        $('.monthframe').remove();
+    })
     
-    $('#' + yearToClear).remove();
-    $('.monthframe').remove();
 };
 
 var storeInLocalStorage = function(storageItemKey, storageItem) {        
@@ -575,7 +576,7 @@ var MonthList = function(startDate) {
         self.monthListState.years.forEach(function(year) {
             var id = year.toString();
             $div.append('<div id=' + id + '></div>');
-            self.monthListState.monthObjects.forEach (function(monthObj) { 
+            self.monthObjects.forEach (function(monthObj) { 
                 if (monthObj.monthState.monthYear == year) {
                     $('#' + id).append('<div class="monthframe" id="' + monthObj.monthState.monthIndex + '-' + monthObj.monthState.monthYear + '" ></div>');
                 }
@@ -586,7 +587,7 @@ var MonthList = function(startDate) {
     
     self.fillMonthDivs = function(div) {
         // fill the empty month divs with correct information.
-        self.monthListState.monthObjects.forEach( function(month) {
+        self.monthObjects.forEach( function(month) {
             month.retrieveCheckedDays(div);
             month.generateMonthDiv();
             month.generateCheckmarks();
@@ -595,7 +596,7 @@ var MonthList = function(startDate) {
     };
     
     self.retrieveCheckMarks = function(div) {
-        self.monthListState.monthObjects.forEach( function(month) {
+        self.monthObjects.forEach( function(month) {
             month.clearCheckedDays();
             month.retrieveCheckedDays(div, month.monthState.monthIndex);
         })
