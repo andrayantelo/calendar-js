@@ -32,6 +32,8 @@ $(document).ready(function() {
     });
     
     $('#clearButton').click(function() {
+        monthList.monthListState = emptyMonthListState();
+        monthList.monthObjects = [];
         clearPage();
         
     });
