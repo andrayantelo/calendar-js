@@ -25,7 +25,8 @@ $(document).ready(function() {
 
     
     $('#saveButton').click(function(){
-        
+        monthList.saveTitle();
+        monthList.storeMonthList(monthList.monthListState.listName);
         alert("Progress saved");
     });
     
@@ -561,8 +562,24 @@ var MonthList = function(startDate) {
     };
     
     self.saveTitle = function() {
-        var yearName = document.getElementById('listTitle').value;
-        self.monthListState.listName = yearName;
+        var title = document.getElementById('listTitle').value;
+        if (title) {
+            var calendarName = document.getElementById('listTitle').value;
+            console.log("this is the calendar name" + " " + calendarName);
+        }
+        
+        else { 
+           var calendarName = prompt("You must enter a list title");
+           if (calendarName === null) {
+               return;
+               
+           }
+           while (!calendarName) { 
+               var calendarName = prompt("You must enter a list title");
+               }
+           
+           }
+        self.monthListState.listName = calendarName;
     }
     
     self.storeMonthList = function(yearKey) {
@@ -617,3 +634,4 @@ var Calendars = function(storageKey) {
 
 
 var month = new Month();
+var monthList = new MonthList();
