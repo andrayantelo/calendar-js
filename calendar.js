@@ -30,7 +30,6 @@ $(document).ready(function() {
     });
     
     $('#clearButton').click(function() {
-        //year.clearYearState();
         clearPage();
         
     });
@@ -41,10 +40,6 @@ $(document).ready(function() {
     
     $('#startDateButton').click(function() {
         startDate = setStartDate();
-        year.startDate = moment(startDate);
-        year.initYear();
-        //nextYear.startDate = moment('2016-01-01');
-        //nextYear.initYear();
     });
     
     
@@ -57,9 +52,7 @@ $(document).ready(function() {
         }
     });
     
-    //year.initYear();
-    //nextYear.initYear();
-    //$('#listTitle').val(year.yearState.yearName)
+    
 });
 
 //UTILITY/HELPER FUNCTIONS
@@ -243,27 +236,6 @@ var extractMonthState = function(monthObj) {
     return monthObj.monthState;
 };
 
-var generateYearObj = function(yState) {
-    // Returns a year object with the given state as it's yearState.
-    
-    // Parameters:
-    // yState: dictionary
-    //     contains year information (yearType, givenYear, etc)
-    
-    var year = new Year();
-    year.yearState = yState;
-    return year;
-};
-
-var extractYearState = function(yearObj) {
-    // Takes a year object, extracts it's yearState, and returns it.
-    
-    // Parameters:
-    // yearObj: object
-    //     An instance of the Year class
-    
-    return yearObj.yearState;
-};
     
 var emptyMonthState = function() {
     return{
@@ -288,10 +260,6 @@ var emptyMonthState = function() {
     }
 };
 
-var generateDateString = function() {
-    //Takes a date and returns it as a string in YYYY-MM-DD format
-    
-};
 
 
 var Month = function (date) {
@@ -487,16 +455,6 @@ var Month = function (date) {
 
 };
 
-var emptyYearState = function() {
-    return{
-        // year
-        yearGiven: '',
-        // array with 12 month objects
-        monthStates: [],
-        //title of year
-        yearName: ''
-    }
-};
 
 var setStartDate = function() {
     // return the startDate string, which is given by the user according to
@@ -621,201 +579,41 @@ var MonthList = function(startDate) {
     };
 };
 
+var emptyCalendarsState = function() {
+    return{
+        //list of titles of saved calendars
+        savedCalendars: []
+    }
+};
 
-var Year = function(startDate) {
-    // Represents a single calendar year
-    
+var Calendars = function(storageKey) {
     var self = this;
-    self.yearState = emptyYearState();
-    self.monthObjects = [];
-    if (startDate) {
-        self.startDate = moment(startDate);
-    }
-    else {
-        self.startDate = moment();
-    }
+    self.calendarsState = emptyCalendarsState();
+    self.storageKey = storageKey;
     
-    self.getMonthStatesOfGivenYear = function(desiredYear) {
-        var monthStatesOfYear = [];
-        
-        for (month = 1; month < 13; month++) {
-            
-            if (month >= self.startDate.month() + 1) {
-                
-                if (month == self.startDate.month() + 1) {
-                    var monthprop = new Month(self.startDate.format("YYYY-MM-DD"));
-                    monthprop.initCurrentMonthState();
-                }
-                else {
-                    var monthprop = new Month(desiredYear.toString() + '-' + month.toString() + '-01');
-                    monthprop.initCurrentMonthState();
-                }
-            self.monthObjects.push(monthprop);
-            monthStatesOfYear.push(monthprop.monthState);
-                
-            }
-        }
-        return monthStatesOfYear;
+    
+    self.generateCalendarMenu = function() {
+        //fills the saved calendars tab in the nav bar with the titles
+        // of the saved calendars
     };
     
-    self.getMonthObjects = function(state) {
-        // Returns an array of 12 month objects with monthStates that
-        // correspond to the monthStates stored in yearState.monthStates
-        
-        // Parameters:
-        //   state: array
-        //     stores monthStates
-        
-        monthObjectsArray = [];
-        state.forEach (function(state) {
-            var monthi = generateMonthObj(state);
-            monthObjectsArray.push(monthi);
-        })
-        return monthObjectsArray;
-        
+    self.storeState = function() {
+        //stores the calendars state (the titles of the savedCalendars)
     };
     
-    
-    self.generateEmptyYearDiv = function(div) {
-        // will generate the html for 12 empty month divs
-        
-        // Parameters:
-        //     divClass: string
-        // The div where you want to generate the months, must specify
-        // whether it is an ID or class. eg ".calendar" or "#month0"
-        
-        var $div = $(div);
-        id = self.yearState.yearGiven.toString();
-        $div.append('<div id=' + id + '></div>');
-        self.monthObjects.forEach (function(monthObj) { 
-            $('#' + id).append('<div class="monthframe" id="' + monthObj.monthState.monthIndex + '-' + monthObj.monthState.monthYear + '" ></div>');
-        })
-            
-        $('#' + id).find('.monthframe').append($('#template').html()); 
+    self.loadState = function() {
+        //load the calendars state
     };
     
-    
-    self.retrieveYearCheckmarks = function(div) {
-        // Collects the checked days of the year.
-        
-        self.monthObjects.forEach( function(month) {
-            month.clearCheckedDays();
-            month.retrieveCheckedDays(div, month.monthState.monthIndex);
-        })
-    };
-            
-    self.fillYearDiv = function(div) {
-        // Fills the empty year div with correct month information.
-        
-        self.monthObjects.forEach( function(month) {
-            month.retrieveCheckedDays(div);
-            month.generateMonthDiv();
-            month.generateCheckmarks();
-            month.attachClickHandler();
-        });
-    
+    self.addToSavedCalendars = function() {
+        //add title to savedCalendars array in the calendarsState
     };
     
-    
-    self.updateMonthStates = function() {
-        // Updates the yearState's monthStates array with current information.
-        
-        monthStates = [];
-        self.monthObjects.forEach (function(monthObj) {     
-            var state = extractMonthState(monthObj);
-            monthStates.push(state);
-        })
-        self.yearState = monthStates;
-        
+    self.removeFromSavedCalendars = function() {
     };
-    
-    self.storeYear = function() {
-        // Stores the yearState in localstorage.
-        
-        var storageItem = self.yearState;
-        storeInLocalStorage(yearKey, storageItem);
-    };
-    
-    
-    self.loadYear = function() {
-        // Loads the yearState from localstorage and returns it. If there
-        // is no yearState in localStorage, returns yearState for current year.
-        
-        var loadedYear = loadFromLocalStorage(yearKey);
-        if(loadedYear == undefined){
-            return;
-        }
-        
-        return loadedYear;
-    };
-    
-    self.emptyMonthStateArray = function() {
-        // Returns an array of 12 empty monthStates.
-        
-        emptyMonthStateArray = [];
-        for(i=0;i<=11;i++) {
-            emptyMonthStateArray.push(emptyMonthState());
-        }
-        return emptyMonthStateArray;
-    };
-    
-    self.clearEmptyWeeks = function() {
-        // Gets rid of weeks that are only filled with nill days
-        
-    };
-    
-    self.clearYearState = function() {
-        //clears the year object's yearState
-        self.monthObjects = [];
-        self.yearState = emptyYearState();
-    }
-    
-    self.initYearState = function() {
-        // initializes year object's yearState, 
-        
-        //Parameters:
-        //desiredYear: int
-            //the year you want a calendar generated for
-        
-        self.yearState.yearGiven = self.startDate.year();
-        self.yearState.monthStates = self.getMonthStatesOfGivenYear(self.yearState.yearGiven);
-        
-    }
-    
-    self.saveTitle = function() {
-        var yearName = document.getElementById('listTitle').value;
-        self.yearState.yearName = yearName;
-    }
-    
-    
-    
-    
-    self.initYear = function() {
-        var yState = self.loadYear();
-        if (yState == undefined) {
-            if (self.startDate === undefined) {
-                today = new Date();
-                yState = self.initYearState();
-            }
-            else {
-                yState = self.initYearState();
-            }
-        }
-        else {
-            self.yearState = yState;
-        }
-        
-        
-        self.generateEmptyYearDiv('.calendar');
-        self.fillYearDiv('.calendar');
-    };
-    
-
     
 };
 
 
 
 var month = new Month();
-var year = new Year();
-var nextYear = new Year();
