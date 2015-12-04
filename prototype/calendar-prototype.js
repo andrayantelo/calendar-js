@@ -7,6 +7,7 @@ var $monthframe = $('.monthframe');
 var temporaryStorageKey = "temporaryStorageKey"; //temporary storage key for month object
 var yearKey = "yearKey"; //temporaryStorageKey for year object
 var $listTitle = $('#listTitle');
+var temporaryStorageKey = "temp";
 
 $(document).ready(function() {
     
@@ -25,25 +26,28 @@ $(document).ready(function() {
 
     
     $('#saveButton').click(function(){
-        year.retrieveYearCheckmarks('.calendar');
-        year.saveTitle();
-        year.storeYear();
+        monthList.retrieveCheckMarks('.calendar');
+        monthList.saveTitle();
+        monthList.storeMonthList(temporaryStorageKey);
         alert("Progress saved");
     });
     
     $('#clearButton').click(function() {
+        console.log("clear button clicked");
+        monthList.monthListState = emptyMonthListState();
+        monthList.monthObjects = [];
         clearPage();
         
     });
     
-    $('#hideButton').click(function() {
-        hideTemplate();
-    });
+    //$('#hideButton').click(function() {
+    //    hideTemplate();
+    //});
     
     $('#startDateButton').click(function() {
         startDate = setStartDate();
-        var year = new Year(startDate);
-        year.initYear();
+        
+        monthList.initMonthList(startDate);
     });
     
     
@@ -56,12 +60,29 @@ $(document).ready(function() {
         }
     });
     
+    //WHEN PAGE LOADS, CURRENTLY WORKING WITH ONE CALENDAR
+    //check if there is any calendar saved in localStorage
     
-    startDate = setStartDate();
-    var year = new Year(startDate);
-    year.initYear();
+    $('#clearButton').click();
     
-    //$('#listTitle').val(year.yearState.yearName)
+    var load = monthList.loadMonthList(temporaryStorageKey);
+    
+    if (load) {            // IS THIS WRITTEN IN A GOOD WAY?
+        monthList.monthListState = load;
+        
+        
+        monthList.startDateMoment = moment(monthList.monthListState.startDate);
+        monthList.monthObjects = monthList.getMonthObjects();
+        
+        monthList.generateEmptyMonthDivs('.calendar');
+        monthList.fillMonthDivs('.calendar');
+        document.getElementById('listTitle').value = monthList.monthListState.listName;
+        
+        
+    }
+    
+    
+    
 });
 
 //UTILITY/HELPER FUNCTIONS
@@ -82,7 +103,14 @@ var hideTemplate = function() {
 
 var clearPage = function() {
     // Remove all divs from page except #template
-    $('.monthframe').remove();
+    //Parameters:
+    // yearsToClear: array
+    var yearsToClear = [2015, 2016, 2017, 2018, 2019];
+    yearsToClear.forEach(function(year) {
+        $('#' + year).remove();
+        $('.monthframe').remove();
+    })
+    
 };
 
 var storeInLocalStorage = function(storageItemKey, storageItem) {        
@@ -155,15 +183,10 @@ var getMonthIndex = function(date) {
     
     //  Parameters:
     //  date: string
-    //      "month year" format. Example: "October 2013"
-    //      or "year month" format. Example "2013 10" (10 is October)
+    //      "YYYY-MM-DD" format. Example: "2013-10-12"
+    //      which would be October 12, 2013
     
-    if (date === undefined) {
-        var today = new Date();
-        return today.getMonth();
-    }
-    date = new Date(date);
-    return date.getMonth();
+    return date.month();
 };
 
 var getMonthName = function(index) {
@@ -171,18 +194,12 @@ var getMonthName = function(index) {
     //  returns the name of the month of the current date.
     
     //  Parameters: 
-    //  date: string
-    //      "month year" format.
-    //      or "year month" format. Example "2013 10" (10 is October)
-    
+    //  index: int
+    //      0 index 0-11, 0 being January
     var months = {
         0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
         6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
         11:"December"};
-    if (index === undefined) {
-        var today = new Date();  //can i pass an argument date and have var today = new Date(date) || new Date(); ???
-        return months[today.getMonth()];
-    }
     return months[index];
 };
 
@@ -192,17 +209,8 @@ var getNumberOfDays = function(date) {
     
     //  Parameters: 
     //  date: string
-    //      "month year" format.
-    //      or "year month" format. Example "2013 10" (10 is October)
+    //      "YYYY-MM" format where MM is 1-12 index
     
-    if (date === undefined) {
-        date = new Date();
-    }
-    else {
-        date = new Date(date);
-    }
-    
-    date = moment(date);
     return numberOfDays = date.daysInMonth();
 };
 
@@ -215,30 +223,12 @@ var getYear = function(date) {
     //      "month year" format.
     //      or "year month" format. Example "2013 10" (10 is October)   
       
-   
-    if (date === undefined) {
-        var today = new Date();
-        return today.getFullYear()
-        
-    }
-    else {
-        date = new Date(date);
-        return date.getFullYear()
-    }
+    return date.year();
+    
         
 };
 
-var diffBetweenDays = function(firstDate, secondDate) {
-    //  Calculates the number of days between firstDate and secondDate and
-    // returns it.
-    
-    //  Parameters:
-    //      firstDate: date object
-    //      secondDate: date object
-    
-    var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
-    return Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
-};
+
 var getDayOfWeek = function(date) {
     //  Returns the index (day of the week) of the given date or the current
     //  date if no date is given.
@@ -249,14 +239,7 @@ var getDayOfWeek = function(date) {
     //      or "year month day" format. Example "2013 10 12" (10 is October) 
     //      If no day number is given, the 1st of the month is used.
      
-    if (date === undefined) {
-        date = new Date();
-    }
-    else {
-        date = new Date(date);
-    }
-    
-    var index = date.getDay();
+    var index = date.day();
     return index;
 };
     
@@ -266,8 +249,9 @@ var generateMonthObj = function(mState) {
     // Parameters:
     // mState: dictionary
     //     contains month information (numberOfDays, firstIndex, etc)
-    
-    var month = new Month(mState.monthName + mState.monthYear);
+    var monthIndex = mState.monthIndex + 1;
+    monthIndex = monthIndex.toString();
+    var month = new Month(mState.monthYear.toString() + '-' + monthIndex + '-' + mState.startDay.toString(), 'YYYY-MM-DD');
     month.monthState = mState;
     return month;
 };
@@ -282,31 +266,10 @@ var extractMonthState = function(monthObj) {
     return monthObj.monthState;
 };
 
-var generateYearObj = function(yState) {
-    // Returns a year object with the given state as it's yearState.
-    
-    // Parameters:
-    // yState: dictionary
-    //     contains year information (yearType, givenYear, etc)
-    
-    var year = new Year();
-    year.yearState = yState;
-    return year;
-};
-
-var extractYearState = function(yearObj) {
-    // Takes a year object, extracts it's yearState, and returns it.
-    
-    // Parameters:
-    // yearObj: object
-    //     An instance of the Year class
-    
-    return yearObj.yearState;
-};
     
 var emptyMonthState = function() {
     return{
-        // first day of the month
+        // first day index of the month
         firstIndex: 4,
         // how many days in the month, default 30
         numberOfDays: 31,
@@ -327,36 +290,19 @@ var emptyMonthState = function() {
     }
 };
 
-var emptyYearState = function() {
-    return{
-        // year
-        yearGiven: '',
-        // array with 12 month objects
-        monthStates: [],
-        //title of year
-        yearName: ''
-    }
-};
-
-var setStartDate = function() {
-    // parse the startDate string, which is given by te user according to
-    // their local time zone, into a Date object
-    var startDate = moment(document.getElementById('startDate').value);
-    
-    return startDate
-}
 
 
 var Month = function (date) {
     //Represents a single month
+    //date format "YYYY-MM-DD" months 1-12 index
     
     var self = this;
     self.monthState = emptyMonthState();
     if (date === undefined) {
-        self.date = new Date();
+        self.date = moment();
     }
     else{
-        self.date = new Date(date);
+        self.date = moment(date, "YYYY-MM-DD");
     }
     
     self.attachClickHandler = function(div) {
@@ -366,7 +312,7 @@ var Month = function (date) {
         
         div = div || '.calendar';
         var $div = $(div);
-        var $monthId = $('#' + self.monthState.monthIndex);
+        var $monthId = $('#' + self.monthState.monthIndex + '-' + self.monthState.monthYear);
         $div.find($monthId).find('.cell').click(function (event) {
             console.log(event);  // prints so you can look at the event object in the console
             $( this ).children().toggleClass("hidden");
@@ -379,7 +325,7 @@ var Month = function (date) {
         
         div = div || '.calendar';
         var $div = $(div);
-        var $monthId = $('#'+ self.monthState.monthIndex);
+        var $monthId = $('#'+ self.monthState.monthIndex + '-' + self.monthState.monthYear);
         $div.find($monthId).find('.header').find('.month-year').empty();
         $div.find($monthId).find('.month').find('td').each(function(index) {
             $(this).empty();
@@ -404,7 +350,7 @@ var Month = function (date) {
         // Fills in the days of the month, month name, and
         // year in an empty month template
         
-        var $monthId = $('#'+ self.monthState.monthIndex);
+        var $monthId = $('#'+ self.monthState.monthIndex + '-' + self.monthState.monthYear);
         self.clearMonthDiv();
         $monthId.find(".month-year").empty();
         $monthId.find(".month-year").append(self.monthState.monthName + " " + self.monthState.monthYear);
@@ -433,7 +379,7 @@ var Month = function (date) {
         div = div || '.calendar';
         $div = $(div);
         monthIndex = monthIndex || self.monthState.monthIndex;
-        var monthId = '#'+ monthIndex;
+        var monthId = '#'+ monthIndex + '-' + self.monthState.monthYear;
         $div.find(monthId).find('.month').find('td').each( function(index) {
             
             if (self.monthState.checkedDays[index]) {
@@ -455,7 +401,7 @@ var Month = function (date) {
         div = div || '.calendar';
         var $div = $(div);
         monthIndex = monthIndex || self.monthState.monthIndex;
-        var $monthId = $('#'+ monthIndex);
+        var $monthId = $('#'+ monthIndex + '-' + self.monthState.monthYear);
         //retrieves the daynumber attribute of the checked days and stores it in monthState.checkedDays
         //if ($div.find($monthId).find('.month').find('.daynumber.hidden')) {
         $monthId.find('.month').find('.daynumber.hidden').each(function (index) {
@@ -516,12 +462,11 @@ var Month = function (date) {
     self.initCurrentMonthState = function() {
         // Initializes a month object.
         self.monthState.monthIndex = getMonthIndex(self.date);
-        self.monthState.monthName = getMonthName(self.monthState.monthIndex);
+        self.monthState.monthName = getMonthName(self.date.month());
         self.monthState.monthYear = getYear(self.date);
-        self.monthState.numberOfDays = getNumberOfDays(self.monthState.monthName
-                                                     + ' ' + self.monthState.monthYear);
-        self.monthState.startDay = self.date.getDate(); //NEW LINE
-        self.monthState.firstIndex = getDayOfWeek(self.date); //NEW LINE
+        self.monthState.numberOfDays = getNumberOfDays(self.date);
+        self.monthState.startDay = self.date.date(); 
+        self.monthState.firstIndex = getDayOfWeek(self.date); 
         
         self.monthState.monthId = 'month' + self.monthState.monthIndex;
         return self.monthState;
@@ -532,8 +477,8 @@ var Month = function (date) {
         // Adds a unique ID to the month div with class .monthframe
         
         $div = $(div);
-        $div.attr('id', self.monthState.monthIndex);
-        self.monthState.monthId = 'month'+ self.monthState.monthIndex;
+        $div.attr('id', self.monthState.monthIndex + '-' + self.monthState.monthYear);
+        self.monthState.monthId = 'month'+ self.monthState.monthIndex + '-' + self.monthState.monthYear;
         
     };
     
@@ -541,199 +486,200 @@ var Month = function (date) {
 };
 
 
-var Year = function(startDate) {
-    // Represents a single calendar year
+var setStartDate = function() {
+    // return the startDate string, which is given by the user according to
+    // their local time zone, given in "YYYY-MM-DD" format
+    var startDate = document.getElementById('startDate').value;
+    
+    return startDate;
+};
+
+var emptyMonthListState = function() {
+    return{
+        //number of milliseconds since the unix epoch to the startdate
+        startDate: "",
+        //list of years
+        years: [],
+        //list of month objects monthStates
+        monthStates: [],
+        //list name under which it will be saved
+        listName: ''
+    }
+};
+
+var MonthList = function() {
+    //startDate format "YYYY-MM-DD" with month index starting at 1
     
     var self = this;
-    self.yearState = emptyYearState();
+    self.monthListState = emptyMonthListState();
     self.monthObjects = [];
-    self.startDate = new Date(startDate);
+    //self.startDateMoment = moment(startDate) || moment();
+    self.startDateMoment = moment(); 
     
-    self.getMonthStatesOfGivenYear = function() {
-        var monthStatesOfYear = [];
-        var monthNames = {
-            0:"January", 1:"February", 2:"March", 3:"April", 4:"May", 5:"June",
-            6:"July", 7:"August", 8:"September", 9:"October", 10:"November",
-            11:"December"};
-        if (!self.startDate.getFullYear()) {
-            console.log("!yearGiven ran");
-            var today = new Date();
-            desiredYear = today.getFullYear();
-            self.yearState.yearGiven = desiredYear;
-        }
-        else {
-            var desiredYear = self.startDate.getFullYear();
-        }
+    self.initState = function(startDate) {
+        //initializes monthListState with current info
+        self.startDateMoment = moment(startDate);
+        self.monthListState.startDate = self.startDateMoment.valueOf();  //THIS MIGHT BE WHERE I NEED TO DO SOME UTC STUFF
+        self.monthListState.monthStates = monthList.getMonthStates(12);
+        self.monthObjects = monthList.getMonthObjects();
         
-        for (prop in monthNames) {
-            if (!monthNames.hasOwnProperty(prop)) {
-            //The current property is not a direct property of monthNames
-                continue;
+    };
+
+    self.getMonthStates = function(numberOfMonths) {
+        var desiredYear = self.startDateMoment.year();
+        var monthStates = [];
+        self.monthListState.years.push(desiredYear);
+        
+        for (i = self.startDateMoment.month(); i< self.startDateMoment.month() + numberOfMonths; i++) {
+            monthIndex = i%12;
+            if (monthIndex == self.startDateMoment.month() && desiredYear == self.startDateMoment.year()) {
+                console.log("inside first conditional if statement");
+                var month = new Month(self.startDateMoment.format("YYYY-MM-DD"));
             }
-            if (prop >= self.startDate.getMonth()) {
-                var monthprop = new Month(monthNames[prop] + ' ' + desiredYear);
-                monthprop.initCurrentMonthState();
-                if (prop == self.startDate.getMonth()) {
-                    monthprop.monthState.startDay = self.startDate.getUTCDate();
-                    console.log(monthprop.monthState);
-                }
-                monthStatesOfYear.push(monthprop.monthState);
-                
+            else {
+                monthIndex += 1;
+                var month = new Month(desiredYear.toString() + '-' + monthIndex.toString() + '-01');
+            }
+            month.initCurrentMonthState();
+            monthStates.push(month.monthState);
+            if (i == 11) {
+                desiredYear += 1;
+                self.monthListState.years.push(desiredYear);
+            }
+            if (desiredYear == 2017) {
+                console.log("breaking");
+                break;
             }
         }
-        
-        return monthStatesOfYear;
+        return monthStates;
     };
     
-    self.getMonthObjects = function(state) {
-        // Returns an array of 12 month objects with monthStates that
-        // correspond to the monthStates stored in yearState.monthStates
+    self.getMonthObjects = function() {
+        // generate list of monthObjects from list of monthStates
+        //DO I WANT TO RETURN A LIST? OR JUST HAVE IT ADD TO THE MONTHOBJECTS ATTRIBUTE
         
-        // Parameters:
-        //   state: array
-        //     stores monthStates
-        
-        monthObjectsArray = [];
-        state.forEach (function(state) {
-            var monthi = generateMonthObj(state);
-            monthObjectsArray.push(monthi);
+        var monthObjects = [];
+        self.monthListState.monthStates.forEach(function(monthState) {
+            var month = generateMonthObj(monthState);
+            monthObjects.push(month)
         })
-        return monthObjectsArray;
-        
+        return monthObjects;
     };
     
-    
-    self.generateEmptyYearDiv = function(div) {
-        // will generate the html for 12 empty month divs
-        
-        // Parameters:
-        //     divClass: string
-        // The div where you want to generate the months, must specify
-        // whether it is an ID or class. eg ".calendar" or "#month0"
+    self.generateEmptyMonthDivs = function(div) {
+        //generates empty month Divs 
+        //for the month objects in the list
         
         var $div = $(div);
-        
-        self.monthObjects.forEach (function(monthObj) {     
-            $div.append('<div class="monthframe" id="' + monthObj.monthState.monthIndex + '" ></div>');
-        })
-            
-        
-        var $monthframe = $('.monthframe');
-        $monthframe.append($('#template').html()); 
-    };
-    
-    
-    self.retrieveYearCheckmarks = function(div) {
-        // Collects the checked days of the year.
-        
-        self.monthObjects.forEach( function(month) {
-            month.clearCheckedDays();
-            month.retrieveCheckedDays(div, month.monthState.monthIndex);
+        self.monthListState.years.forEach(function(year) {
+            var id = year.toString();
+            $div.append('<div id=' + id + '></div>');
+            self.monthObjects.forEach (function(monthObj) { 
+                if (monthObj.monthState.monthYear == year) {
+                    $('#' + id).append('<div class="monthframe" id="' + monthObj.monthState.monthIndex + '-' + monthObj.monthState.monthYear + '" ></div>');
+                }
+            })
+            $('#' + id).find('.monthframe').append($('#template').html()); 
         })
     };
-            
-    self.fillYearDiv = function(div) {
-        // Fills the empty year div with correct month information.
-        
+    
+    self.fillMonthDivs = function(div) {
+        // fill the empty month divs with correct information.
         self.monthObjects.forEach( function(month) {
             month.retrieveCheckedDays(div);
             month.generateMonthDiv();
             month.generateCheckmarks();
             month.attachClickHandler();
-        })
-    
+        });
     };
     
-    self.updateMonthStates = function() {
-        // Updates the yearState's monthStates array with current information.
-        
-        monthStates = [];
-        self.monthObjects.forEach (function(monthObj) {     
-            var state = extractMonthState(monthObj);
-            monthStates.push(state);
+    self.retrieveCheckMarks = function(div) {
+        self.monthObjects.forEach( function(month) {
+            month.clearCheckedDays();
+            month.retrieveCheckedDays(div, month.monthState.monthIndex);
         })
-        self.yearState = monthStates;
-        
     };
     
-    self.storeYear = function() {
-        // Stores the yearState in localstorage.
+    self.saveTitle = function() {
+        var title = document.getElementById('listTitle').value;
+        if (title) {
+            var calendarName = document.getElementById('listTitle').value;
+            console.log("this is the calendar name" + " " + calendarName);
+        }
         
-        var storageItem = self.yearState;
+        else { 
+           var calendarName = prompt("You must enter a list title");
+           if (calendarName === null) {
+               return;
+               
+           }
+           while (!calendarName) { 
+               var calendarName = prompt("You must enter a list title");
+               }
+           
+           }
+        self.monthListState.listName = calendarName;
+        document.getElementById('listTitle').value = calendarName;
+        
+    }
+    
+    self.storeMonthList = function(yearKey) {
+        //stores item into localStorage under key yearKey
+        
+        var storageItem = self.monthListState;
         storeInLocalStorage(yearKey, storageItem);
     };
     
-    
-    self.loadYear = function() {
-        // Loads the yearState from localstorage and returns it. If there
-        // is no yearState in localStorage, returns yearState for current year.
-        
+    self.loadMonthList = function(yearKey) {
+        //loads item with key yearKey from localStorage
         var loadedYear = loadFromLocalStorage(yearKey);
-        if(loadedYear == undefined){
-            return;
-        }
-        
         return loadedYear;
     };
     
-    self.emptyMonthStateArray = function() {
-        // Returns an array of 12 empty monthStates.
-        
-        emptyMonthStateArray = [];
-        for(i=0;i<=11;i++) {
-            emptyMonthStateArray.push(emptyMonthState());
-        }
-        return emptyMonthStateArray;
+    self.initMonthList = function(startDate) {
+        monthList.initState(startDate);
+        monthList.generateEmptyMonthDivs('.calendar');
+        monthList.fillMonthDivs('.calendar');
     };
-    
-    self.clearEmptyWeeks = function() {
-        // Gets rid of weeks that are only filled with nill days
-        
-    };
-    
-    self.initYearState = function(desiredYear) {
-        // initializes year object's yearState, 
-        
-        //Parameters:
-        //desiredYear: int
-            //the year you want a calendar generated for
-        
-        self.yearState.yearGiven = desiredYear;
-        self.yearState.monthStates = self.getMonthStatesOfGivenYear(desiredYear);
-        
-    }
-    
-    self.saveTitle = function() {
-        var yearName = document.getElementById('listTitle').value;
-        self.yearState.yearName = yearName;
-    }
-    
-    
-    
-    
-    self.initYear = function(desiredYear) {
-        clearPage();
-        var yState = self.loadYear();
-        if (yState == undefined) {
-            if (desiredYear === undefined) {
-                today = new Date();
-                yState = self.initYearState(desiredYear);
-            }
-            else {
-                yState = self.initYearState(desiredYear);
-            }
-        }
-        else {
-            self.yearState = yState;
-        }
-        
-        self.monthObjects = self.getMonthObjects(self.yearState.monthStates);
-        self.generateEmptyYearDiv('.calendar');
-        self.fillYearDiv('.calendar');
-    };
-    
-
     
 };
-var month = new Month();
 
+var emptyCalendarsState = function() {
+    return{
+        //list of titles of saved calendars
+        savedCalendars: []
+    }
+};
+
+var Calendars = function(storageKey) {
+    var self = this;
+    self.calendarsState = emptyCalendarsState();
+    self.storageKey = storageKey;
+    
+    
+    self.generateCalendarMenu = function() {
+        //fills the saved calendars tab in the nav bar with the titles
+        // of the saved calendars
+    };
+    
+    self.storeState = function() {
+        //stores the calendars state (the titles of the savedCalendars)
+    };
+    
+    self.loadState = function() {
+        //load the calendars state
+    };
+    
+    self.addToSavedCalendars = function() {
+        //add title to savedCalendars array in the calendarsState
+    };
+    
+    self.removeFromSavedCalendars = function() {
+    };
+    
+};
+
+
+
+var month = new Month();
+var monthList = new MonthList();
