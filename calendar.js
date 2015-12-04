@@ -63,18 +63,30 @@ $(document).ready(function() {
     //WHEN PAGE LOADS, CURRENTLY WORKING WITH ONE CALENDAR
     //check if there is any calendar saved in localStorage
     
-    //$('#clearButton').click();
+    $('#clearButton').click();
+    console.log(monthList.monthListState.years.length + ' this is the number of years in the year array on load');
     console.log(monthList.monthObjects.length + ' these are the number of objects on load');
     console.log(monthList.monthListState.monthStates.length + " these are the number of monthStates on load");
     var load = monthList.loadMonthList(temporaryStorageKey);
     console.log(!load + ' that item is not in localStorage');
     if (load) {            // IS THIS WRITTEN IN A GOOD WAY?
         monthList.monthListState = load;
+        console.log(monthList.monthListState.years.length + ' this is the number of years in the year array on load');
         console.log(monthList.monthObjects.length + ' these are the number of objects after loading saved state');
         console.log(monthList.monthListState.monthStates.length + ' these are the number of monthStates after loading saved state');
         console.log('saved start date ' + monthList.monthListState.startDate);
-    //    console.log('formatted saved start date ' + monthList.startDate.format("YYYY-MM-DD"));
-    //    monthList.initMonthList(monthList.startDate.format("YYYY-MM-DD"));
+        
+        monthList.startDateMoment = moment(monthList.monthListState.startDate);
+        monthList.monthObjects = monthList.getMonthObjects();
+        
+        monthList.generateEmptyMonthDivs('.calendar');
+        monthList.fillMonthDivs('.calendar');
+        document.getElementById('listTitle').value = monthList.monthListState.listName;
+        
+        console.log(monthList.monthListState.years.length + ' this is the number of years in the year array after initialized monthList');
+        console.log(monthList.monthObjects.length + ' these are the number of objects after initializing monthList');
+        console.log(monthList.monthListState.monthStates.length + ' these are the number of monthStates after initializing monthList');
+        
     }
     
     
