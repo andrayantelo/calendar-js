@@ -45,6 +45,7 @@ $(document).ready(function() {
     });
     
     $('#startDateButton').click(function() {
+        $('#clearButton').click();
         startDate = setStartDate();
         
         monthList.initMonthList(startDate);
@@ -294,7 +295,7 @@ var emptyMonthState = function() {
 
 var Month = function (date) {
     //Represents a single month
-    //date format "YYYY-MM-DD" months 1-12 index
+    //date format "YYYY-MM-DD" months 1-12 index  (seconds since epoch???)
     
     var self = this;
     self.monthState = emptyMonthState();
@@ -302,7 +303,7 @@ var Month = function (date) {
         self.date = moment();
     }
     else{
-        self.date = moment(date, "YYYY-MM-DD");
+        self.date = moment(date, "x");
     }
     
     self.attachClickHandler = function(div) {
@@ -356,8 +357,9 @@ var Month = function (date) {
         $monthId.find(".month-year").append(self.monthState.monthName + " " + self.monthState.monthYear);
         
         $monthId.find($('.week')).find('td').each( function(index) {
-        
+            
             var dayOfMonth = index - (self.monthState.firstIndex - 1);
+            console.log(index + " : " + dayOfMonth);
             if (dayOfMonth >= self.monthState.startDay && dayOfMonth <= self.monthState.numberOfDays) { //MODIFIED LINE
                  self.monthState.dayIndex[dayOfMonth] = index;
                  $(this).empty();   
@@ -465,7 +467,8 @@ var Month = function (date) {
         self.monthState.monthName = getMonthName(self.date.month());
         self.monthState.monthYear = getYear(self.date);
         self.monthState.numberOfDays = getNumberOfDays(self.date);
-        self.monthState.startDay = self.date.date(); 
+        self.monthState.startDay = self.date.date();
+        self.date.set('date', 1);  //NEED TO LOOK FURTHER INTO THIS
         self.monthState.firstIndex = getDayOfWeek(self.date); 
         
         self.monthState.monthId = 'month' + self.monthState.monthIndex;
@@ -519,7 +522,7 @@ var MonthList = function() {
     self.initState = function(startDate) {
         //initializes monthListState with current info
         self.startDateMoment = moment(startDate);
-        self.monthListState.startDate = self.startDateMoment.valueOf();  //THIS MIGHT BE WHERE I NEED TO DO SOME UTC STUFF
+        self.monthListState.startDate = self.startDateMoment.valueOf(); //THIS MIGHT BE WHERE I NEED TO DO SOME UTC STUFF
         self.monthListState.monthStates = monthList.getMonthStates(12);
         self.monthObjects = monthList.getMonthObjects();
         
@@ -534,11 +537,14 @@ var MonthList = function() {
             monthIndex = i%12;
             if (monthIndex == self.startDateMoment.month() && desiredYear == self.startDateMoment.year()) {
                 console.log("inside first conditional if statement");
-                var month = new Month(self.startDateMoment.format("YYYY-MM-DD"));
+                console.log(self.monthListState.startDate);
+                var month = new Month(self.monthListState.startDate);
             }
             else {
                 monthIndex += 1;
-                var month = new Month(desiredYear.toString() + '-' + monthIndex.toString() + '-01');
+                var dateEpoch = moment(desiredYear.toString() + '-' + monthIndex.toString() + '-01', "YYYY-MM-DD");
+                console.log(dateEpoch + " here is the dateEpoch");
+                var month = new Month(dateEpoch);
             }
             month.initCurrentMonthState();
             monthStates.push(month.monthState);
