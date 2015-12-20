@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-9" />
+    <meta charset="utf-8" />
     <title>Calendar</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
     <!-- Latest compiled JavaScript -->
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="style.css" />
@@ -18,10 +20,25 @@
     <script src="//code.jquery.com/qunit/qunit-1.20.0.js"></script>
     
     <script type = "text/javascript" src="calendar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
     <!--my test file -->
     <!--<script src="//code.jquery.com/qunit/qunit-1.20.0.js"></script>
     <script type = "text/javascript" src="tests.js"></script>
     -->
+    <script>
+        $(function(){           
+            if (!Modernizr.inputtypes.date) {
+        // If not native HTML5 support, fallback to jQuery datePicker
+            $('input[type=date]').datepicker({
+                // Consistent format with the HTML5 picker
+                dateFormat : 'yy-mm-dd'
+                },
+                // Localization
+                $.datepicker.regional['it']
+                );
+            }
+        });
+    </script>
 </head>
 <body>
 <!--
@@ -60,6 +77,7 @@
         <p id="startDatePrompt">When should we start?</p>
         <!--<p id="startDateText">Start Date</p> -->
         <input type="date" id="startDate" name="startDate"/>
+      
         <input id="startDateButton" class="button" type="button" value="Set"/>
 
     </div>

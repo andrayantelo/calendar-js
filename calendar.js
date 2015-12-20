@@ -1,12 +1,5 @@
-//move these under the $document ready line?
-var $cal = $(".calendar") 
-var $week = $('.week');  //this is the class for the rows of the table
-var $month = $('.month');  //this is the class for the month tables
-var $aDay = $('.aDay'); //class for day cells
-var $monthframe = $('.monthframe');
 var temporaryStorageKey = "temporaryStorageKey"; //temporary storage key for month object
 var yearKey = "yearKey"; //temporaryStorageKey for year object
-var $listTitle = $('#listTitle');
 var temporaryStorageKey = "temp";
 
 $(document).ready(function() {
@@ -15,10 +8,9 @@ $(document).ready(function() {
     var defaultDate = defaultDay.format("YYYY-MM-DD");
     $('#startDate').val(defaultDate);
     
-    $("input[placeholder]").each(function () {
-        //console.log($(this).attr('placeholder').length + 5);
-        $(this).attr('size', $(this).attr('placeholder').length + 5);
-    });
+    $listTitle = $('#listTitle')
+    // FIXME
+    $listTitle.attr('size', $listTitle.attr('placeholder').length + 5);
     
     $('input[text]').each(function() {
         $(this).attr('size', $(this).val().length);
@@ -359,7 +351,7 @@ var Month = function (date) {
         $monthId.find($('.week')).find('td').each( function(index) {
             
             var dayOfMonth = index - (self.monthState.firstIndex - 1);
-            console.log(index + " : " + dayOfMonth);
+            
             if (dayOfMonth >= self.monthState.startDay && dayOfMonth <= self.monthState.numberOfDays) { //MODIFIED LINE
                  self.monthState.dayIndex[dayOfMonth] = index;
                  $(this).empty();   
@@ -543,7 +535,7 @@ var MonthList = function() {
             else {
                 monthIndex += 1;
                 var dateEpoch = moment(desiredYear.toString() + '-' + monthIndex.toString() + '-01', "YYYY-MM-DD");
-                console.log(dateEpoch + " here is the dateEpoch");
+                
                 var month = new Month(dateEpoch);
             }
             month.initCurrentMonthState();
