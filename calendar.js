@@ -8,9 +8,12 @@ $(document).ready(function() {
     var defaultDate = defaultDay.format("YYYY-MM-DD");
     $('#startDate').val(defaultDate);
     
-    $listTitle = $('#listTitle')
+    $listTitle = $('#listTitle');
     // FIXME
     $listTitle.attr('size', $listTitle.attr('placeholder').length + 5);
+    //FIXME
+    $description = $('#description');
+    $description.attr('size', $listTitle.attr('placeholder').length);
     
     $('input[text]').each(function() {
         $(this).attr('size', $(this).val().length);

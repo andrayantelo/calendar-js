@@ -146,6 +146,18 @@ html {
     font-weight: bold;
 }
 
+#description {
+    border: none;
+    font-size: 10px;
+    font-style: italic;
+}
+
+#hideDescriptionButton{
+    border: none;
+    background-color: white;
+    text-align: center;
+}
+
 #startDateText {
     display: inline-block;
 }
