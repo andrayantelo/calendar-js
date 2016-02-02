@@ -144,6 +144,7 @@ html {
     border: none;
     font-size: 20px;
     font-weight: bold;
+    width: auto;
 }
 
 #description {
@@ -170,5 +171,16 @@ html {
 
 .buttonContainer {
     clear: both;
+}
+
+/* FIX ME */
+.note #note{
+    background: #e1e1e1;
+    border: none;
+    width: auto;
+    float: right;
+    width: 100px;
+    word-wrap: break-word;
+    
 }
 

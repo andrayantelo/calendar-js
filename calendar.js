@@ -10,13 +10,28 @@ $(document).ready(function() {
     
     $listTitle = $('#listTitle');
     // FIXME
-    $listTitle.attr('size', $listTitle.attr('placeholder').length + 5);
+    //$listTitle.attr('size', $listTitle.attr('placeholder').length + 5);
     //FIXME
-    $description = $('#description');
-    $description.attr('size', $listTitle.attr('placeholder').length);
+    //$description = $('#description');
+    //$description.attr('size', $listTitle.attr('placeholder').length);
     
-    $('input[text]').each(function() {
+    //START HERE
+    
+    //var input = document.querySelectorAll('input');
+    //for(i=0; i<input.length; i++){
+    //    input[i].setAttribute('width',input[i].getAttribute('placeholder').length);
+    //}
+    
+    //FIX ME FIX ME
+    function resizeInput() {
         $(this).attr('size', $(this).val().length);
+    }
+    
+    $('input[type="text"]')
+        .keyup(resizeInput)
+        .each(resizeInput);
+    $('input[type="text"]').each(function() {
+        $(this).attr('size', $(this).attr('placeholder').length);
     });
 
     
