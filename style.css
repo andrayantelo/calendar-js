@@ -174,12 +174,16 @@ html {
 }
 
 /* FIX ME */
+
+.note {
+    max-width: 100px;
+}
 .note #note{
     background: #e1e1e1;
     border: none;
     width: auto;
     float: right;
-    width: 100px;
+    /*width: 100px;*/
     word-wrap: break-word;
     
 }

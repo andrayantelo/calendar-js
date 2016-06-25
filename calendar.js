@@ -27,9 +27,8 @@ $(document).ready(function() {
         $(this).attr('size', $(this).val().length);
     }
     
-    $('input[type="text"]')
-        .keyup(resizeInput)
-        .each(resizeInput);
+    //$('input[type="text"]').each($(this).attr('size', $(this).val().length));
+        
     $('input[type="text"]').each(function() {
         $(this).attr('size', $(this).attr('placeholder').length);
     });
