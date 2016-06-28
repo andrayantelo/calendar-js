@@ -78,6 +78,7 @@ $(document).ready(function() {
     var load = monthList.loadMonthList(temporaryStorageKey);
     
     if (load) {            // IS THIS WRITTEN IN A GOOD WAY?
+        console.log("When page started, something was found in localstorage")
         monthList.monthListState = load;
         
         
@@ -87,6 +88,7 @@ $(document).ready(function() {
         monthList.generateEmptyMonthDivs('.calendar');
         monthList.fillMonthDivs('.calendar');
         document.getElementById('listTitle').value = monthList.monthListState.listName;
+        monthList.generateCalendarMenu($('.dropdown-menu'));
         
         
     }
@@ -634,7 +636,8 @@ var MonthList = function() {
            
            }
         self.monthListState.listName = calendarName;
-        document.getElementById('listTitle').value = calendarName;
+        //document.getElementById('listTitle').value = calendarName;
+        
         
     }
     
@@ -657,6 +660,22 @@ var MonthList = function() {
         monthList.fillMonthDivs('.calendar');
     };
     
+    self.generateCalendarMenu = function(menuClass) {
+        //fills the saved calendars tab in the nav bar with the titles
+        // of the saved calendars
+         //if (!self.isOk) {
+         //   console.log("Could not generate listmenu");
+         //   updateFlag(self);
+         //   return self;
+        //}
+            
+        $(menuClass).empty();
+        var listName = self.monthListState.listName 
+        //self.monthListState.forEach( function(listName) {
+        $(menuClass).append('<li class="dropdown-option"><a href="#">' + listName + '</a></li>');
+        //});
+    };
+    
 };
 
 var emptyCalendarsState = function() {
@@ -672,9 +691,20 @@ var Calendars = function(storageKey) {
     self.storageKey = storageKey;
     
     
-    self.generateCalendarMenu = function() {
+    self.generateCalendarMenu = function(menuClass) {
         //fills the saved calendars tab in the nav bar with the titles
         // of the saved calendars
+         //if (!self.isOk) {
+         //   console.log("Could not generate listmenu");
+         //   updateFlag(self);
+         //   return self;
+        //}
+            
+        $(menuClass).empty();
+        var listName = self.monthListState.listName 
+        //self.monthListState.forEach( function(listName) {
+        $(menuClass).append('<li class="dropdown-option"><a href="#">' + listName + '</a></li>');
+        //});
     };
     
     self.storeState = function() {
