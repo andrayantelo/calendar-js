@@ -32,6 +32,17 @@ $(document).ready(function() {
     $('input[type="text"]').each(function() {
         $(this).attr('size', $(this).attr('placeholder').length);
     });
+    
+    $('.dropdown-menu').delegate('li', 'mouseover mouseout', function(event) {
+       // makes the red x appear to remove a list item when mouse hovers over item 
+       var $this = $(this).find('button');
+       
+       if(event.type === 'mouseover') {
+           $this.stop(true, true).fadeIn();
+       } else {
+           $this.stop(true, true).fadeOut();
+       }
+   });
 
     
     $('#saveButton').click(function(){
@@ -673,7 +684,7 @@ var MonthList = function() {
         $(menuClass).empty();
         var listName = self.monthListState.listName 
         //self.monthListState.forEach( function(listName) {
-        $(menuClass).append('<li class="dropdown-option"><a href="#">' + listName + '</a></li>');
+        $(menuClass).append('<li class="dropdown-option"><a href="#">' + listName + '<button id="removal-button">X</button></li>');
         //});
     };
     
@@ -704,7 +715,7 @@ var Calendars = function(storageKey) {
         $(menuClass).empty();
         var listName = self.monthListState.listName 
         //self.monthListState.forEach( function(listName) {
-        $(menuClass).append('<li class="dropdown-option"><a href="#">' + listName + '</a><a href= "#">X</a></li>');
+        $(menuClass).append('<li class="dropdown-option"><a href="#">' + listName + '</a></li>');
         //});
     };
     

@@ -188,3 +188,12 @@ html {
     
 }
 
+#removal-button {
+    float: right;
+    padding: 0;
+    border: none;
+    background: none;
+    color: red;
+    
+}
+
