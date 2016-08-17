@@ -38,6 +38,7 @@ $(document).ready(function() {
         monthList.retrieveCheckMarks('.calendar');
         monthList.saveTitle();
         monthList.storeMonthList(temporaryStorageKey);
+        monthList.generateCalendarMenu($('.dropdown-menu'));
         alert("Progress saved");
     });
     
@@ -703,7 +704,7 @@ var Calendars = function(storageKey) {
         $(menuClass).empty();
         var listName = self.monthListState.listName 
         //self.monthListState.forEach( function(listName) {
-        $(menuClass).append('<li class="dropdown-option"><a href="#">' + listName + '</a></li>');
+        $(menuClass).append('<li class="dropdown-option"><a href="#">' + listName + '</a><a href= "#">X</a></li>');
         //});
     };
     
