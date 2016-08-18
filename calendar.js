@@ -177,6 +177,12 @@ var loadFromLocalStorage = function(storageItemKey) {
     }         
 };
 
+var removeCalendarFromStorage = function(storageItemKey){
+    // removes item with key storageItemKey from localStorage
+    
+        localStorage.removeItem(storageItemKey)
+    };
+
 var getMonthsOfGivenYear = function(givenYear) {
     // An array of month objects for givenYear is generated and returned
     //if givenYear not provided, then current year is used.
@@ -688,6 +694,7 @@ var MonthList = function() {
         //});
     };
     
+   
 };
 
 var emptyCalendarsState = function() {
