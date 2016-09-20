@@ -43,6 +43,25 @@ $(document).ready(function() {
            $this.stop(true, true).fadeOut();
        }
    });
+   
+    
+    //$('.dropdown-menu').find('button').click(function() {
+        //var $this = $('.dropdown-menu').find('#' + monthListState.listName);
+        //console.log($this);
+    //    console.log("removal button was clicked");
+    //});
+    
+    $(".dropdown-menu").on("click", "button", function(e) {
+        e.preventDefault();
+        if (confirm("Are you sure you want to delete saved calendar?")){
+            $(this).parent().remove();
+            monthList.removeMonthList(temporaryStorageKey); //eventually the storage keys will be calendar titles
+        }
+        
+        //want to delete calendar from localstorage also have a popup asking if you really want to do that
+        
+    });
+    
 
     
     $('#saveButton').click(function(){
@@ -55,8 +74,8 @@ $(document).ready(function() {
     
     $('#clearButton').click(function() {
         console.log("clear button clicked");
-        monthList.monthListState = emptyMonthListState();
-        monthList.monthObjects = [];
+        //monthList.monthListState = emptyMonthListState();              I COMMENTED THESE TWO LINES OUT BUT I DON'T KNOW IF THAT CHANGED ANYTHING.
+        //monthList.monthObjects = [];
         clearPage();
         
     });
@@ -672,6 +691,13 @@ var MonthList = function() {
         return loadedYear;
     };
     
+    self.removeMonthList = function(yearKey) {
+        // removes item with key yearKey from localStorage
+        removeCalendarFromStorage(yearKey);
+        console.log('item was removed');
+    };
+        
+    
     self.initMonthList = function(startDate) {
         monthList.initState(startDate);
         monthList.generateEmptyMonthDivs('.calendar');
@@ -690,7 +716,7 @@ var MonthList = function() {
         $(menuClass).empty();
         var listName = self.monthListState.listName 
         //self.monthListState.forEach( function(listName) {
-        $(menuClass).append('<li class="dropdown-option"><a href="#">' + listName + '<button id="removal-button">X</button></li>');
+        $(menuClass).append('<li class="dropdown-option" id="' + listName + '"><a href="#">' + listName + '<button id="removalButton">X</button></li>');
         //});
     };
     
@@ -718,6 +744,8 @@ var Calendars = function(storageKey) {
          //   updateFlag(self);
          //   return self;
         //}
+        
+        // each item is going to have to have it's own unique ID
             
         $(menuClass).empty();
         var listName = self.monthListState.listName 
