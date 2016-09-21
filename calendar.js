@@ -4,6 +4,8 @@ var temporaryStorageKey = "temp";
 
 $(document).ready(function() {
     
+    
+    
     var defaultDay = moment();
     var defaultDate = defaultDay.format("YYYY-MM-DD");
     $('#startDate').val(defaultDate);
@@ -65,11 +67,15 @@ $(document).ready(function() {
 
     
     $('#saveButton').click(function(){
-        monthList.retrieveCheckMarks('.calendar');
-        monthList.saveTitle();
-        monthList.storeMonthList(temporaryStorageKey);
-        monthList.generateCalendarMenu($('.dropdown-menu'));
-        alert("Progress saved");
+        if (document.getElementById('listTitle')) {
+            monthList.retrieveCheckMarks('.calendar');
+            monthList.saveTitle();
+            var storageKey = document.getElementById('listTitle').value;
+            monthList.storeMonthList(storageKey);
+            monthList.generateCalendarMenu($('.dropdown-menu'));
+            alert("Progress saved");
+        }
+        else { prompt("Give the Calendar a Title, Please.")}
     });
     
     $('#clearButton').click(function() {
@@ -106,24 +112,26 @@ $(document).ready(function() {
     
     $('#clearButton').click();
     
+    //var load = monthList.loadMonthList(temporaryStorageKey);
+    
+    //if (load) {            // IS THIS WRITTEN IN A GOOD WAY?
+    //    console.log("When page started, something was found in localstorage")
+    //    monthList.monthListState = load;
+        
+        
+    //    monthList.startDateMoment = moment(monthList.monthListState.startDate);
+    //    monthList.monthObjects = monthList.getMonthObjects();
+        
+    //    monthList.generateEmptyMonthDivs('.calendar');
+    //    monthList.fillMonthDivs('.calendar');
+    //    document.getElementById('listTitle').value = monthList.monthListState.listName;
+    //    monthList.generateCalendarMenu($('.dropdown-menu'));
+        
+        
+    //}
     var load = monthList.loadMonthList(temporaryStorageKey);
-    
-    if (load) {            // IS THIS WRITTEN IN A GOOD WAY?
-        console.log("When page started, something was found in localstorage")
-        monthList.monthListState = load;
-        
-        
-        monthList.startDateMoment = moment(monthList.monthListState.startDate);
-        monthList.monthObjects = monthList.getMonthObjects();
-        
-        monthList.generateEmptyMonthDivs('.calendar');
-        monthList.fillMonthDivs('.calendar');
-        document.getElementById('listTitle').value = monthList.monthListState.listName;
-        monthList.generateCalendarMenu($('.dropdown-menu'));
-        
-        
-    }
-    
+    document.getElementById('listTitle').value = monthList.monthListState.listName;
+    monthList.generateCalendarMenu($('.dropdown-menu'));
     
     
 });
@@ -720,6 +728,7 @@ var MonthList = function() {
         //});
     };
     
+    
    
 };
 
@@ -734,7 +743,12 @@ var Calendars = function(storageKey) {
     var self = this;
     self.calendarsState = emptyCalendarsState();
     self.storageKey = storageKey;
-    
+    // The calendars object has an attribute calendarsState, which in it
+    // has an array of savedCalendars under their titles. If you want
+    // to access a calendar, you get the title from this array, and look
+    // into localStorage using that title (because it is saved under it's title
+    // name) and the object you retrieve is that calendar's monthList state. 
+    // which you can use to generate that calendar's month divs. 
     
     self.generateCalendarMenu = function(menuClass) {
         //fills the saved calendars tab in the nav bar with the titles
@@ -754,19 +768,29 @@ var Calendars = function(storageKey) {
         //});
     };
     
-    self.storeState = function() {
+    self.storeState = function(self.storageKey) {
         //stores the calendars state (the titles of the savedCalendars)
+        var storageItem = self.calendarsState 
+        storeInLocalStorage(self.storageKey, storageItem);
     };
     
-    self.loadState = function() {
+    self.loadState = function(self.storageKey) {
         //load the calendars state
+        var loadedCalendars = loadFromLocalStorage(storageKey);
+        return loadedCalendars;
     };
     
-    self.addToSavedCalendars = function() {
+    self.addToSavedCalendars = function(calendarToSave) {
         //add title to savedCalendars array in the calendarsState
+        self.calendarsState.savedCalendars.push(calendarToSave);
     };
     
-    self.removeFromSavedCalendars = function() {
+    self.removeFromSavedCalendars = function(calendarToRemove) {
+        //removes title from savedCalendars array in the calendarsState
+        var indexOfCalendar = self.calendarsState.savedCalendards.indexOf(calendarToRemove);
+        if (index > -1) {
+            self.calendarsSate.savedCalendars.splice(indexOfCalendar, 1);
+        }
     };
     
 };
@@ -775,3 +799,4 @@ var Calendars = function(storageKey) {
 
 var month = new Month();
 var monthList = new MonthList();
+var calendars = new Calendars();
