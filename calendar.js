@@ -73,6 +73,11 @@ $(document).ready(function() {
             var storageKey = document.getElementById('listTitle').value;
             monthList.storeMonthList(storageKey);
             monthList.generateCalendarMenu($('.dropdown-menu'));
+            //save the list title in the calendars object's state, then
+            //save the calendars state.
+            calendars.addToSavedCalendars(storageKey);
+            calendars.storeState();
+            console.log(calendars.calendarsState.savedCalendars);
             alert("Progress saved");
         }
         else { prompt("Give the Calendar a Title, Please.")}
@@ -129,9 +134,9 @@ $(document).ready(function() {
         
         
     //}
-    var load = monthList.loadMonthList(temporaryStorageKey);
-    document.getElementById('listTitle').value = monthList.monthListState.listName;
-    monthList.generateCalendarMenu($('.dropdown-menu'));
+    var load = calendars.loadState();
+    //document.getElementById('listTitle').value = monthList.monthListState.listName;
+    calendars.generateCalendarMenu($('.dropdown-menu'));
     
     
 });
@@ -750,6 +755,8 @@ var Calendars = function(storageKey) {
     // name) and the object you retrieve is that calendar's monthList state. 
     // which you can use to generate that calendar's month divs. 
     
+    //The calendars object also has a built in storage key.
+    
     self.generateCalendarMenu = function(menuClass) {
         //fills the saved calendars tab in the nav bar with the titles
         // of the saved calendars
@@ -760,23 +767,31 @@ var Calendars = function(storageKey) {
         //}
         
         // each item is going to have to have it's own unique ID
-            
+        
         $(menuClass).empty();
-        var listName = self.monthListState.listName 
+        console.log(self.calendarsState.savedCalendars);
+        
+        for (i = 0; i < self.calendarsState.savedCalendars; i++) {
+            // need to stop it from adding 'undefined' to the list, which it does when
+            // the array is empty.
+            var listName = self.calendarsState.savedCalendars[i];
+            console.log("inside the generateCalendarMenu function" + listName);
         //self.monthListState.forEach( function(listName) {
-        $(menuClass).append('<li class="dropdown-option"><a href="#">' + listName + '</a></li>');
-        //});
+            $(menuClass).append('<li class="dropdown-option" id="' + listName + '"><a href="#">' + listName + '<button id="removalButton">X</button></li>');
+        };
     };
     
-    self.storeState = function(self.storageKey) {
+    self.storeState = function() {
+        console.log("the storeState function is running");
         //stores the calendars state (the titles of the savedCalendars)
         var storageItem = self.calendarsState 
         storeInLocalStorage(self.storageKey, storageItem);
+       
     };
     
-    self.loadState = function(self.storageKey) {
+    self.loadState = function() {
         //load the calendars state
-        var loadedCalendars = loadFromLocalStorage(storageKey);
+        var loadedCalendars = loadFromLocalStorage(self.storageKey);
         return loadedCalendars;
     };
     
@@ -799,4 +814,4 @@ var Calendars = function(storageKey) {
 
 var month = new Month();
 var monthList = new MonthList();
-var calendars = new Calendars();
+var calendars = new Calendars('My Calendars');
